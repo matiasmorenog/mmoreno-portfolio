@@ -39,4 +39,24 @@ export const projects = [
       "Portfolio demo focused on CRUD flows, local persistence, and clean state management.",
     usage: "Portfolio demo (not in active production use).",
   },
+  {
+    id: 3,
+    title: "Nexus Web Store",
+    category: "E-commerce",
+    stack: ["Next.js", "TypeScript", "Prisma", "Tailwind CSS", "Zustand", "Mercado Pago"],
+    level: "Advanced",
+    score: 94,
+    scoreLabel: "Self-assessment",
+    status: "Live",
+    previewImage: "/project-nexus-store-preview.svg",
+    previewAlt: "Preview of Nexus Web Store storefront with product catalog",
+    demoUrl: "https://nexus-web-store.vercel.app/",
+    repoUrl: "https://github.com/matiasmorenog/nexus-web-store",
+    role: "Individual contributor (portfolio demo)",
+    summary:
+      "Full-stack sports apparel storefront with catalog filters, product variants, persistent cart, checkout, and protected admin panel.",
+    impact:
+      "End-to-end e-commerce demo with Mercado Pago integration, multi-tenant-ready data model, and admin for products and orders.",
+    usage: "Live portfolio demo (Alaska Indumentaria storefront on Vercel).",
+  },
 ];
