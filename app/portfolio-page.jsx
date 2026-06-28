@@ -18,6 +18,7 @@ import Tooltip from "@mui/material/Tooltip";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import ProjectCard from "@/components/ProjectCard";
 import { projects } from "@/data/projects";
 import {
@@ -38,6 +39,49 @@ const toolbarIconButtonSx = {
   bgcolor: "background.paper",
 };
 
+const downloadCtaWrapSx = (hintActive) => ({
+  position: "relative",
+  display: "inline-flex",
+  borderRadius: 1,
+  "@keyframes portfolioDownloadRipple": {
+    "0%": { transform: "scale(0.94)", opacity: 0.55 },
+    "100%": { transform: "scale(1.55)", opacity: 0 },
+  },
+  "@keyframes portfolioDownloadGlow": {
+    "0%, 100%": {
+      boxShadow: (theme) => `0 0 0 0 ${theme.palette.primary.main}66`,
+    },
+    "50%": {
+      boxShadow: (theme) => `0 0 0 8px ${theme.palette.primary.main}00`,
+    },
+  },
+  ...(hintActive && {
+    "&::before, &::after": {
+      content: '""',
+      position: "absolute",
+      inset: -4,
+      borderRadius: 1.5,
+      border: "2px solid",
+      borderColor: "primary.main",
+      animation: "portfolioDownloadRipple 2.2s ease-out infinite",
+      pointerEvents: "none",
+      "@media (prefers-reduced-motion: reduce)": {
+        animation: "none",
+        display: "none",
+      },
+    },
+    "&::after": {
+      animationDelay: "1.1s",
+    },
+    "& .MuiButton-root": {
+      animation: "portfolioDownloadGlow 2.2s ease-in-out infinite",
+      "@media (prefers-reduced-motion: reduce)": {
+        animation: "none",
+      },
+    },
+  }),
+});
+
 function PortfolioPageContent() {
   const router = useRouter();
   const pathname = usePathname();
@@ -49,6 +93,8 @@ function PortfolioPageContent() {
   );
   const [downloadingCv, setDownloadingCv] = useState(false);
   const [downloadingCvAts, setDownloadingCvAts] = useState(false);
+  const [downloadHint, setDownloadHint] = useState(true);
+  const [emailCopied, setEmailCopied] = useState(false);
 
   const theme = useMemo(() => createPortfolioTheme(darkMode), [darkMode]);
   const ui = useMemo(() => getPortfolioUi(locale), [locale]);
@@ -70,6 +116,17 @@ function PortfolioPageContent() {
     const urlLocale = parseLocale(searchParams.get(localeQueryParam));
     setLocale((current) => (current === urlLocale ? current : urlLocale));
   }, [searchParams]);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      setDownloadHint(false);
+      return undefined;
+    }
+
+    const timer = window.setTimeout(() => setDownloadHint(false), 6000);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const updateLocale = useCallback(
     (nextLocale) => {
@@ -93,11 +150,39 @@ function PortfolioPageContent() {
     updateLocale(locale === "en" ? "es" : "en");
   };
 
-  const handleContactClick = () => {
-    window.location.href = contactMailtoUrl;
+  const handleCopyEmail = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+    } catch {
+      const input = document.createElement("textarea");
+      input.value = profile.email;
+      input.setAttribute("readonly", "");
+      input.style.position = "absolute";
+      input.style.left = "-9999px";
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+    }
+
+    setEmailCopied(true);
+    window.setTimeout(() => setEmailCopied(false), 2000);
+  }, [profile.email]);
+
+  const handleScrollToProjects = (event) => {
+    event.preventDefault();
+    const projectsSection = document.getElementById("projects");
+    if (!projectsSection) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    projectsSection.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "start",
+    });
   };
 
   const handleDownloadCv = async () => {
+    setDownloadHint(false);
     setDownloadingCv(true);
     try {
       const { downloadResumePdf } = await import("@/lib/downloadResumePdf");
@@ -245,30 +330,59 @@ function PortfolioPageContent() {
                     ))}
                   </Stack>
 
-                  <Stack
-                    direction="row"
-                    spacing={1}
-                    useFlexGap
-                    flexWrap="wrap"
-                    sx={{ mt: 1.5 }}
-                  >
-                    <Button
-                      size="small"
-                      variant="contained"
-                      component="a"
-                      href="#projects"
+                  <Stack spacing={0.75} sx={{ mt: 1.5 }}>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      useFlexGap
+                      flexWrap="wrap"
                     >
-                      {ui.viewProjects}
-                    </Button>
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      type="button"
-                      onClick={handleContactClick}
-                      aria-label={`${ui.contactMe} (${profile.email})`}
-                    >
-                      {ui.contactMe}
-                    </Button>
+                      <Button
+                        size="small"
+                        variant="contained"
+                        component="a"
+                        href="#projects"
+                        onClick={handleScrollToProjects}
+                      >
+                        {ui.viewProjects}
+                      </Button>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        component="a"
+                        href={contactMailtoUrl}
+                        aria-label={`${ui.contactMe} (${profile.email})`}
+                      >
+                        {ui.contactMe}
+                      </Button>
+                    </Stack>
+                    <Typography variant="caption" color="text.secondary">
+                      {ui.contactEmailFallback}
+                    </Typography>
+                    <Stack direction="row" spacing={0.5} alignItems="center" useFlexGap>
+                      <Typography
+                        component="a"
+                        href={contactMailtoUrl}
+                        variant="body2"
+                        color="primary"
+                        sx={{
+                          textDecoration: "none",
+                          fontWeight: 500,
+                          "&:hover": { textDecoration: "underline" },
+                        }}
+                      >
+                        {profile.email}
+                      </Typography>
+                      <Tooltip title={emailCopied ? ui.emailCopied : ui.copyEmail}>
+                        <IconButton
+                          size="small"
+                          onClick={handleCopyEmail}
+                          aria-label={emailCopied ? ui.emailCopied : ui.copyEmail}
+                        >
+                          <ContentCopyRoundedIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </Stack>
                   </Stack>
                 </Box>
 
@@ -326,15 +440,18 @@ function PortfolioPageContent() {
                       >
                         {ui.github}
                       </Button>
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        onClick={handleDownloadCv}
-                        disabled={downloadingCv || downloadingCvAts}
-                        startIcon={<DownloadRoundedIcon fontSize="small" />}
-                      >
-                        {downloadingCv ? ui.generating : ui.downloadCv}
-                      </Button>
+                      <Box sx={downloadCtaWrapSx(downloadHint)}>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="primary"
+                          onClick={handleDownloadCv}
+                          disabled={downloadingCv || downloadingCvAts}
+                          startIcon={<DownloadRoundedIcon fontSize="small" />}
+                        >
+                          {downloadingCv ? ui.generating : ui.downloadCv}
+                        </Button>
+                      </Box>
                       <Button
                         size="small"
                         variant="text"
