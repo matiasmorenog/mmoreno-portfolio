@@ -1,6 +1,6 @@
 # Next Skill Showcase
 
-[![CI](https://github.com/matiasmorenog/react-skill-showcase/actions/workflows/ci.yml/badge.svg)](https://github.com/matiasmorenog/react-skill-showcase/actions/workflows/ci.yml)
+[![CI](https://github.com/matiasmorenog/mmoreno-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/matiasmorenog/mmoreno-portfolio/actions/workflows/ci.yml)
 
 Portfolio project built with Next.js + Material UI to showcase frontend skills, component architecture, filtering logic, testing, and CI best practices.
 
@@ -56,4 +56,4 @@ npm run dev
 
 Badge is configured for this repository:
 
-`https://github.com/matiasmorenog/react-skill-showcase/actions/workflows/ci.yml/badge.svg`
+`https://github.com/matiasmorenog/mmoreno-portfolio/actions/workflows/ci.yml/badge.svg`
