@@ -8,7 +8,7 @@ export default function Page() {
     "@type": "Person",
     name: "Matías Moreno",
     jobTitle: "Senior Frontend Engineer",
-    url: "https://react-skill-showcase.vercel.app",
+    url: "https://mmoreno-portfolio.vercel.app",
     email: "mailto:matiasmorenog@gmail.com",
     sameAs: [
       "https://github.com/matiasmorenog",
@@ -24,7 +24,7 @@ export default function Page() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Matías Moreno Portfolio",
-    url: "https://react-skill-showcase.vercel.app",
+    url: "https://mmoreno-portfolio.vercel.app",
     inLanguage: "en",
     author: {
       "@type": "Person",

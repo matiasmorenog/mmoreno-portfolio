@@ -1,7 +1,7 @@
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 
 export const metadata = {
-  metadataBase: new URL("https://react-skill-showcase.vercel.app"),
+  metadataBase: new URL("https://mmoreno-portfolio.vercel.app"),
   title: "Matías Moreno | Senior Frontend Engineer — React & TypeScript",
   description:
     "Senior Frontend Engineer specializing in React, TypeScript, and scalable UI systems. Experience in SaaS platforms, banking, healthcare, and B2B solutions.",
@@ -12,7 +12,7 @@ export const metadata = {
     title: "Matías Moreno | Senior Frontend Engineer — React & TypeScript",
     description:
       "Portfolio focused on React, TypeScript, scalable frontend architecture, performance optimization, and real project demos.",
-    url: "https://react-skill-showcase.vercel.app",
+    url: "https://mmoreno-portfolio.vercel.app",
     siteName: "Matías Moreno Portfolio",
     type: "website",
     images: [

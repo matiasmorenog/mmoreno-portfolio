@@ -22,8 +22,8 @@ export const resume = {
     linkedinUrl: "https://www.linkedin.com/in/matias-moreno/",
     githubLabel: "github.com/matiasmorenog",
     githubUrl: "https://github.com/matiasmorenog",
-    portfolioLabel: "react-skill-showcase.vercel.app",
-    portfolioUrl: "https://react-skill-showcase.vercel.app",
+    portfolioLabel: "mmoreno-portfolio.vercel.app",
+    portfolioUrl: "https://mmoreno-portfolio.vercel.app",
     profilePhoto: "/profile-photo.jpg",
   },
   professionalProfile: [

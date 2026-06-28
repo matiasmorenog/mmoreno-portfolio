@@ -1,4 +1,4 @@
-# Next Skill Showcase
+# Matías Moreno — Portfolio
 
 [![CI](https://github.com/matiasmorenog/mmoreno-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/matiasmorenog/mmoreno-portfolio/actions/workflows/ci.yml)
 
@@ -6,7 +6,10 @@ Portfolio project built with Next.js + Material UI to showcase frontend skills, 
 
 ## Live Demo
 
-[Open Portfolio](https://react-skill-showcase.vercel.app/)
+- **Primary:** [mmoreno-portfolio.vercel.app](https://mmoreno-portfolio.vercel.app/)
+- **Legacy (kept for older shared links):** [react-skill-showcase.vercel.app](https://react-skill-showcase.vercel.app/)
+
+Both URLs deploy the same `main` branch from this repository.
 
 ## Tech Stack
 
@@ -51,6 +54,22 @@ Pipeline steps:
 npm install
 npm run dev
 ```
+
+## Deployment (Vercel)
+
+Use **two Vercel projects** connected to this same GitHub repo so both URLs stay live:
+
+| Vercel project | URL | Purpose |
+| --- | --- | --- |
+| `mmoreno-portfolio` | `https://mmoreno-portfolio.vercel.app` | Canonical URL for new shares, metadata, and CV |
+| `react-skill-showcase` | `https://react-skill-showcase.vercel.app` | Legacy URL for links already sent in job applications |
+
+Steps for the new project:
+
+1. In Vercel: **Add New → Project** → import `matiasmorenog/mmoreno-portfolio`.
+2. Keep the existing `react-skill-showcase` project linked to the same repo.
+3. Do **not** rename or delete the legacy project.
+4. Every push to `main` deploys both projects automatically.
 
 ## Badge Setup
 

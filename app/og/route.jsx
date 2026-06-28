@@ -47,7 +47,7 @@ export function GET() {
         </div>
 
         <div style={{ display: "flex", fontSize: 24, color: "#9cb4cf" }}>
-          react-skill-showcase.vercel.app
+          mmoreno-portfolio.vercel.app
         </div>
       </div>
     ),
