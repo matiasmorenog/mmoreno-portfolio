@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
@@ -16,87 +17,105 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
-import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import ProjectCard from "@/components/ProjectCard";
 import { projects } from "@/data/projects";
+import {
+  getPortfolioProfile,
+  getPortfolioSummary,
+  getExperienceHighlights,
+  getEducationHighlights,
+  getPortfolioUi,
+  defaultLocale,
+  localeQueryParam,
+  parseLocale,
+} from "@/data/resume";
 import { createPortfolioTheme } from "@/app/theme";
 
-const profile = {
-  name: "Matías Moreno",
-  role: "Senior Frontend Engineer — React & TypeScript | Scalable UI Systems",
-  location: "Tigre, Buenos Aires — Open to remote work",
-  email: "matiasmorenog@gmail.com",
-  github: "https://github.com/matiasmorenog",
-  linkedin: "https://www.linkedin.com/in/matias-moreno/",
-  resumePdf: "/MatiasMoreno_resume.pdf",
-  profilePhoto: "/profile-photo.jpg",
+const toolbarIconButtonSx = {
+  border: 1,
+  borderColor: "divider",
+  bgcolor: "background.paper",
 };
 
-const profileSummary = [
-  "Senior Frontend Engineer with extensive experience developing high-demand SaaS platforms and B2B solutions, specializing in React and TypeScript. I have worked in complex environments such as banking, healthcare, and global certification platforms, with a focus on performance, scalability, and product quality.",
-  "I excel at building robust, maintainable, and user-oriented interfaces, combining frontend architecture best practices with testing and continuous improvement. Proven track record leading the evolution of production systems and ensuring consistent experiences for thousands of active users.",
-];
+function PortfolioPageContent() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-const experienceHighlights = [
-  {
-    role: "Frontend Engineer",
-    company: "INE",
-    period: "Mar 2022 - Jul 2025",
-    details:
-      "SaaS learning platforms (cybersecurity, networking, cloud). React, Vue & TypeScript. B2C/B2B products, subscriptions, certifications, and user management.",
-  },
-  {
-    role: "Software Engineer (Fullstack)",
-    company: "Santander Tecnología Argentina",
-    period: "Dec 2021 - Mar 2022",
-    details:
-      "Banking processes and enterprise architecture. Legacy systems support, SQL Server stored procedures, and regulated high-compliance environments.",
-  },
-  {
-    role: "Software Engineer (Fullstack)",
-    company: "Genetrics",
-    period: "Jul 2021 - Sep 2021",
-    details:
-      "Healthcare applications during COVID-19. React interfaces for hospital workflows, patient screening systems, and government API integration.",
-  },
-  {
-    role: "Software Engineer (Fullstack)",
-    company: "Envone",
-    period: "Jul 2015 - Jun 2021",
-    details:
-      "Modular CRM platform for enterprise clients in Latin America. Node.js & Vue.js. Sales, billing, automation, and operational management modules.",
-  },
-];
-
-const educationHighlights = [
-  "Higher Technical Degree in Programming — Universidad Tecnológica Nacional (UTN) · 2012 - 2015",
-  "Bachelor's in Economics and Administration — Colegio San Martín de Tours · 2007 - 2010",
-  "Certifications: Stock Market Diffusion Program (PRO.DI.BUR), Microsoft Office Suite (Advanced/Intermediate)",
-  "Languages: English (Professional — B2 Level)",
-];
-
-const coreSkills = [
-  "React",
-  "Next.js",
-  "Vue.js",
-  "TypeScript",
-  "Node.js",
-  "Jest & Cypress",
-  "Performance Optimization",
-  "Scalable Frontend Architecture",
-  "SaaS Product Development",
-];
-
-const credibilityChips = [
-  "10+ years in software development",
-  "Banking, healthcare & SaaS platforms",
-  "React, TypeScript & scalable UI systems",
-];
-
-export default function PortfolioPage() {
   const [darkMode, setDarkMode] = useState(true);
+  const [locale, setLocale] = useState(() =>
+    parseLocale(searchParams.get(localeQueryParam)),
+  );
+  const [downloadingCv, setDownloadingCv] = useState(false);
+  const [downloadingCvAts, setDownloadingCvAts] = useState(false);
 
   const theme = useMemo(() => createPortfolioTheme(darkMode), [darkMode]);
+  const ui = useMemo(() => getPortfolioUi(locale), [locale]);
+  const profile = useMemo(() => getPortfolioProfile(locale), [locale]);
+  const portfolioSummary = useMemo(() => getPortfolioSummary(locale), [locale]);
+  const experienceHighlights = useMemo(() => getExperienceHighlights(locale), [locale]);
+  const educationHighlights = useMemo(() => getEducationHighlights(locale), [locale]);
+  const contactMailtoUrl = useMemo(
+    () =>
+      `mailto:${profile.email}?subject=${encodeURIComponent(ui.contactMailSubject)}`,
+    [profile.email, ui.contactMailSubject],
+  );
+
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
+  useEffect(() => {
+    const urlLocale = parseLocale(searchParams.get(localeQueryParam));
+    setLocale((current) => (current === urlLocale ? current : urlLocale));
+  }, [searchParams]);
+
+  const updateLocale = useCallback(
+    (nextLocale) => {
+      const resolvedLocale = parseLocale(nextLocale);
+      setLocale(resolvedLocale);
+
+      const params = new URLSearchParams(searchParams.toString());
+      if (resolvedLocale === defaultLocale) {
+        params.delete(localeQueryParam);
+      } else {
+        params.set(localeQueryParam, resolvedLocale);
+      }
+
+      const query = params.toString();
+      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    },
+    [pathname, router, searchParams],
+  );
+
+  const handleToggleLocale = () => {
+    updateLocale(locale === "en" ? "es" : "en");
+  };
+
+  const handleContactClick = () => {
+    window.location.href = contactMailtoUrl;
+  };
+
+  const handleDownloadCv = async () => {
+    setDownloadingCv(true);
+    try {
+      const { downloadResumePdf } = await import("@/lib/downloadResumePdf");
+      await downloadResumePdf(locale);
+    } finally {
+      setDownloadingCv(false);
+    }
+  };
+
+  const handleDownloadCvAts = async () => {
+    setDownloadingCvAts(true);
+    try {
+      const { downloadResumePdfAts } = await import("@/lib/downloadResumePdf");
+      await downloadResumePdfAts(locale);
+    } finally {
+      setDownloadingCvAts(false);
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -114,17 +133,30 @@ export default function PortfolioPage() {
       >
         <Container maxWidth="lg">
           <Stack spacing={2}>
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Tooltip title={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
+              <Tooltip title={ui.switchLanguage}>
                 <IconButton
-                  onClick={() => setDarkMode((prev) => !prev)}
-                  aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+                  onClick={handleToggleLocale}
+                  aria-label={ui.switchLanguage}
                   size="small"
                   sx={{
-                    border: 1,
-                    borderColor: "divider",
-                    bgcolor: "background.paper",
+                    ...toolbarIconButtonSx,
+                    width: 36,
+                    height: 36,
+                    fontSize: "0.72rem",
+                    fontWeight: 700,
+                    letterSpacing: 0.6,
                   }}
+                >
+                  {locale.toUpperCase()}
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={darkMode ? ui.switchToLight : ui.switchToDark}>
+                <IconButton
+                  onClick={() => setDarkMode((prev) => !prev)}
+                  aria-label={darkMode ? ui.switchToLight : ui.switchToDark}
+                  size="small"
+                  sx={toolbarIconButtonSx}
                 >
                   {darkMode ? <LightModeRoundedIcon /> : <DarkModeRoundedIcon />}
                 </IconButton>
@@ -170,7 +202,7 @@ export default function PortfolioPage() {
                         color="primary.main"
                         sx={{ fontWeight: 700, letterSpacing: 1.4 }}
                       >
-                        React Portfolio Hub
+                        {ui.reactPortfolioHub}
                       </Typography>
                       <Typography
                         variant="h3"
@@ -205,10 +237,10 @@ export default function PortfolioPage() {
                     <Chip
                       size="small"
                       color="primary"
-                      label="Available for freelance / full-time"
+                      label={ui.availableFor}
                     />
                     <Chip size="small" variant="outlined" label={profile.location} />
-                    {credibilityChips.map((chip) => (
+                    {ui.credibilityChips.map((chip) => (
                       <Chip key={chip} size="small" variant="outlined" label={chip} />
                     ))}
                   </Stack>
@@ -226,15 +258,16 @@ export default function PortfolioPage() {
                       component="a"
                       href="#projects"
                     >
-                      View Projects
+                      {ui.viewProjects}
                     </Button>
                     <Button
                       size="small"
                       variant="outlined"
-                      component="a"
-                      href={`mailto:${profile.email}`}
+                      type="button"
+                      onClick={handleContactClick}
+                      aria-label={`${ui.contactMe} (${profile.email})`}
                     >
-                      Contact Me
+                      {ui.contactMe}
                     </Button>
                   </Stack>
                 </Box>
@@ -246,9 +279,9 @@ export default function PortfolioPage() {
                       variant="subtitle2"
                       sx={{ fontWeight: 700 }}
                     >
-                      Summary
+                      {ui.summary}
                     </Typography>
-                    {profileSummary.map((item) => (
+                    {portfolioSummary.map((item) => (
                       <Typography
                         key={item}
                         variant="body2"
@@ -264,7 +297,7 @@ export default function PortfolioPage() {
 
                   <Box>
                     <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                      Quick Links
+                      {ui.quickLinks}
                     </Typography>
                     <Stack
                       direction="row"
@@ -281,7 +314,7 @@ export default function PortfolioPage() {
                         target="_blank"
                         rel="noreferrer"
                       >
-                        LinkedIn
+                        {ui.linkedin}
                       </Button>
                       <Button
                         size="small"
@@ -291,18 +324,24 @@ export default function PortfolioPage() {
                         target="_blank"
                         rel="noreferrer"
                       >
-                        GitHub
+                        {ui.github}
                       </Button>
                       <Button
                         size="small"
                         variant="outlined"
-                        component="a"
-                        href={profile.resumePdf}
-                        endIcon={<OpenInNewRoundedIcon fontSize="small" />}
-                        target="_blank"
-                        rel="noreferrer"
+                        onClick={handleDownloadCv}
+                        disabled={downloadingCv || downloadingCvAts}
+                        startIcon={<DownloadRoundedIcon fontSize="small" />}
                       >
-                        Download CV
+                        {downloadingCv ? ui.generating : ui.downloadCv}
+                      </Button>
+                      <Button
+                        size="small"
+                        variant="text"
+                        onClick={handleDownloadCvAts}
+                        disabled={downloadingCv || downloadingCvAts}
+                      >
+                        {downloadingCvAts ? ui.generating : ui.downloadCvAts}
                       </Button>
                     </Stack>
                   </Box>
@@ -316,10 +355,25 @@ export default function PortfolioPage() {
               sx={{ p: 1.5, borderRadius: 1 }}
             >
               <Typography component="h2" variant="h6" sx={{ mb: 1 }}>
-                Core Skills
+                {ui.coreSkillsTitle}
               </Typography>
               <Stack direction="row" spacing={0.9} useFlexGap flexWrap="wrap">
-                {coreSkills.map((skill) => (
+                {ui.coreSkillChips.map((skill) => (
+                  <Chip key={skill} label={skill} variant="outlined" />
+                ))}
+              </Stack>
+            </Paper>
+
+            <Paper
+              component="section"
+              variant="outlined"
+              sx={{ p: 1.5, borderRadius: 1 }}
+            >
+              <Typography component="h2" variant="h6" sx={{ mb: 1 }}>
+                {ui.softSkillsTitle}
+              </Typography>
+              <Stack direction="row" spacing={0.9} useFlexGap flexWrap="wrap">
+                {ui.softSkillChips.map((skill) => (
                   <Chip key={skill} label={skill} variant="outlined" />
                 ))}
               </Stack>
@@ -341,7 +395,7 @@ export default function PortfolioPage() {
                   variant="h6"
                   sx={{ mb: 1 }}
                 >
-                  Experience Highlights
+                  {ui.experienceHighlights}
                 </Typography>
                 {experienceHighlights.map((item, index) => (
                   <Box
@@ -420,7 +474,7 @@ export default function PortfolioPage() {
 
               <Paper variant="outlined" sx={{ p: 2, borderRadius: 1 }}>
                 <Typography component="h2" variant="h6" sx={{ mb: 1 }}>
-                  Education & Certifications
+                  {ui.educationCertifications}
                 </Typography>
                 {educationHighlights.map((item) => (
                   <Typography
@@ -435,40 +489,44 @@ export default function PortfolioPage() {
               </Paper>
             </Box>
 
-            <Paper
-              component="section"
-              variant="outlined"
-              aria-labelledby="projects-heading"
-              sx={{ p: 2, borderRadius: 1 }}
+            <Typography
+              id="projects-heading"
+              component="h2"
+              variant="h6"
+              sx={{ mb: 1 }}
             >
-              <Typography
-                id="projects-heading"
-                component="h2"
-                variant="h6"
-                sx={{ mb: 1.5 }}
-              >
-                Live demo projects
-              </Typography>
-              <Box
-                id="projects"
-                sx={{
-                  display: "grid",
-                  gap: 1,
-                  gridTemplateColumns: {
-                    xs: "1fr",
-                    sm: "repeat(2, 1fr)",
-                    lg: "repeat(3, 1fr)",
-                  },
-                }}
-              >
-                {projects.map((project) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
-              </Box>
-            </Paper>
+              {ui.liveDemoProjects}
+            </Typography>
+
+            <Box
+              id="projects"
+              component="section"
+              aria-labelledby="projects-heading"
+              sx={{
+                display: "grid",
+                gap: 1,
+                gridTemplateColumns: {
+                  xs: "1fr",
+                  sm: "repeat(2, 1fr)",
+                  lg: "repeat(3, 1fr)",
+                },
+              }}
+            >
+              {projects.map((project) => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </Box>
           </Stack>
         </Container>
       </Box>
     </ThemeProvider>
+  );
+}
+
+export default function PortfolioPage() {
+  return (
+    <Suspense fallback={null}>
+      <PortfolioPageContent />
+    </Suspense>
   );
 }
