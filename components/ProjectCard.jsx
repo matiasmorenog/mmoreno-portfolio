@@ -141,7 +141,7 @@ export default function ProjectCard({ project, caseStudyLabels }) {
           sx={{
             display: "block",
             width: "100%",
-            aspectRatio: hasPreviewImage ? "960 / 558" : "16 / 9",
+            aspectRatio: hasPreviewImage ? "40 / 23" : "16 / 9",
             position: "relative",
             overflow: "hidden",
             bgcolor: "#152535",
