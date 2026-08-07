@@ -141,8 +141,7 @@ export default function ProjectCard({ project, caseStudyLabels }) {
           sx={{
             display: "block",
             width: "100%",
-            aspectRatio: "16 / 9",
-            maxHeight: { xs: 200, sm: 240, md: 280 },
+            aspectRatio: hasPreviewImage ? "960 / 558" : "16 / 9",
             position: "relative",
             overflow: "hidden",
             bgcolor: "#152535",
@@ -163,7 +162,7 @@ export default function ProjectCard({ project, caseStudyLabels }) {
               alt={project.previewAlt ?? project.title}
               fill
               sizes="(max-width: 768px) 100vw, 960px"
-              style={{ objectFit: "cover" }}
+              style={{ objectFit: "cover", objectPosition: "top center" }}
             />
           ) : (
             <PreviewComponent
