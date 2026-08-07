@@ -29,6 +29,7 @@ export const projects = [
     level: "Advanced",
     status: "Live",
     previewKey: "nexus-apparel",
+    previewImage: "/project-previews/nexus-web-store.png",
     previewAlt: "Preview of e-commerce storefront with product catalog and cart",
     demoUrl: "https://nexus-web-store.vercel.app/",
     repoUrl: "https://github.com/matiasmorenog/nexus-web-store",
