@@ -18,9 +18,14 @@ import Tooltip from "@mui/material/Tooltip";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
-import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
+import SkillsIconGrid from "@/components/SkillsIconGrid";
 import ProjectCard from "@/components/ProjectCard";
-import { projects } from "@/data/projects";
+import DownloadCtaHint from "@/components/DownloadCtaHint";
+import PortfolioContact from "@/components/PortfolioContact";
+import { getProjects } from "@/data/projects";
 import {
   getPortfolioProfile,
   getPortfolioSummary,
@@ -39,49 +44,6 @@ const toolbarIconButtonSx = {
   bgcolor: "background.paper",
 };
 
-const downloadCtaWrapSx = (hintActive) => ({
-  position: "relative",
-  display: "inline-flex",
-  borderRadius: 1,
-  "@keyframes portfolioDownloadRipple": {
-    "0%": { transform: "scale(0.94)", opacity: 0.55 },
-    "100%": { transform: "scale(1.55)", opacity: 0 },
-  },
-  "@keyframes portfolioDownloadGlow": {
-    "0%, 100%": {
-      boxShadow: (theme) => `0 0 0 0 ${theme.palette.primary.main}66`,
-    },
-    "50%": {
-      boxShadow: (theme) => `0 0 0 8px ${theme.palette.primary.main}00`,
-    },
-  },
-  ...(hintActive && {
-    "&::before, &::after": {
-      content: '""',
-      position: "absolute",
-      inset: -4,
-      borderRadius: 1.5,
-      border: "2px solid",
-      borderColor: "primary.main",
-      animation: "portfolioDownloadRipple 2.2s ease-out infinite",
-      pointerEvents: "none",
-      "@media (prefers-reduced-motion: reduce)": {
-        animation: "none",
-        display: "none",
-      },
-    },
-    "&::after": {
-      animationDelay: "1.1s",
-    },
-    "& .MuiButton-root": {
-      animation: "portfolioDownloadGlow 2.2s ease-in-out infinite",
-      "@media (prefers-reduced-motion: reduce)": {
-        animation: "none",
-      },
-    },
-  }),
-});
-
 function PortfolioPageContent() {
   const router = useRouter();
   const pathname = usePathname();
@@ -94,7 +56,10 @@ function PortfolioPageContent() {
   const [downloadingCv, setDownloadingCv] = useState(false);
   const [downloadingCvAts, setDownloadingCvAts] = useState(false);
   const [downloadHint, setDownloadHint] = useState(true);
-  const [emailCopied, setEmailCopied] = useState(false);
+
+  const handleDownloadHintComplete = useCallback(() => {
+    setDownloadHint(false);
+  }, []);
 
   const theme = useMemo(() => createPortfolioTheme(darkMode), [darkMode]);
   const ui = useMemo(() => getPortfolioUi(locale), [locale]);
@@ -102,6 +67,7 @@ function PortfolioPageContent() {
   const portfolioSummary = useMemo(() => getPortfolioSummary(locale), [locale]);
   const experienceHighlights = useMemo(() => getExperienceHighlights(locale), [locale]);
   const educationHighlights = useMemo(() => getEducationHighlights(locale), [locale]);
+  const localizedProjects = useMemo(() => getProjects(locale), [locale]);
   const contactMailtoUrl = useMemo(
     () =>
       `mailto:${profile.email}?subject=${encodeURIComponent(ui.contactMailSubject)}`,
@@ -121,11 +87,7 @@ function PortfolioPageContent() {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) {
       setDownloadHint(false);
-      return undefined;
     }
-
-    const timer = window.setTimeout(() => setDownloadHint(false), 6000);
-    return () => window.clearTimeout(timer);
   }, []);
 
   const updateLocale = useCallback(
@@ -150,25 +112,6 @@ function PortfolioPageContent() {
     updateLocale(locale === "en" ? "es" : "en");
   };
 
-  const handleCopyEmail = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(profile.email);
-    } catch {
-      const input = document.createElement("textarea");
-      input.value = profile.email;
-      input.setAttribute("readonly", "");
-      input.style.position = "absolute";
-      input.style.left = "-9999px";
-      document.body.appendChild(input);
-      input.select();
-      document.execCommand("copy");
-      document.body.removeChild(input);
-    }
-
-    setEmailCopied(true);
-    window.setTimeout(() => setEmailCopied(false), 2000);
-  }, [profile.email]);
-
   const handleScrollToProjects = (event) => {
     event.preventDefault();
     const projectsSection = document.getElementById("projects");
@@ -182,7 +125,6 @@ function PortfolioPageContent() {
   };
 
   const handleDownloadCv = async () => {
-    setDownloadHint(false);
     setDownloadingCv(true);
     try {
       const { downloadResumePdf } = await import("@/lib/downloadResumePdf");
@@ -258,8 +200,8 @@ function PortfolioPageContent() {
                 sx={{
                   display: "grid",
                   gap: 2,
-                  gridTemplateColumns: { xs: "1fr", md: "1.6fr 1fr" },
-                  alignItems: "start",
+                  gridTemplateColumns: { xs: "1fr", md: "1fr 1.5fr" },
+                  alignItems: "stretch",
                 }}
               >
                 <Box>
@@ -306,10 +248,22 @@ function PortfolioPageContent() {
                       mt: 0.4,
                       fontSize: { xs: "0.95rem", sm: "1.1rem", md: "1.25rem" },
                       lineHeight: 1.35,
-                      maxWidth: 640,
+                      maxWidth: { xs: 640, md: "none" },
                     }}
                   >
                     {profile.role}
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="text.secondary"
+                    sx={{
+                      mt: 1,
+                      fontWeight: 500,
+                      lineHeight: 1.45,
+                      fontSize: { xs: "0.9rem", md: "0.98rem" },
+                    }}
+                  >
+                    {ui.elevatorPitch}
                   </Typography>
 
                   <Stack
@@ -317,76 +271,48 @@ function PortfolioPageContent() {
                     spacing={1}
                     useFlexGap
                     flexWrap="wrap"
-                    sx={{ mt: 1.4 }}
+                    sx={{ mt: 1.2 }}
                   >
                     <Chip
                       size="small"
-                      color="primary"
-                      label={ui.availableFor}
+                      variant="outlined"
+                      icon={<LocationOnRoundedIcon />}
+                      label={profile.location}
                     />
-                    <Chip size="small" variant="outlined" label={profile.location} />
-                    {ui.credibilityChips.map((chip) => (
+                    {ui.heroChips.map((chip) => (
                       <Chip key={chip} size="small" variant="outlined" label={chip} />
                     ))}
                   </Stack>
 
-                  <Stack spacing={0.75} sx={{ mt: 1.5 }}>
-                    <Stack
-                      direction="row"
-                      spacing={1}
-                      useFlexGap
-                      flexWrap="wrap"
-                    >
-                      <Button
-                        size="small"
-                        variant="contained"
-                        component="a"
-                        href="#projects"
-                        onClick={handleScrollToProjects}
-                      >
-                        {ui.viewProjects}
-                      </Button>
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        component="a"
-                        href={contactMailtoUrl}
-                        aria-label={`${ui.contactMe} (${profile.email})`}
-                      >
-                        {ui.contactMe}
-                      </Button>
-                    </Stack>
-                    <Typography variant="caption" color="text.secondary">
-                      {ui.contactEmailFallback}
-                    </Typography>
-                    <Stack direction="row" spacing={0.5} alignItems="center" useFlexGap>
-                      <Typography
-                        component="a"
-                        href={contactMailtoUrl}
-                        variant="body2"
-                        color="primary"
-                        sx={{
-                          textDecoration: "none",
-                          fontWeight: 500,
-                          "&:hover": { textDecoration: "underline" },
-                        }}
-                      >
-                        {profile.email}
-                      </Typography>
-                      <Tooltip title={emailCopied ? ui.emailCopied : ui.copyEmail}>
-                        <IconButton
-                          size="small"
-                          onClick={handleCopyEmail}
-                          aria-label={emailCopied ? ui.emailCopied : ui.copyEmail}
-                        >
-                          <ContentCopyRoundedIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                    </Stack>
-                  </Stack>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    component="a"
+                    href="#projects"
+                    onClick={handleScrollToProjects}
+                    sx={{ mt: 1.5, alignSelf: "flex-start" }}
+                  >
+                    {ui.viewProjects}
+                  </Button>
                 </Box>
 
-                <Stack spacing={2} sx={{ pl: { md: 1 }, borderLeft: { md: 1 }, borderColor: { md: "divider" } }}>
+                <Stack
+                  spacing={2}
+                  sx={{
+                    position: "relative",
+                    pl: { md: 2 },
+                    "&::before": {
+                      content: '""',
+                      display: { xs: "none", md: "block" },
+                      position: "absolute",
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: "1px",
+                      bgcolor: "divider",
+                    },
+                  }}
+                >
                   <Box>
                     <Typography
                       component="h2"
@@ -422,64 +348,113 @@ function PortfolioPageContent() {
                     >
                       <Button
                         size="small"
-                        variant="outlined"
+                        variant="contained"
                         component="a"
                         href={profile.linkedin}
                         target="_blank"
                         rel="noreferrer"
+                        startIcon={<LinkedInIcon fontSize="small" />}
+                        sx={{
+                          bgcolor: "#0A66C2",
+                          color: "#fff",
+                          "&:hover": {
+                            bgcolor: "#004182",
+                          },
+                        }}
                       >
                         {ui.linkedin}
                       </Button>
                       <Button
                         size="small"
-                        variant="outlined"
+                        variant="contained"
                         component="a"
                         href={profile.github}
                         target="_blank"
                         rel="noreferrer"
+                        startIcon={<GitHubIcon fontSize="small" />}
+                        sx={{
+                          bgcolor: "#24292f",
+                          color: "#fff",
+                          "&:hover": {
+                            bgcolor: "#0d1117",
+                          },
+                        }}
                       >
                         {ui.github}
                       </Button>
-                      <Box sx={downloadCtaWrapSx(downloadHint)}>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        useFlexGap
+                        alignItems="center"
+                        sx={{ flexWrap: "nowrap", flexShrink: 0 }}
+                      >
+                        <DownloadCtaHint
+                          active={downloadHint}
+                          onComplete={handleDownloadHintComplete}
+                        >
+                          <Button
+                            size="small"
+                            variant="contained"
+                            color="primary"
+                            className="download-cta-button"
+                            onClick={handleDownloadCv}
+                            disabled={downloadingCv || downloadingCvAts}
+                            startIcon={<DownloadRoundedIcon fontSize="small" />}
+                            sx={{ whiteSpace: "nowrap", flexShrink: 0 }}
+                          >
+                            <Box
+                              component="span"
+                              sx={{
+                                display: "inline-grid",
+                                "& > span": { gridArea: "1 / 1" },
+                              }}
+                            >
+                              <Box
+                                component="span"
+                                aria-hidden={downloadingCv}
+                                sx={{ visibility: downloadingCv ? "hidden" : "visible" }}
+                              >
+                                {ui.downloadCv}
+                              </Box>
+                              <Box
+                                component="span"
+                                aria-hidden={!downloadingCv}
+                                sx={{ visibility: downloadingCv ? "visible" : "hidden" }}
+                              >
+                                {ui.generating}
+                              </Box>
+                            </Box>
+                          </Button>
+                        </DownloadCtaHint>
                         <Button
                           size="small"
-                          variant="contained"
-                          color="primary"
-                          onClick={handleDownloadCv}
+                          variant="text"
+                          onClick={handleDownloadCvAts}
                           disabled={downloadingCv || downloadingCvAts}
-                          startIcon={<DownloadRoundedIcon fontSize="small" />}
+                          sx={{ whiteSpace: "nowrap", flexShrink: 0 }}
                         >
-                          {downloadingCv ? ui.generating : ui.downloadCv}
+                          {downloadingCvAts ? ui.generating : ui.downloadCvAts}
                         </Button>
-                      </Box>
-                      <Button
-                        size="small"
-                        variant="text"
-                        onClick={handleDownloadCvAts}
-                        disabled={downloadingCv || downloadingCvAts}
-                      >
-                        {downloadingCvAts ? ui.generating : ui.downloadCvAts}
-                      </Button>
+                      </Stack>
                     </Stack>
                   </Box>
+
+                  <Divider />
+
+                  <PortfolioContact
+                    title={ui.contactTitle}
+                    email={profile.email}
+                    emailHref={contactMailtoUrl}
+                    phone={profile.phone}
+                    whatsappHref={profile.whatsapp}
+                    openWhatsAppLabel={ui.openWhatsApp}
+                  />
                 </Stack>
               </Box>
             </Paper>
 
-            <Paper
-              component="section"
-              variant="outlined"
-              sx={{ p: 1.5, borderRadius: 1 }}
-            >
-              <Typography component="h2" variant="h6" sx={{ mb: 1 }}>
-                {ui.coreSkillsTitle}
-              </Typography>
-              <Stack direction="row" spacing={0.9} useFlexGap flexWrap="wrap">
-                {ui.coreSkillChips.map((skill) => (
-                  <Chip key={skill} label={skill} variant="outlined" />
-                ))}
-              </Stack>
-            </Paper>
+            <SkillsIconGrid title={ui.coreSkillsTitle} subtitle={ui.skillsSubtitle} />
 
             <Paper
               component="section"
@@ -584,6 +559,19 @@ function PortfolioPageContent() {
                       <Typography variant="body2" color="text.secondary" sx={{ mt: 0.4 }}>
                         {item.details}
                       </Typography>
+                      {item.stack?.length > 0 ? (
+                        <Stack
+                          direction="row"
+                          spacing={0.6}
+                          useFlexGap
+                          flexWrap="wrap"
+                          sx={{ mt: 0.8 }}
+                        >
+                          {item.stack.map((tech) => (
+                            <Chip key={tech} label={tech} size="small" variant="outlined" />
+                          ))}
+                        </Stack>
+                      ) : null}
                     </Box>
                   </Box>
                 ))}
@@ -606,28 +594,40 @@ function PortfolioPageContent() {
               </Paper>
             </Box>
 
-            <Typography
-              id="projects-heading"
-              component="h2"
-              variant="h6"
-              sx={{ mb: 1 }}
-            >
-              {ui.liveDemoProjects}
-            </Typography>
+            <Box component="section" aria-labelledby="projects-heading">
+              <Typography
+                id="projects-heading"
+                component="h2"
+                variant="h6"
+                sx={{ mb: 0.5 }}
+              >
+                {ui.liveDemoProjects}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+                {ui.portfolioSubtitle}
+              </Typography>
 
-            <Box
-              id="projects"
-              component="section"
-              aria-labelledby="projects-heading"
-              sx={{
-                display: "grid",
-                gap: 1.5,
-                gridTemplateColumns: "1fr",
-              }}
-            >
-              {projects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
+              <Box
+                id="projects"
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+                  gap: 2,
+                  width: "100%",
+                }}
+              >
+                {localizedProjects.map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    caseStudyLabels={{
+                      problem: ui.caseStudyProblem,
+                      action: ui.caseStudyAction,
+                      result: ui.caseStudyResult,
+                    }}
+                  />
+                ))}
+              </Box>
             </Box>
           </Stack>
         </Container>

@@ -1,18 +1,28 @@
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
+import {
+  CANONICAL_SITE_URL,
+  canonicalProfile,
+  siteDescription,
+  siteKeywords,
+} from "@/data/resume/canonical";
+import { getLocaleLanguageAlternates } from "@/data/resume/index";
+
+const siteTitle = `${canonicalProfile.name} | ${canonicalProfile.headline.replace(/\s*\|\s*/g, " — ")}`;
 
 export const metadata = {
-  metadataBase: new URL("https://mmoreno-portfolio.vercel.app"),
-  title: "Matías Moreno | Senior Frontend Engineer — React & TypeScript",
-  description:
-    "Senior Frontend Engineer specializing in React, TypeScript, and scalable UI systems. Experience in SaaS platforms, banking, healthcare, and B2B solutions.",
+  metadataBase: new URL(CANONICAL_SITE_URL),
+  title: siteTitle,
+  description: siteDescription,
+  keywords: siteKeywords,
   alternates: {
     canonical: "/",
+    languages: getLocaleLanguageAlternates(),
   },
   openGraph: {
-    title: "Matías Moreno | Senior Frontend Engineer — React & TypeScript",
+    title: siteTitle,
     description:
       "Portfolio focused on React, TypeScript, scalable frontend architecture, performance optimization, and real project demos.",
-    url: "https://mmoreno-portfolio.vercel.app",
+    url: CANONICAL_SITE_URL,
     siteName: "Matías Moreno Portfolio",
     type: "website",
     images: [
@@ -26,7 +36,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Matías Moreno | Senior Frontend Engineer — React & TypeScript",
+    title: siteTitle,
     description:
       "Portfolio focused on React, TypeScript, scalable frontend architecture, performance optimization, and real project demos.",
     images: ["/og"],
@@ -34,6 +44,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  // Default EN; portfolio-page.jsx sets document.documentElement.lang for ?lang=es.
   return (
     <html lang="en">
       <body>
