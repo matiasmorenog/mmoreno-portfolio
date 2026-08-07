@@ -7,7 +7,7 @@ export const projects = [
     level: "Advanced",
     status: "Live",
     previewKey: "rocha-cotizador",
-    previewImage: "/project-previews/rocha-cotizador.png",
+    previewImage: "/project-previews/rocha-cotizador.webp",
     previewAlt: "Preview of B2B wholesale quoting interface with product lines and totals",
     demoUrl: "https://rocha-cotizador-dev.vercel.app/",
     repoUrl: "https://github.com/matiasmorenog/rocha-cotizador",
