@@ -1,3 +1,6 @@
+import { canonicalProfile, experienceJobs, professionalProfileEn } from "@/data/resume/canonical";
+import { experienceContentById } from "@/data/resume/experience-content.en";
+
 export const resumeLabels = {
   professionalProfile: "Professional Profile",
   workExperience: "Work Experience",
@@ -6,86 +9,24 @@ export const resumeLabels = {
   education: "Education",
   certifications: "Certifications",
   languages: "Languages",
+  keywords: "Keywords",
   contact: "Contact",
 };
+
+const experience = experienceJobs.map((job) => ({
+  ...job,
+  ...experienceContentById[job.id],
+}));
 
 export const resume = {
   locale: "en",
   labels: resumeLabels,
   contact: {
-    name: "Matías Moreno",
-    title: "Senior Frontend Engineer | React & TypeScript | Scalable UI Systems",
-    location: "Tigre, Buenos Aires, Argentina",
-    phone: "+54 11 6353 7809",
-    email: "matiasmorenog@gmail.com",
-    linkedinLabel: "linkedin.com/in/matias-moreno",
-    linkedinUrl: "https://www.linkedin.com/in/matias-moreno/",
-    githubLabel: "github.com/matiasmorenog",
-    githubUrl: "https://github.com/matiasmorenog",
-    portfolioLabel: "mmoreno-portfolio.vercel.app",
-    portfolioUrl: "https://mmoreno-portfolio.vercel.app",
-    profilePhoto: "/profile-photo.jpg",
+    ...canonicalProfile,
+    title: canonicalProfile.headline,
   },
-  professionalProfile: [
-    "Senior Frontend Engineer specialized in React, TypeScript, and scalable SaaS/B2B platforms across banking, healthcare, and global certification products.",
-    "Delivered high-traffic interfaces for 50,000+ active users, combining performance optimization, automated testing, and cross-functional delivery with backend and product teams.",
-    "Seeking to contribute frontend architecture leadership, code quality standards, and user-centered product execution in remote or hybrid engineering teams.",
-  ],
-  experience: [
-    {
-      role: "Frontend Engineer",
-      company: "INE",
-      period: "2022 – 2025",
-      periodDisplay: "Mar 2022 - Jul 2025",
-      portfolioSummary:
-        "SaaS learning platforms (cybersecurity, networking, cloud). React, Vue & TypeScript. 50k+ users. B2B platform lead. Client-side search with Web Workers and lazy loading.",
-      highlights: [
-        "Delivered React, Vue, and TypeScript features for cybersecurity, networking, and cloud learning platforms serving 50,000+ active B2C and B2B users.",
-        "Led frontend ownership of the B2B SaaS platform for one year as an individual contributor (no direct reports), driving feature delivery for enterprise learning products.",
-        "Built client-side content search with custom filtering and sorting logic, using a Web Worker to offload heavy processing and keep rendering responsive, plus lazy loading for content lists.",
-        "Implemented unit and integration testing plus code-review standards to improve release stability across subscription, certification, and user-management flows.",
-      ],
-    },
-    {
-      role: "Software Engineer (Fullstack)",
-      company: "Santander Tecnología Argentina",
-      period: "2021 – 2022",
-      periodDisplay: "Dec 2021 - Mar 2022",
-      portfolioSummary:
-        "Banking processes and enterprise architecture. Legacy systems support, SQL Server stored procedures, and regulated high-compliance environments.",
-      highlights: [
-        "Completed banking, security, and enterprise-architecture training while supporting legacy systems in a regulated financial environment.",
-        "Resolved production incidents in SQL Server stored procedures, restoring critical operations under strict compliance and audit requirements.",
-        "Contributed to maintenance workflows for high-security banking systems with elevated reliability and traceability standards.",
-      ],
-    },
-    {
-      role: "Software Engineer (Fullstack)",
-      company: "Genetrics",
-      period: "2021 – 2021",
-      periodDisplay: "Jul 2021 - Sep 2021",
-      portfolioSummary:
-        "Healthcare applications during COVID-19. React interfaces for hospital workflows, patient screening systems, and government API integration.",
-      highlights: [
-        "Built React interfaces for hospital workflows during COVID-19, enabling low-contact patient screening for healthcare providers in Argentina.",
-        "Integrated government APIs for COVID-19 case reporting, supporting timely public-health data exchange from clinical applications.",
-        "Introduced frontend best practices during a team technology transition, improving delivery consistency under urgent pandemic timelines.",
-      ],
-    },
-    {
-      role: "Software Engineer (Fullstack)",
-      company: "Envone",
-      period: "2015 – 2021",
-      periodDisplay: "Jul 2015 - Jun 2021",
-      portfolioSummary:
-        "Broad modular CRM for 5+ main enterprise partners in Latin America. Node.js & Vue.js. Sales, billing, automation, operations, and end-user workflows.",
-      highlights: [
-        "Evolved a broad modular Node.js/Vue.js CRM used by 5+ main enterprise partners and their end-user bases across Latin America over 6 years.",
-        "Built and maintained full-coverage CRM modules spanning sales, billing, automation, and operational management for diverse business needs.",
-        "Maintained business-critical production systems while improving performance, stability, and UX through iterative Scrum deliveries.",
-      ],
-    },
-  ],
+  professionalProfile: professionalProfileEn,
+  experience,
   skills: [
     {
       category: "Frontend",
@@ -117,20 +58,49 @@ export const resume = {
       period: "2012 – 2015",
     },
   ],
-  certifications: ["Microsoft Office Suite (Advanced/Intermediate)"],
+  certifications: [],
   languages: [{ name: "English", level: "Professional — B2 Level" }],
+  atsKeywords: [
+    "Senior Frontend Engineer",
+    "React",
+    "TypeScript",
+    "Vue.js",
+    "Next.js",
+    "Node.js",
+    "Nest.js",
+    "JavaScript",
+    "Frontend Architecture",
+    "Performance Optimization",
+    "Scalable UI Systems",
+    "SaaS",
+    "B2B",
+    "Jest",
+    "Cypress",
+    "Automated Testing",
+    "PostgreSQL",
+    "REST APIs",
+    "Agile",
+    "Scrum",
+    "Code Reviews",
+    "Cross-functional Collaboration",
+  ],
 };
 
 export const portfolioUi = {
   reactPortfolioHub: "React Portfolio Hub",
+  elevatorPitch:
+    "Production UIs for complex B2B workflows — fast, well-tested, and built to scale as products and teams grow.",
   availableFor: "Available for freelance / full-time",
   openToRemote: "Open to remote work",
   viewProjects: "View Projects",
   contactMe: "Contact Me",
+  contactTitle: "Contact",
   contactMailSubject: "Contact from portfolio",
-  contactEmailFallback: "If no mail app opens, copy the email below.",
   copyEmail: "Copy email",
   emailCopied: "Email copied",
+  openWhatsApp: "Open WhatsApp chat",
+  copyPhone: "Copy phone",
+  phoneCopied: "Phone copied",
   summary: "Summary",
   quickLinks: "Quick Links",
   linkedin: "LinkedIn",
@@ -139,31 +109,25 @@ export const portfolioUi = {
   downloadCvAts: "ATS version",
   generating: "Generating…",
   coreSkillsTitle: "Core Skills",
+  skillsSubtitle: "Tools and frameworks I work with daily",
   softSkillsTitle: "Soft Skills",
   experienceHighlights: "Experience Highlights",
   educationCertifications: "Education & Certifications",
-  liveDemoProjects: "Live demo projects",
+  liveDemoProjects: "Portfolio",
+  portfolioSubtitle: "Check out some of my work below",
   switchToLight: "Switch to light mode",
   switchToDark: "Switch to dark mode",
   switchLanguage: "Switch to Spanish",
   languageEn: "EN",
   languageEs: "ES",
-  credibilityChips: [
+  heroChips: [
     "10+ years in software development",
     "Banking, healthcare & SaaS platforms",
-    "50,000+ active SaaS users",
+    "50,000+ active users",
   ],
-  coreSkillChips: [
-    "React",
-    "Next.js",
-    "Vue.js",
-    "TypeScript",
-    "Node.js",
-    "PostgreSQL",
-    "Jest & Cypress",
-    "Performance Optimization",
-    "SaaS Product Development",
-  ],
+  caseStudyProblem: "Problem",
+  caseStudyAction: "Action",
+  caseStudyResult: "Result",
   softSkillChips: [
     "Cross-functional collaboration",
     "Code reviews",
@@ -172,5 +136,5 @@ export const portfolioUi = {
   ],
 };
 
-export const resumePdfFilename = "Matias_Moreno_CV_Frontend_Engineer.pdf";
-export const resumePdfAtsFilename = "Matias_Moreno_CV_Frontend_Engineer_ATS.pdf";
+export const resumePdfFilename = "Matias_Moreno_Resume.pdf";
+export const resumePdfAtsFilename = "Matias_Moreno_Resume_ATS.pdf";

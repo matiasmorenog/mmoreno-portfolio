@@ -7,8 +7,10 @@ describe("App", () => {
   it("renders project content", () => {
     render(<PortfolioPage />);
 
+    expect(screen.getByText("Rocha Cotizador")).toBeInTheDocument();
     expect(screen.getByText("Nexus Web Store")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Live Demo" })).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: "Live Demo" }).length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByText("Problem").length).toBeGreaterThanOrEqual(2);
   });
 
   it("renders quick links actions", () => {

@@ -97,6 +97,12 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     lineHeight: 1.45,
   },
+  keywordsText: {
+    fontSize: 9.5,
+    lineHeight: 1.45,
+    color: "#333333",
+    textAlign: "justify",
+  },
 });
 
 function BulletList({ items }) {
@@ -118,6 +124,7 @@ export default function ResumePdfAtsDocument({ resume }) {
     education,
     certifications,
     languages,
+    atsKeywords = [],
   } = resume;
 
   return (
@@ -158,7 +165,7 @@ export default function ResumePdfAtsDocument({ resume }) {
                 <Text style={styles.jobTitle}>
                   {job.role} | {job.company}
                 </Text>
-                <Text style={styles.jobPeriod}>{job.period}</Text>
+                <Text style={styles.jobPeriod}>{job.periodDisplay}</Text>
               </View>
               <BulletList items={job.highlights} />
             </View>
@@ -191,12 +198,14 @@ export default function ResumePdfAtsDocument({ resume }) {
           </Text>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionHeading}>{labels.certifications}</Text>
-          <Text style={styles.listItem}>
-            {certifications.map((item) => `• ${item}`).join("\n")}
-          </Text>
-        </View>
+        {certifications.length > 0 ? (
+          <View style={styles.section}>
+            <Text style={styles.sectionHeading}>{labels.certifications}</Text>
+            <Text style={styles.listItem}>
+              {certifications.map((item) => `• ${item}`).join("\n")}
+            </Text>
+          </View>
+        ) : null}
 
         <View style={styles.section}>
           <Text style={styles.sectionHeading}>{labels.languages}</Text>
@@ -204,6 +213,13 @@ export default function ResumePdfAtsDocument({ resume }) {
             {languages.map((lang) => `${lang.name} — ${lang.level}`).join("\n")}
           </Text>
         </View>
+
+        {atsKeywords.length > 0 ? (
+          <View style={styles.section}>
+            <Text style={styles.sectionHeading}>{labels.keywords}</Text>
+            <Text style={styles.keywordsText}>{atsKeywords.join(", ")}</Text>
+          </View>
+        ) : null}
       </Page>
     </Document>
   );

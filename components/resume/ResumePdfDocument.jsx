@@ -1,13 +1,8 @@
 import React from "react";
-import {
-  Document,
-  Page,
-  View,
-  Text,
-  StyleSheet,
-  Link,
-  Image,
-} from "@react-pdf/renderer";
+import { Document, Page, View, Text, StyleSheet, Image } from "@react-pdf/renderer";
+import PdfContactItem from "@/components/resume/PdfContactItem";
+import PdfSkillsIconGrid from "@/components/resume/PdfSkillsIconGrid";
+import PdfTechStack from "@/components/resume/PdfTechStack";
 
 const colors = {
   primary: "#0a7f78",
@@ -45,9 +40,9 @@ const styles = StyleSheet.create({
     paddingLeft: 22,
   },
   photo: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 78,
+    height: 78,
+    borderRadius: 39,
     marginBottom: 8,
     alignSelf: "center",
   },
@@ -77,30 +72,6 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(125, 226, 219, 0.35)",
-  },
-  contactItem: {
-    fontSize: 8,
-    color: colors.sidebarMuted,
-    lineHeight: 1.4,
-    marginBottom: 3,
-  },
-  contactLink: {
-    color: colors.accent,
-    textDecoration: "none",
-  },
-  skillBlock: {
-    marginBottom: 5,
-  },
-  skillCategory: {
-    fontSize: 7.5,
-    fontFamily: "Helvetica-Bold",
-    color: colors.white,
-    marginBottom: 1,
-  },
-  skillItems: {
-    fontSize: 7.5,
-    color: colors.sidebarMuted,
-    lineHeight: 1.35,
   },
   educationItem: {
     marginBottom: 6,
@@ -214,7 +185,6 @@ export default function ResumePdfDocument({ resume }) {
     labels,
     professionalProfile,
     experience,
-    skills,
     softSkills,
     education,
     certifications,
@@ -236,27 +206,45 @@ export default function ResumePdfDocument({ resume }) {
           <Text style={styles.title}>{contact.title}</Text>
 
           <SidebarSection title={labels.contact}>
-            <Text style={styles.contactItem}>{contact.location}</Text>
-            <Text style={styles.contactItem}>{contact.phone}</Text>
-            <Text style={styles.contactItem}>{contact.email}</Text>
-            <Link src={contact.linkedinUrl} style={styles.contactLink}>
-              <Text style={styles.contactItem}>{contact.linkedinLabel}</Text>
-            </Link>
-            <Link src={contact.githubUrl} style={styles.contactLink}>
-              <Text style={styles.contactItem}>{contact.githubLabel}</Text>
-            </Link>
-            <Link src={contact.portfolioUrl} style={styles.contactLink}>
-              <Text style={styles.contactItem}>{contact.portfolioLabel}</Text>
-            </Link>
+            <PdfContactItem iconKey="location" label={contact.location} />
+            {contact.whatsappUrl ? (
+              <PdfContactItem
+                iconKey="whatsapp"
+                label={contact.phone}
+                href={contact.whatsappUrl}
+                isLink
+              />
+            ) : (
+              <PdfContactItem iconKey="phone" label={contact.phone} />
+            )}
+            <PdfContactItem
+              iconKey="email"
+              label={contact.email}
+              href={`mailto:${contact.email}`}
+              isLink
+            />
+            <PdfContactItem
+              iconKey="linkedin"
+              label={contact.linkedinLabel}
+              href={contact.linkedinUrl}
+              isLink
+            />
+            <PdfContactItem
+              iconKey="github"
+              label={contact.githubLabel}
+              href={contact.githubUrl}
+              isLink
+            />
+            <PdfContactItem
+              iconKey="portfolio"
+              label={contact.portfolioLabel}
+              href={contact.portfolioUrl}
+              isLink
+            />
           </SidebarSection>
 
           <SidebarSection title={labels.technicalSkills}>
-            {skills.map((group) => (
-              <View key={group.category} style={styles.skillBlock}>
-                <Text style={styles.skillCategory}>{group.category}</Text>
-                <Text style={styles.skillItems}>{group.items}</Text>
-              </View>
-            ))}
+            <PdfSkillsIconGrid />
           </SidebarSection>
 
           <SidebarSection title={labels.softSkills}>
@@ -312,9 +300,10 @@ export default function ResumePdfDocument({ resume }) {
                 <Text style={styles.jobTitle}>
                   {job.role} | {job.company}
                 </Text>
-                <Text style={styles.jobPeriod}>{job.period}</Text>
+                <Text style={styles.jobPeriod}>{job.periodDisplay}</Text>
               </View>
               <BulletList items={job.highlights} />
+              <PdfTechStack labels={job.stack} compact showLabel />
             </View>
           ))}
         </View>

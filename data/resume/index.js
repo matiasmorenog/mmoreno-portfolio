@@ -1,5 +1,12 @@
 import * as en from "@/data/resume/en";
 import * as es from "@/data/resume/es";
+import {
+  CANONICAL_SITE_URL,
+  canonicalProfile,
+  linkedInSyncChecklist,
+} from "@/data/resume/canonical";
+
+export { CANONICAL_SITE_URL, canonicalProfile, linkedInSyncChecklist };
 
 const locales = {
   en,
@@ -15,6 +22,32 @@ export function parseLocale(value) {
     return value;
   }
   return defaultLocale;
+}
+
+/** Relative path for Next.js metadata (resolved via metadataBase). */
+export function getLocalePath(locale = defaultLocale) {
+  if (locale === defaultLocale) {
+    return "/";
+  }
+  return `/?${localeQueryParam}=${locale}`;
+}
+
+/** Absolute URL for sitemap and external references. */
+export function getLocaleUrl(locale = defaultLocale) {
+  return `${CANONICAL_SITE_URL}${getLocalePath(locale)}`;
+}
+
+/**
+ * hreflang alternates keyed by locale (plus x-default).
+ * @param {{ absolute?: boolean }} options — absolute URLs for sitemap; relative paths for metadata.
+ */
+export function getLocaleLanguageAlternates({ absolute = false } = {}) {
+  const toHref = absolute ? getLocaleUrl : getLocalePath;
+  const languages = Object.fromEntries(
+    supportedLocales.map((locale) => [locale, toHref(locale)]),
+  );
+  languages["x-default"] = toHref(defaultLocale);
+  return languages;
 }
 
 export function getResumeContent(locale = defaultLocale) {
@@ -39,13 +72,14 @@ export function getResumePdfFilenames(locale = defaultLocale) {
 
 export function getPortfolioProfile(locale = defaultLocale) {
   const { resume: data } = getResumeContent(locale);
-  const ui = getPortfolioUi(locale);
 
   return {
     name: data.contact.name,
     role: data.contact.title.replace(/\s*\|\s*/g, " — "),
-    location: `${data.contact.location} — ${ui.openToRemote}`,
+    location: data.contact.location,
     email: data.contact.email,
+    phone: data.contact.phone,
+    whatsapp: data.contact.whatsappUrl,
     github: data.contact.githubUrl,
     linkedin: data.contact.linkedinUrl,
     profilePhoto: data.contact.profilePhoto,
@@ -61,6 +95,7 @@ export function getExperienceHighlights(locale = defaultLocale) {
     role: item.role,
     company: item.company,
     period: item.periodDisplay,
+    stack: item.stack ?? [],
     details: item.portfolioSummary,
   }));
 }
@@ -75,7 +110,9 @@ export function getEducationHighlights(locale = defaultLocale) {
     ...data.education.map(
       (item) => `${item.degree} — ${item.institution} · ${item.period}`,
     ),
-    `${certificationsLabel}: ${data.certifications.join(", ")}`,
+    ...(data.certifications.length > 0
+      ? [`${certificationsLabel}: ${data.certifications.join(", ")}`]
+      : []),
     `${languagesLabel}: ${data.languages.map((lang) => `${lang.name} (${lang.level})`).join(", ")}`,
   ];
 }

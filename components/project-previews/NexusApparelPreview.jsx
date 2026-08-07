@@ -6,7 +6,7 @@ export default function NexusApparelPreview({ style, ...props }) {
       xmlns="http://www.w3.org/2000/svg"
       role="img"
       aria-hidden={props["aria-label"] ? undefined : true}
-      preserveAspectRatio="none"
+      preserveAspectRatio="xMidYMid slice"
       style={{ display: "block", ...style }}
       {...props}
     >
