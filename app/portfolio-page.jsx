@@ -42,7 +42,71 @@ const toolbarIconButtonSx = {
   border: 1,
   borderColor: "divider",
   bgcolor: "background.paper",
+  boxShadow: 2,
 };
+
+function FloatingDisplayControls({ darkMode, locale, ui, onToggleDarkMode, onToggleLocale }) {
+  return (
+    <Box
+      sx={{
+        position: "fixed",
+        top: { xs: 28, md: 40 },
+        left: 0,
+        right: 0,
+        zIndex: (theme) => theme.zIndex.tooltip,
+        pointerEvents: "none",
+      }}
+    >
+      <Container maxWidth="lg" sx={{ position: "relative", pointerEvents: "none" }}>
+        <Box
+          component="nav"
+          aria-label="Display settings"
+          sx={{
+            position: { xs: "fixed", sm: "absolute" },
+            top: { xs: 28, sm: 0 },
+            right: { xs: 16, sm: 0 },
+            transform: {
+              sm: "translateX(calc(100% + 12px))",
+            },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 0.75,
+            pointerEvents: "auto",
+          }}
+        >
+          <Tooltip title={ui.switchLanguage}>
+            <IconButton
+              onClick={onToggleLocale}
+              aria-label={ui.switchLanguage}
+              size="small"
+              sx={{
+                ...toolbarIconButtonSx,
+                width: 36,
+                height: 36,
+                fontSize: "0.72rem",
+                fontWeight: 700,
+                letterSpacing: 0.6,
+              }}
+            >
+              {locale.toUpperCase()}
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={darkMode ? ui.switchToLight : ui.switchToDark}>
+            <IconButton
+              onClick={onToggleDarkMode}
+              aria-label={darkMode ? ui.switchToLight : ui.switchToDark}
+              size="small"
+              sx={toolbarIconButtonSx}
+            >
+              {darkMode ? <LightModeRoundedIcon /> : <DarkModeRoundedIcon />}
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </Container>
+    </Box>
+  );
+}
 
 function PortfolioPageContent() {
   const router = useRouter();
@@ -68,11 +132,6 @@ function PortfolioPageContent() {
   const experienceHighlights = useMemo(() => getExperienceHighlights(locale), [locale]);
   const educationHighlights = useMemo(() => getEducationHighlights(locale), [locale]);
   const localizedProjects = useMemo(() => getProjects(locale), [locale]);
-  const contactMailtoUrl = useMemo(
-    () =>
-      `mailto:${profile.email}?subject=${encodeURIComponent(ui.contactMailSubject)}`,
-    [profile.email, ui.contactMailSubject],
-  );
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -158,38 +217,15 @@ function PortfolioPageContent() {
           py: { xs: 2, md: 4 },
         }}
       >
+        <FloatingDisplayControls
+          darkMode={darkMode}
+          locale={locale}
+          ui={ui}
+          onToggleDarkMode={() => setDarkMode((prev) => !prev)}
+          onToggleLocale={handleToggleLocale}
+        />
         <Container maxWidth="lg">
           <Stack spacing={2}>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
-              <Tooltip title={ui.switchLanguage}>
-                <IconButton
-                  onClick={handleToggleLocale}
-                  aria-label={ui.switchLanguage}
-                  size="small"
-                  sx={{
-                    ...toolbarIconButtonSx,
-                    width: 36,
-                    height: 36,
-                    fontSize: "0.72rem",
-                    fontWeight: 700,
-                    letterSpacing: 0.6,
-                  }}
-                >
-                  {locale.toUpperCase()}
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={darkMode ? ui.switchToLight : ui.switchToDark}>
-                <IconButton
-                  onClick={() => setDarkMode((prev) => !prev)}
-                  aria-label={darkMode ? ui.switchToLight : ui.switchToDark}
-                  size="small"
-                  sx={toolbarIconButtonSx}
-                >
-                  {darkMode ? <LightModeRoundedIcon /> : <DarkModeRoundedIcon />}
-                </IconButton>
-              </Tooltip>
-            </Box>
-
             <Paper
               component="section"
               aria-labelledby="hero-heading"
@@ -445,7 +481,8 @@ function PortfolioPageContent() {
                   <PortfolioContact
                     title={ui.contactTitle}
                     email={profile.email}
-                    emailHref={contactMailtoUrl}
+                    copyEmailLabel={ui.copyEmail}
+                    emailCopiedLabel={ui.emailCopied}
                     phone={profile.phone}
                     whatsappHref={profile.whatsapp}
                     openWhatsAppLabel={ui.openWhatsApp}
