@@ -123,7 +123,7 @@ export const portfolioUi = {
   heroChips: [
     "10+ years in software development",
     "Banking, healthcare & SaaS platforms",
-    "50,000+ active users",
+    "150,000+ active users",
   ],
   caseStudyProblem: "Problem",
   caseStudyAction: "Action",

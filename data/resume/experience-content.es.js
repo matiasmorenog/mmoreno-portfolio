@@ -1,9 +1,9 @@
 export const experienceContentById = {
   ine: {
     portfolioSummary:
-      "Plataformas SaaS de aprendizaje (ciberseguridad, networking, cloud). React, Vue.js y TypeScript. 50k+ usuarios. Liderazgo frontend B2B. Buscadores client-side con Web Workers y lazy loading.",
+      "Plataformas SaaS de aprendizaje (ciberseguridad, networking, cloud). React, Vue.js y TypeScript. 150k+ usuarios. Liderazgo frontend B2B. Buscadores client-side con Web Workers y lazy loading.",
     highlights: [
-      "Entregué funcionalidades con React, Vue.js y TypeScript en productos de ciberseguridad, networking y cloud, soportando más de 50.000 usuarios activos B2C y B2B en la plataforma SaaS de INE.",
+      "Entregué funcionalidades con React, Vue.js y TypeScript en productos de ciberseguridad, networking y cloud, soportando más de 150.000 usuarios activos B2C y B2B en la plataforma SaaS de INE.",
       "Lideré la entrega frontend de la plataforma SaaS B2B durante un año como contributor individual (sin personas a cargo), impulsando releases de certificaciones y suscripciones enterprise.",
       "Delegué filtrado y ordenamiento pesado de búsqueda client-side a un Web Worker en TypeScript, junto con lazy loading de listados, para mantener interacciones de búsqueda fluidas a escala.",
       "Mejoré la estabilidad de releases introduciendo tests unitarios e integración con Jest y estándares de code review en módulos de suscripciones, certificaciones y gestión de usuarios.",
