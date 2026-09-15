@@ -124,7 +124,7 @@ export const portfolioUi = {
   heroChips: [
     "10+ años en desarrollo de software",
     "Banca, salud y plataformas SaaS",
-    "50.000+ usuarios activos",
+    "150.000+ usuarios activos",
   ],
   caseStudyProblem: "Problema",
   caseStudyAction: "Acción",

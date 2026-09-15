@@ -72,7 +72,7 @@ export const linkedInSyncChecklist = [
 /** Professional summary — aligned with LinkedIn About (EN / ES). */
 export const professionalProfileEn = [
   "I specialize in building scalable SaaS and B2B platforms, with production experience across React and Vue ecosystems — banking, healthcare, and global certification products.",
-  "Delivered high-traffic interfaces for 50,000+ active users, combining performance optimization, automated testing, and cross-functional delivery with backend and product teams.",
+  "Delivered high-traffic interfaces for 150,000+ active users, combining performance optimization, automated testing, and cross-functional delivery with backend and product teams.",
   "Full-stack foundation with Node.js and PostgreSQL from 6+ years building CRM and B2B products — with frontend as my primary focus.",
   "Previously led frontend ownership of INE's B2B SaaS platform as an individual contributor (no direct reports). Comfortable in regulated, high-compliance environments and agile (Scrum) delivery.",
   "Seeking to contribute frontend architecture leadership, code quality standards, and user-centered product execution in remote or hybrid engineering teams.",
@@ -80,7 +80,7 @@ export const professionalProfileEn = [
 
 export const professionalProfileEs = [
   "Me especializo en construir plataformas SaaS y B2B escalables, con experiencia en producción en los ecosistemas React y Vue — banca, salud y certificaciones globales.",
-  "Entregué interfaces de alto tráfico para más de 50.000 usuarios activos, combinando optimización de performance, testing automatizado y trabajo cross-funcional con equipos de backend y producto.",
+  "Entregué interfaces de alto tráfico para más de 150.000 usuarios activos, combinando optimización de performance, testing automatizado y trabajo cross-funcional con equipos de backend y producto.",
   "Base full stack con Node.js y PostgreSQL (6+ años en CRM y productos B2B), con el frontend como foco principal.",
   "Lideré la entrega frontend de la plataforma SaaS B2B de INE como contributor individual (sin personas a cargo). Experiencia en entornos regulados de alta compliance y entrega ágil (Scrum).",
   "Busco aportar liderazgo en arquitectura frontend, estándares de calidad de código y ejecución centrada en el usuario en equipos de ingeniería remotos o híbridos.",
