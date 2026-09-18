@@ -1,22 +1,15 @@
 import React from "react";
-import {
-  Document,
-  Page,
-  View,
-  Text,
-  StyleSheet,
-  Link,
-} from "@react-pdf/renderer";
+import { Document, Page, View, Text, StyleSheet, Link } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   page: {
-    paddingTop: 36,
-    paddingBottom: 36,
-    paddingHorizontal: 42,
+    paddingTop: 32,
+    paddingBottom: 32,
+    paddingHorizontal: 40,
     fontFamily: "Helvetica",
     fontSize: 10,
     color: "#1a1a1a",
-    lineHeight: 1.45,
+    lineHeight: 1.4,
   },
   name: {
     fontSize: 20,
@@ -39,7 +32,7 @@ const styles = StyleSheet.create({
     textDecoration: "none",
   },
   section: {
-    marginBottom: 14,
+    marginBottom: 11,
   },
   sectionHeading: {
     fontSize: 11,
@@ -58,31 +51,39 @@ const styles = StyleSheet.create({
     textAlign: "justify",
   },
   jobBlock: {
-    marginBottom: 10,
+    marginBottom: 8,
   },
-  jobHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    gap: 10,
-    marginBottom: 3,
-  },
-  jobTitle: {
+  jobRole: {
     fontSize: 10.5,
     fontFamily: "Helvetica-Bold",
-    flexGrow: 1,
+    marginBottom: 1,
+  },
+  jobCompany: {
+    fontSize: 9.5,
+    marginBottom: 1,
+    color: "#333333",
   },
   jobPeriod: {
     fontSize: 9.5,
     fontFamily: "Helvetica-Bold",
-    flexShrink: 0,
+    marginBottom: 4,
+  },
+  projectTitle: {
+    fontSize: 10.5,
+    fontFamily: "Helvetica-Bold",
+    marginBottom: 1,
+  },
+  projectMeta: {
+    fontSize: 9.5,
+    marginBottom: 4,
+    color: "#333333",
   },
   bulletText: {
     fontSize: 9.5,
-    lineHeight: 1.45,
+    lineHeight: 1.4,
     color: "#333333",
     textAlign: "justify",
-    marginBottom: 4,
+    marginBottom: 3,
   },
   skillLine: {
     fontSize: 9.5,
@@ -97,19 +98,24 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     lineHeight: 1.45,
   },
-  keywordsText: {
-    fontSize: 9.5,
-    lineHeight: 1.45,
-    color: "#333333",
-    textAlign: "justify",
-  },
 });
 
 function BulletList({ items }) {
   return (
-    <Text style={styles.bulletText}>
-      {items.map((item) => `• ${item}`).join("\n")}
-    </Text>
+    <Text style={styles.bulletText}>{items.map((item) => `• ${item}`).join("\n")}</Text>
+  );
+}
+
+function JobBlock({ job }) {
+  return (
+    <View style={styles.jobBlock}>
+      <View wrap={false}>
+        <Text style={styles.jobRole}>{job.role}</Text>
+        <Text style={styles.jobCompany}>{job.company}</Text>
+        <Text style={styles.jobPeriod}>{job.periodDisplay}</Text>
+      </View>
+      <BulletList items={job.highlights} />
+    </View>
   );
 }
 
@@ -120,11 +126,10 @@ export default function ResumePdfAtsDocument({ resume }) {
     professionalProfile,
     experience,
     skills,
-    softSkills,
+    selectedProject,
     education,
     certifications,
     languages,
-    atsKeywords = [],
   } = resume;
 
   return (
@@ -160,15 +165,7 @@ export default function ResumePdfAtsDocument({ resume }) {
         <View style={styles.section}>
           <Text style={styles.sectionHeading}>{labels.workExperience}</Text>
           {experience.map((job) => (
-            <View key={`${job.company}-${job.period}`} style={styles.jobBlock}>
-              <View style={styles.jobHeader}>
-                <Text style={styles.jobTitle}>
-                  {job.role} | {job.company}
-                </Text>
-                <Text style={styles.jobPeriod}>{job.periodDisplay}</Text>
-              </View>
-              <BulletList items={job.highlights} />
-            </View>
+            <JobBlock key={job.id || `${job.company}-${job.period}`} job={job} />
           ))}
         </View>
 
@@ -182,44 +179,43 @@ export default function ResumePdfAtsDocument({ resume }) {
           ))}
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionHeading}>{labels.softSkills}</Text>
-          <Text style={styles.listItem}>
-            {softSkills.map((item) => `• ${item}`).join("\n")}
-          </Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionHeading}>{labels.education}</Text>
-          <Text style={styles.listItem}>
-            {education
-              .map((item) => `${item.degree} | ${item.institution} | ${item.period}`)
-              .join("\n")}
-          </Text>
-        </View>
-
-        {certifications.length > 0 ? (
+        {selectedProject ? (
           <View style={styles.section}>
-            <Text style={styles.sectionHeading}>{labels.certifications}</Text>
+            <Text style={styles.sectionHeading}>{labels.selectedProject}</Text>
+            <Text style={styles.projectTitle}>
+              {selectedProject.name} — {selectedProject.subtitle} |{" "}
+              {selectedProject.periodDisplay}
+            </Text>
+            <BulletList items={selectedProject.highlights} />
+          </View>
+        ) : null}
+
+        <View wrap={false}>
+          <View style={styles.section}>
+            <Text style={styles.sectionHeading}>{labels.education}</Text>
             <Text style={styles.listItem}>
-              {certifications.map((item) => `• ${item}`).join("\n")}
+              {education
+                .map((item) => `${item.degree} | ${item.institution} | ${item.period}`)
+                .join("\n")}
             </Text>
           </View>
-        ) : null}
 
-        <View style={styles.section}>
-          <Text style={styles.sectionHeading}>{labels.languages}</Text>
-          <Text style={styles.listItem}>
-            {languages.map((lang) => `${lang.name} — ${lang.level}`).join("\n")}
-          </Text>
-        </View>
+          {certifications.length > 0 ? (
+            <View style={styles.section}>
+              <Text style={styles.sectionHeading}>{labels.certifications}</Text>
+              <Text style={styles.listItem}>
+                {certifications.map((item) => `• ${item}`).join("\n")}
+              </Text>
+            </View>
+          ) : null}
 
-        {atsKeywords.length > 0 ? (
           <View style={styles.section}>
-            <Text style={styles.sectionHeading}>{labels.keywords}</Text>
-            <Text style={styles.keywordsText}>{atsKeywords.join(", ")}</Text>
+            <Text style={styles.sectionHeading}>{labels.languages}</Text>
+            <Text style={styles.listItem}>
+              {languages.map((lang) => `${lang.name} — ${lang.level}`).join("\n")}
+            </Text>
           </View>
-        ) : null}
+        </View>
       </Page>
     </Document>
   );

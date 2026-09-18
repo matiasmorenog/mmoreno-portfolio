@@ -20,8 +20,7 @@ export const metadata = {
   },
   openGraph: {
     title: siteTitle,
-    description:
-      "Portfolio focused on React, TypeScript, scalable frontend architecture, performance optimization, and real project demos.",
+    description: siteDescription,
     url: CANONICAL_SITE_URL,
     siteName: "Matías Moreno Portfolio",
     type: "website",
@@ -30,15 +29,14 @@ export const metadata = {
         url: "/og",
         width: 1200,
         height: 630,
-        alt: "Matías Moreno — Senior Frontend Engineer portfolio",
+        alt: "Matías Moreno — Software Engineer portfolio",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: siteTitle,
-    description:
-      "Portfolio focused on React, TypeScript, scalable frontend architecture, performance optimization, and real project demos.",
+    description: siteDescription,
     images: ["/og"],
   },
 };

@@ -1,16 +1,20 @@
-import { canonicalProfile, experienceJobs, professionalProfileEs } from "@/data/resume/canonical";
+import {
+  canonicalProfile,
+  experienceJobs,
+  professionalProfileEs,
+} from "@/data/resume/canonical";
 import { experienceContentById } from "@/data/resume/experience-content.es";
+import { selectedProjectByLocale } from "@/data/resume/selected-project";
 
 export const resumeLabels = {
   professionalProfile: "Perfil Profesional",
   workExperience: "Experiencia Laboral",
   technicalSkills: "Habilidades Técnicas",
-  softSkills: "Habilidades Blandas",
   education: "Educación",
   certifications: "Certificaciones",
   languages: "Idiomas",
-  keywords: "Palabras clave",
   contact: "Contacto",
+  selectedProject: "Proyecto Destacado",
 };
 
 const experience = experienceJobs.map((job) => ({
@@ -23,7 +27,7 @@ export const resume = {
   labels: resumeLabels,
   contact: {
     ...canonicalProfile,
-    title: canonicalProfile.headline,
+    title: "Ingeniero de Software | React, TypeScript, Next.js & Node.js",
   },
   professionalProfile: professionalProfileEs,
   experience,
@@ -31,70 +35,43 @@ export const resume = {
     {
       category: "Frontend",
       items:
-        "React.js, Next.js, Vue.js, TypeScript, JavaScript (ES6+), HTML5, CSS3",
-    },
-    { category: "Backend", items: "Node.js, Nest.js" },
-    { category: "Bases de datos", items: "PostgreSQL, MySQL" },
-    {
-      category: "Testing",
-      items: "Mocha.js, Jest, Cypress (Unit & Integration)",
+        "React, Next.js, Vue.js, TypeScript, JavaScript, HTML, CSS, Tailwind CSS, Sass, Material UI, Zustand, Redux, Vuex",
     },
     {
-      category: "Otros",
+      category: "Backend",
+      items: "Node.js, Express, APIs REST, Prisma, Sequelize",
+    },
+    { category: "Bases de datos", items: "PostgreSQL, MySQL, SQL" },
+    { category: "Testing", items: "Jest, Mocha, Cypress" },
+    {
+      category: "Herramientas / Prácticas",
       items:
-        "Arquitectura Frontend Escalable, Optimización de Performance, Code Reviews, Metodologías Ágiles (Scrum), Desarrollo de Productos SaaS",
+        "Git, GitHub, Code Review, Agile / Scrum, Vercel, Desarrollo asistido por IA, Cursor, Codex",
     },
   ],
-  softSkills: [
-    "Colaboración cross-funcional con equipos de backend, producto y QA en entornos SaaS y enterprise",
-    "Code reviews y estándares de calidad frontend en equipos distribuidos",
-    "Entrega ágil (Scrum) con releases iterativos orientados a valor",
-    "Experiencia en entornos regulados de alta compliance (banca, salud)",
-  ],
+  selectedProject: selectedProjectByLocale.es,
   education: [
     {
       degree: "Tecnicatura Superior en Programación",
       institution: "Universidad Tecnológica Nacional (UTN)",
-      period: "2012 – 2015",
+      period: "2012–2015",
     },
   ],
   certifications: [],
-  languages: [{ name: "Inglés", level: "Profesional — Nivel B2" }],
-  atsKeywords: [
-    "Senior Frontend Engineer",
-    "Ingeniero Frontend Senior",
-    "React",
-    "TypeScript",
-    "Vue.js",
-    "Next.js",
-    "Node.js",
-    "Nest.js",
-    "JavaScript",
-    "Arquitectura Frontend",
-    "Optimización de Performance",
-    "Sistemas UI Escalables",
-    "SaaS",
-    "B2B",
-    "Jest",
-    "Cypress",
-    "Testing Automatizado",
-    "PostgreSQL",
-    "APIs REST",
-    "Agile",
-    "Scrum",
-    "Code Reviews",
-    "Colaboración Cross-funcional",
+  languages: [
+    { name: "Español", level: "Nativo" },
+    { name: "Inglés", level: "B2 — Competencia profesional" },
   ],
 };
 
 export const portfolioUi = {
-  reactPortfolioHub: "Portfolio React",
+  reactPortfolioHub: "Portfolio",
   elevatorPitch:
-    "UIs de producción para flujos B2B complejos — rápidas, bien testeadas y pensadas para escalar con el producto y el equipo.",
+    "Desarrollo aplicaciones web en producción con una fuerte especialización frontend y experiencia full-stack en productos SaaS, B2B y aplicaciones web modernas.",
   availableFor: "Disponible freelance / full-time",
   openToRemote: "Abierto a remoto",
   viewProjects: "Ver proyectos",
-  contactMe: "Contactame",
+  contactMe: "Contacto",
   contactTitle: "Contacto",
   contactMailSubject: "Contacto desde portfolio",
   copyEmail: "Copiar email",
@@ -106,36 +83,30 @@ export const portfolioUi = {
   quickLinks: "Enlaces",
   linkedin: "LinkedIn",
   github: "GitHub",
-  downloadCv: "Descargar CV completo",
-  downloadCvAts: "Versión ATS",
+  downloadCv: "Descargar CV",
+  downloadCvAts: "Descargar CV ATS",
   generating: "Generando…",
   coreSkillsTitle: "Habilidades técnicas",
-  skillsSubtitle: "Herramientas y frameworks con los que trabajo día a día",
-  softSkillsTitle: "Habilidades blandas",
-  experienceHighlights: "Experiencia destacada",
-  educationCertifications: "Educación y certificaciones",
-  liveDemoProjects: "Portfolio",
-  portfolioSubtitle: "Mirá algunos de mis trabajos abajo",
+  skillsSubtitle: "Stack con foco frontend y experiencia full-stack",
+  experienceHighlights: "Experiencia",
+  educationCertifications: "Educación e idiomas",
+  liveDemoProjects: "Proyectos",
+  portfolioSubtitle: "Trabajo reciente en producción y productos personales",
   switchToLight: "Modo claro",
   switchToDark: "Modo oscuro",
   switchLanguage: "Cambiar a inglés",
   languageEn: "EN",
   languageEs: "ES",
-  heroChips: [
-    "10+ años en desarrollo de software",
-    "Banca, salud y plataformas SaaS",
-    "150.000+ usuarios activos",
-  ],
+  heroChips: ["Más de 10 años de experiencia", "Foco frontend · Experiencia full-stack"],
   caseStudyProblem: "Problema",
   caseStudyAction: "Acción",
   caseStudyResult: "Resultado",
-  softSkillChips: [
-    "Colaboración cross-funcional",
-    "Code reviews",
-    "Agile (Scrum)",
-    "Entornos regulados",
-  ],
+  technicalHighlightLabel: "Highlight técnico",
+  projectLiveDemo: "Ver demo",
+  projectSourceCode: "Código fuente",
+  projectDemoSoon: "Demo pronto",
+  projectRoleLabel: "Rol",
 };
 
-export const resumePdfFilename = "Matias_Moreno_CV.pdf";
-export const resumePdfAtsFilename = "Matias_Moreno_CV_ATS.pdf";
+export const resumePdfFilename = "Matias_Moreno_CV_ES.pdf";
+export const resumePdfAtsFilename = "Matias_Moreno_CV_ATS_ES.pdf";

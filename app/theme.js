@@ -4,14 +4,14 @@ export function createPortfolioTheme(darkMode) {
   return createTheme({
     palette: {
       mode: darkMode ? "dark" : "light",
-      primary: { main: "#0a7f78" },
-      secondary: { main: "#ff9f43" },
+      primary: { main: darkMode ? "#2a9d8f" : "#0f766e" },
+      secondary: { main: "#64748b" },
       background: {
-        default: darkMode ? "#0e1320" : "#f4f1ea",
-        paper: darkMode ? "rgba(21,29,40,0.9)" : "rgba(255,255,255,0.78)",
+        default: darkMode ? "#0f1419" : "#f7f8fa",
+        paper: darkMode ? "rgba(22, 28, 36, 0.92)" : "rgba(255, 255, 255, 0.92)",
       },
     },
-    shape: { borderRadius: 8 },
+    shape: { borderRadius: 10 },
     typography: {
       fontFamily: "Space Grotesk, Avenir Next, Segoe UI, sans-serif",
       h3: { fontWeight: 700 },
@@ -21,22 +21,22 @@ export function createPortfolioTheme(darkMode) {
       MuiPaper: {
         styleOverrides: {
           root: {
-            borderRadius: 8,
-            borderColor: darkMode ? "rgba(255,255,255,0.14)" : "rgba(21,32,41,0.12)",
+            borderRadius: 10,
+            borderColor: darkMode ? "rgba(255,255,255,0.10)" : "rgba(15,20,25,0.10)",
             boxShadow: darkMode
-              ? "0 6px 18px rgba(0,0,0,0.28)"
-              : "0 4px 14px rgba(21,32,41,0.08)",
+              ? "0 4px 16px rgba(0,0,0,0.22)"
+              : "0 2px 10px rgba(15,20,25,0.06)",
           },
         },
       },
       MuiCard: {
         styleOverrides: {
           root: {
-            borderRadius: 8,
-            borderColor: darkMode ? "rgba(255,255,255,0.14)" : "rgba(21,32,41,0.12)",
+            borderRadius: 10,
+            borderColor: darkMode ? "rgba(255,255,255,0.10)" : "rgba(15,20,25,0.10)",
             boxShadow: darkMode
-              ? "0 6px 18px rgba(0,0,0,0.24)"
-              : "0 3px 12px rgba(21,32,41,0.07)",
+              ? "0 4px 14px rgba(0,0,0,0.2)"
+              : "0 2px 8px rgba(15,20,25,0.05)",
           },
         },
       },
@@ -48,7 +48,7 @@ export function createPortfolioTheme(darkMode) {
             fontWeight: 600,
             "&.Mui-focusVisible": {
               outline: "2px solid",
-              outlineColor: darkMode ? "#7de2db" : "#0a7f78",
+              outlineColor: darkMode ? "#5eead4" : "#0f766e",
               outlineOffset: 2,
             },
           },
@@ -60,7 +60,7 @@ export function createPortfolioTheme(darkMode) {
             borderRadius: 8,
             "&.Mui-focusVisible": {
               outline: "2px solid",
-              outlineColor: darkMode ? "#7de2db" : "#0a7f78",
+              outlineColor: darkMode ? "#5eead4" : "#0f766e",
               outlineOffset: 2,
             },
           },

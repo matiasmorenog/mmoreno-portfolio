@@ -1,71 +1,77 @@
 export const projectContentById = {
   "rocha-cotizador": {
     en: {
-      role: "Full-stack developer (client project)",
+      category: "Commercial / Production",
+      statusLabel: "Live",
+      role: "Independent Software Engineer — commercial production work",
       summary:
-        "B2B wholesale quoting platform where authenticated customers build quotes with hidden per-client discounts; admins manage products, customers, Excel sync, and printable delivery notes (remitos).",
-      impact:
-        "Next.js 16 App Router, Prisma/PostgreSQL, dual NextAuth credential flows (admin + customer code/password), and Excel import/export for bulk catalog and customer operations.",
+        "Production B2B ordering and quotation platform for a multi-location bakery, replacing WhatsApp/Excel wholesale workflows with customer self-service and centralized administration.",
+      impact: null,
       usage:
-        "Portfolio demo on the development environment — customer login at /login, admin panel at /admin.",
+        "Public demo uses its own development database with no real customer data. Demo authentication lets you explore customer and administrator accounts with different roles and permissions.",
       caseStudy: {
         problem:
-          "A wholesale business needed to replace phone and spreadsheet quoting with a digital flow — per-client pricing rules without exposing discounts to buyers.",
+          "Wholesale orders were managed through WhatsApp and Excel, without customer self-service or centralized administration.",
         action:
-          "Built a Next.js B2B portal with role-separated auth, quote builder, printable remitos, admin CRUD, and Excel import/export for products and customers.",
+          "Built the platform end-to-end with Next.js, TypeScript, PostgreSQL, Prisma, and NextAuth, covering authentication, customer-specific pricing, stock, quotations, orders, and Excel synchronization.",
         result:
-          "Production-deployed cotizador with hidden discount logic, self-service quoting for clients, and ops-friendly Excel sync for catalog updates.",
+          "Production platform supporting recurring wholesale ordering across multiple locations and maintained as a paid software service.",
       },
     },
     es: {
-      role: "Desarrollador full stack (proyecto cliente)",
+      category: "Comercial / Producción",
+      statusLabel: "En producción",
+      role: "Ingeniero de Software Independiente — trabajo comercial en producción",
       summary:
-        "Cotizador B2B mayorista donde clientes autenticados arman cotizaciones con descuentos ocultos por cliente; admin gestiona productos, clientes, sync Excel y remitos imprimibles.",
-      impact:
-        "Next.js 16 App Router, Prisma/PostgreSQL, doble flujo NextAuth por credenciales (admin + código/contraseña de cliente) e import/export Excel para catálogo y clientes.",
+        "Plataforma B2B de pedidos y cotizaciones en producción para una panadería con múltiples sucursales, reemplazando el flujo mayorista por WhatsApp/Excel con autogestión para clientes y administración centralizada.",
+      impact: null,
       usage:
-        "Demo del portfolio en entorno de desarrollo — login cliente en /login, panel admin en /admin.",
+        "La demo pública usa su propia base de desarrollo y no contiene datos reales de clientes. Incluye autenticación demo para explorar cuentas de cliente y administrador con distintos roles y permisos.",
       caseStudy: {
         problem:
-          "Un negocio mayorista necesitaba reemplazar cotizaciones por teléfono y planillas con un flujo digital — precios por cliente sin mostrar descuentos al comprador.",
+          "Los pedidos mayoristas se gestionaban por WhatsApp y Excel, sin autogestión para clientes ni administración centralizada.",
         action:
-          "Construí un portal B2B con Next.js: auth por rol, armado de cotizaciones, remitos imprimibles, CRUD admin e import/export Excel de productos y clientes.",
+          "Desarrollé la plataforma end-to-end con Next.js, TypeScript, PostgreSQL, Prisma y NextAuth, cubriendo autenticación, precios personalizados por cliente, stock, cotizaciones, pedidos y sincronización con Excel.",
         result:
-          "Cotizador desplegado en producción con lógica de descuentos ocultos, autocotización para clientes y sync Excel operativo para actualizar catálogo.",
+          "Plataforma en producción que soporta pedidos mayoristas recurrentes en múltiples sucursales y se mantiene como servicio de software pago.",
       },
     },
   },
   "nexus-web-store": {
     en: {
-      role: "Full-stack developer (solo project)",
+      category: "Personal SaaS Product",
+      statusLabel: "Live Demo",
+      role: "Personal SaaS-oriented product (not client work)",
       summary:
-        "Full-stack sports apparel e-commerce with client-side catalog filtering, product variants, persistent cart, Mercado Pago checkout, transactional emails, and a protected admin panel with KPIs and order management.",
-      impact:
-        "Layered caching (ISR + unstable_cache), multi-tenant-ready Prisma schema, Vercel Blob image uploads, and Neon PostgreSQL tuned for serverless — deployable as a real storefront (demo branded as Goat).",
-      usage: "Live portfolio demo on Vercel with seeded catalog, checkout demo mode, and admin at /admin.",
+        "Personal multi-tenant e-commerce platform evolved from a storefront prototype into a reusable SaaS-oriented architecture.",
+      impact: null,
+      usage:
+        "Public demo uses Goat Indumentaria as a fictional demo storefront with sample data — not a real customer.",
       caseStudy: {
         problem:
-          "Demonstrate end-to-end product ownership with a deployable e-commerce flow — catalog, cart, payments, and admin — not just a static UI mockup.",
+          "Needed a production-shaped multi-tenant e-commerce foundation with storefront, checkout, merchant administration, and reusable SaaS-oriented capabilities.",
         action:
-          "Built a Next.js App Router storefront with Prisma/PostgreSQL, Mercado Pago checkout, ISR + server caching, auth-gated admin, and Vercel Blob for product images.",
+          "Built with Next.js 16, TypeScript, PostgreSQL, Prisma, NextAuth, Zustand, and Tailwind CSS, including storefront, checkout, merchant administration, products, variants, orders, inventory, dashboards, configurable modules, store-level data isolation, and layered Next.js caching.",
         result:
-          "Live demo with seeded catalog, checkout demo mode, and admin KPIs — a production-shaped portfolio project recruiters can click through in minutes.",
+          "Live personal SaaS-oriented demo showcasing the complete product through a fictional Goat Indumentaria storefront.",
       },
     },
     es: {
-      role: "Desarrollador full stack (proyecto personal)",
+      category: "Producto SaaS personal",
+      statusLabel: "Demo activa",
+      role: "Producto personal orientado a SaaS (no es trabajo para un cliente)",
       summary:
-        "E-commerce full stack de indumentaria deportiva con filtrado client-side, variantes de producto, carrito persistente, checkout con Mercado Pago, emails transaccionales y panel admin con KPIs y gestión de pedidos.",
-      impact:
-        "Caching en capas (ISR + unstable_cache), schema Prisma multi-tenant, uploads con Vercel Blob y Neon PostgreSQL optimizado para serverless — desplegable como tienda real (demo con marca Goat).",
-      usage: "Demo live en Vercel con catálogo seed, checkout en modo demo y admin en /admin.",
+        "Plataforma e-commerce multi-tenant personal, evolucionada de un prototipo de tienda a una arquitectura reutilizable orientada a SaaS.",
+      impact: null,
+      usage:
+        "La demo pública utiliza Goat Indumentaria como storefront ficticio con datos de ejemplo; no es un cliente real.",
       caseStudy: {
         problem:
-          "Demostrar ownership end-to-end con un flujo e-commerce desplegable — catálogo, carrito, pagos y admin — no solo un mockup estático.",
+          "Necesitaba una base e-commerce multi-tenant con forma de producción: storefront, checkout, administración comercial y capacidades reutilizables orientadas a SaaS.",
         action:
-          "Construí un storefront con Next.js App Router, Prisma/PostgreSQL, checkout Mercado Pago, ISR + cache server, admin con auth y Vercel Blob para imágenes.",
+          "Desarrollé con Next.js 16, TypeScript, PostgreSQL, Prisma, NextAuth, Zustand y Tailwind CSS, incluyendo storefront, checkout, administración comercial, productos, variantes, pedidos, inventario, dashboards, módulos configurables, aislamiento de datos por tienda y caché por capas en Next.js.",
         result:
-          "Demo live con catálogo seed, checkout demo y KPIs en admin — un proyecto con forma de producción que un reclutador puede recorrer en minutos.",
+          "Demo personal orientada a SaaS que muestra el producto completo a través de un storefront ficticio de Goat Indumentaria con datos de ejemplo.",
       },
     },
   },

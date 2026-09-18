@@ -44,7 +44,7 @@ export function getLocaleUrl(locale = defaultLocale) {
 export function getLocaleLanguageAlternates({ absolute = false } = {}) {
   const toHref = absolute ? getLocaleUrl : getLocalePath;
   const languages = Object.fromEntries(
-    supportedLocales.map((locale) => [locale, toHref(locale)]),
+    supportedLocales.map((locale) => [locale, toHref(locale)])
   );
   languages["x-default"] = toHref(defaultLocale);
   return languages;
@@ -72,10 +72,15 @@ export function getResumePdfFilenames(locale = defaultLocale) {
 
 export function getPortfolioProfile(locale = defaultLocale) {
   const { resume: data } = getResumeContent(locale);
+  const [headlineRole, ...headlineRest] = data.contact.title
+    .split("|")
+    .map((part) => part.trim())
+    .filter(Boolean);
 
   return {
     name: data.contact.name,
-    role: data.contact.title.replace(/\s*\|\s*/g, " — "),
+    role: headlineRole ?? data.contact.title,
+    stackLine: headlineRest.join(" · ") || null,
     location: data.contact.location,
     email: data.contact.email,
     phone: data.contact.phone,
@@ -90,25 +95,30 @@ export function getPortfolioSummary(locale = defaultLocale) {
   return getResume(locale).professionalProfile;
 }
 
+const COMPACT_EXPERIENCE_IDS = new Set(["santander", "genetrics"]);
+
 export function getExperienceHighlights(locale = defaultLocale) {
   return getResume(locale).experience.map((item) => ({
+    id: item.id,
     role: item.role,
     company: item.company,
     period: item.periodDisplay,
     stack: item.stack ?? [],
     details: item.portfolioSummary,
+    highlights: item.highlights ?? [],
+    technicalHighlight: item.technicalHighlight ?? null,
+    compact: COMPACT_EXPERIENCE_IDS.has(item.id),
   }));
 }
 
 export function getEducationHighlights(locale = defaultLocale) {
   const data = getResume(locale);
-  const certificationsLabel =
-    data.locale === "es" ? "Certificaciones" : "Certifications";
+  const certificationsLabel = data.locale === "es" ? "Certificaciones" : "Certifications";
   const languagesLabel = data.locale === "es" ? "Idiomas" : "Languages";
 
   return [
     ...data.education.map(
-      (item) => `${item.degree} — ${item.institution} · ${item.period}`,
+      (item) => `${item.degree} — ${item.institution} · ${item.period}`
     ),
     ...(data.certifications.length > 0
       ? [`${certificationsLabel}: ${data.certifications.join(", ")}`]
