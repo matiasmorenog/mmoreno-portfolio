@@ -1,10 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildLlmsTxt } from "@/data/llms-txt";
 import { buildRobotsTxt } from "@/data/robots-txt";
-import {
-  CANONICAL_SITE_URL,
-  canonicalProfile,
-} from "@/data/resume/canonical";
+import { CANONICAL_SITE_URL, canonicalProfile } from "@/data/resume/canonical";
 import { getLocaleUrl } from "@/data/resume/index";
 import { getProjects } from "@/data/projects";
 
@@ -15,7 +12,10 @@ describe("llms.txt", () => {
 
     expect(content).toContain(`Site: ${CANONICAL_SITE_URL}`);
     expect(content).toContain(canonicalProfile.name);
-    expect(content).toContain("Senior Frontend Engineer");
+    expect(content).toContain("Software Engineer");
+    expect(content).not.toContain("Senior Frontend Engineer");
+    expect(content).not.toContain("Nest.js");
+    expect(content).not.toContain("150,000+ active users");
     expect(content).toContain(getLocaleUrl("en"));
     expect(content).toContain(getLocaleUrl("es"));
     expect(content).toContain(canonicalProfile.githubUrl);

@@ -45,7 +45,13 @@ const toolbarIconButtonSx = {
   boxShadow: 2,
 };
 
-function FloatingDisplayControls({ darkMode, locale, ui, onToggleDarkMode, onToggleLocale }) {
+function FloatingDisplayControls({
+  darkMode,
+  locale,
+  ui,
+  onToggleDarkMode,
+  onToggleLocale,
+}) {
   return (
     <Box
       sx={{
@@ -115,7 +121,7 @@ function PortfolioPageContent() {
 
   const [darkMode, setDarkMode] = useState(true);
   const [locale, setLocale] = useState(() =>
-    parseLocale(searchParams.get(localeQueryParam)),
+    parseLocale(searchParams.get(localeQueryParam))
   );
   const [downloadingCv, setDownloadingCv] = useState(false);
   const [downloadingCvAts, setDownloadingCvAts] = useState(false);
@@ -143,7 +149,9 @@ function PortfolioPageContent() {
   }, [searchParams]);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
     if (prefersReducedMotion) {
       setDownloadHint(false);
     }
@@ -164,7 +172,7 @@ function PortfolioPageContent() {
       const query = params.toString();
       router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
     },
-    [pathname, router, searchParams],
+    [pathname, router, searchParams]
   );
 
   const handleToggleLocale = () => {
@@ -176,7 +184,9 @@ function PortfolioPageContent() {
     const projectsSection = document.getElementById("projects");
     if (!projectsSection) return;
 
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
     projectsSection.scrollIntoView({
       behavior: prefersReducedMotion ? "auto" : "smooth",
       block: "start",
@@ -212,8 +222,8 @@ function PortfolioPageContent() {
         sx={{
           minHeight: "100vh",
           background: darkMode
-            ? "radial-gradient(circle at 92% 3%, #264866 0%, #0e1320 55%)"
-            : "radial-gradient(circle at 95% 5%, #ffe5bf 0%, #f4f1ea 50%, #dbe9ff 100%)",
+            ? "linear-gradient(180deg, #121820 0%, #0f1419 40%, #0f1419 100%)"
+            : "linear-gradient(180deg, #eef2f5 0%, #f7f8fa 45%, #f7f8fa 100%)",
           py: { xs: 2, md: 4 },
         }}
       >
@@ -279,23 +289,37 @@ function PortfolioPageContent() {
                   </Stack>
                   <Typography
                     variant="h6"
-                    color="text.secondary"
                     sx={{
-                      mt: 0.4,
-                      fontSize: { xs: "0.95rem", sm: "1.1rem", md: "1.25rem" },
-                      lineHeight: 1.35,
+                      mt: 0.5,
+                      fontWeight: 700,
+                      fontSize: { xs: "1.05rem", sm: "1.2rem", md: "1.35rem" },
+                      lineHeight: 1.3,
                       maxWidth: { xs: 640, md: "none" },
                     }}
                   >
                     {profile.role}
                   </Typography>
+                  {profile.stackLine ? (
+                    <Typography
+                      variant="body1"
+                      color="primary.main"
+                      sx={{
+                        mt: 0.35,
+                        fontWeight: 600,
+                        letterSpacing: 0.2,
+                        fontSize: { xs: "0.9rem", md: "1rem" },
+                      }}
+                    >
+                      {profile.stackLine}
+                    </Typography>
+                  ) : null}
                   <Typography
                     variant="body1"
                     color="text.secondary"
                     sx={{
                       mt: 1,
                       fontWeight: 500,
-                      lineHeight: 1.45,
+                      lineHeight: 1.5,
                       fontSize: { xs: "0.9rem", md: "0.98rem" },
                     }}
                   >
@@ -320,16 +344,56 @@ function PortfolioPageContent() {
                     ))}
                   </Stack>
 
-                  <Button
-                    size="small"
-                    variant="contained"
-                    component="a"
-                    href="#projects"
-                    onClick={handleScrollToProjects}
-                    sx={{ mt: 1.5, alignSelf: "flex-start" }}
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    useFlexGap
+                    flexWrap="wrap"
+                    sx={{ mt: 1.5 }}
                   >
-                    {ui.viewProjects}
-                  </Button>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      component="a"
+                      href="#projects"
+                      onClick={handleScrollToProjects}
+                    >
+                      {ui.viewProjects}
+                    </Button>
+                    <DownloadCtaHint
+                      active={downloadHint}
+                      onComplete={handleDownloadHintComplete}
+                    >
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        className="download-cta-button"
+                        onClick={handleDownloadCv}
+                        disabled={downloadingCv || downloadingCvAts}
+                        startIcon={<DownloadRoundedIcon fontSize="small" />}
+                      >
+                        {downloadingCv ? ui.generating : ui.downloadCv}
+                      </Button>
+                    </DownloadCtaHint>
+                    <Button
+                      size="small"
+                      variant="text"
+                      component="a"
+                      href="#contact"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        document.getElementById("contact")?.scrollIntoView({
+                          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+                            .matches
+                            ? "auto"
+                            : "smooth",
+                          block: "start",
+                        });
+                      }}
+                    >
+                      {ui.contactMe}
+                    </Button>
+                  </Stack>
                 </Box>
 
                 <Stack
@@ -380,113 +444,56 @@ function PortfolioPageContent() {
                       spacing={1}
                       useFlexGap
                       flexWrap="wrap"
+                      alignItems="center"
                       sx={{ mt: 1 }}
                     >
                       <Button
                         size="small"
-                        variant="contained"
+                        variant="outlined"
+                        onClick={handleDownloadCvAts}
+                        disabled={downloadingCv || downloadingCvAts}
+                        startIcon={<DownloadRoundedIcon fontSize="small" />}
+                      >
+                        {downloadingCvAts ? ui.generating : ui.downloadCvAts}
+                      </Button>
+                      <Button
+                        size="small"
+                        variant="text"
                         component="a"
                         href={profile.linkedin}
                         target="_blank"
                         rel="noreferrer"
                         startIcon={<LinkedInIcon fontSize="small" />}
-                        sx={{
-                          bgcolor: "#0A66C2",
-                          color: "#fff",
-                          "&:hover": {
-                            bgcolor: "#004182",
-                          },
-                        }}
                       >
                         {ui.linkedin}
                       </Button>
                       <Button
                         size="small"
-                        variant="contained"
+                        variant="text"
                         component="a"
                         href={profile.github}
                         target="_blank"
                         rel="noreferrer"
                         startIcon={<GitHubIcon fontSize="small" />}
-                        sx={{
-                          bgcolor: "#24292f",
-                          color: "#fff",
-                          "&:hover": {
-                            bgcolor: "#0d1117",
-                          },
-                        }}
                       >
                         {ui.github}
                       </Button>
-                      <Stack
-                        direction="row"
-                        spacing={1}
-                        useFlexGap
-                        alignItems="center"
-                        sx={{ flexWrap: "nowrap", flexShrink: 0 }}
-                      >
-                        <DownloadCtaHint
-                          active={downloadHint}
-                          onComplete={handleDownloadHintComplete}
-                        >
-                          <Button
-                            size="small"
-                            variant="contained"
-                            color="primary"
-                            className="download-cta-button"
-                            onClick={handleDownloadCv}
-                            disabled={downloadingCv || downloadingCvAts}
-                            startIcon={<DownloadRoundedIcon fontSize="small" />}
-                            sx={{ whiteSpace: "nowrap", flexShrink: 0 }}
-                          >
-                            <Box
-                              component="span"
-                              sx={{
-                                display: "inline-grid",
-                                "& > span": { gridArea: "1 / 1" },
-                              }}
-                            >
-                              <Box
-                                component="span"
-                                aria-hidden={downloadingCv}
-                                sx={{ visibility: downloadingCv ? "hidden" : "visible" }}
-                              >
-                                {ui.downloadCv}
-                              </Box>
-                              <Box
-                                component="span"
-                                aria-hidden={!downloadingCv}
-                                sx={{ visibility: downloadingCv ? "visible" : "hidden" }}
-                              >
-                                {ui.generating}
-                              </Box>
-                            </Box>
-                          </Button>
-                        </DownloadCtaHint>
-                        <Button
-                          size="small"
-                          variant="text"
-                          onClick={handleDownloadCvAts}
-                          disabled={downloadingCv || downloadingCvAts}
-                          sx={{ whiteSpace: "nowrap", flexShrink: 0 }}
-                        >
-                          {downloadingCvAts ? ui.generating : ui.downloadCvAts}
-                        </Button>
-                      </Stack>
                     </Stack>
                   </Box>
 
                   <Divider />
 
-                  <PortfolioContact
-                    title={ui.contactTitle}
-                    email={profile.email}
-                    copyEmailLabel={ui.copyEmail}
-                    emailCopiedLabel={ui.emailCopied}
-                    phone={profile.phone}
-                    whatsappHref={profile.whatsapp}
-                    openWhatsAppLabel={ui.openWhatsApp}
-                  />
+                  <Box id="contact">
+                    <PortfolioContact
+                      title={ui.contactTitle}
+                      email={profile.email}
+                      copyEmailLabel={ui.copyEmail}
+                      emailCopiedLabel={ui.emailCopied}
+                      phone={profile.phone}
+                      whatsappHref={profile.whatsapp}
+                      openWhatsAppLabel={ui.openWhatsApp}
+                    />
+                  </Box>
                 </Stack>
               </Box>
             </Paper>
@@ -495,45 +502,30 @@ function PortfolioPageContent() {
 
             <Paper
               component="section"
-              variant="outlined"
-              sx={{ p: 1.5, borderRadius: 1 }}
-            >
-              <Typography component="h2" variant="h6" sx={{ mb: 1 }}>
-                {ui.softSkillsTitle}
-              </Typography>
-              <Stack direction="row" spacing={0.9} useFlexGap flexWrap="wrap">
-                {ui.softSkillChips.map((skill) => (
-                  <Chip key={skill} label={skill} variant="outlined" />
-                ))}
-              </Stack>
-            </Paper>
-
-            <Box
-              component="section"
               aria-labelledby="experience-heading"
-              sx={{
-                display: "grid",
-                gap: 1,
-                gridTemplateColumns: { xs: "1fr", md: "1.5fr 1fr" },
-              }}
+              variant="outlined"
+              sx={{ p: 2, borderRadius: 1 }}
             >
-              <Paper variant="outlined" sx={{ p: 2, borderRadius: 1 }}>
-                <Typography
-                  id="experience-heading"
-                  component="h2"
-                  variant="h6"
-                  sx={{ mb: 1 }}
-                >
-                  {ui.experienceHighlights}
-                </Typography>
-                {experienceHighlights.map((item, index) => (
+              <Typography
+                id="experience-heading"
+                component="h2"
+                variant="h6"
+                sx={{ mb: 1 }}
+              >
+                {ui.experienceHighlights}
+              </Typography>
+              {experienceHighlights.map((item, index) => {
+                const isCompact = Boolean(item.compact);
+                const isLast = index === experienceHighlights.length - 1;
+
+                return (
                   <Box
-                    key={item.company}
+                    key={item.id ?? item.company}
                     sx={{
                       display: "grid",
                       gridTemplateColumns: "auto 1fr",
-                      gap: 1.5,
-                      pb: index < experienceHighlights.length - 1 ? 1.5 : 0,
+                      gap: isCompact ? 1.1 : 1.5,
+                      pb: isLast ? 0 : isCompact ? 1.1 : 2,
                     }}
                   >
                     <Box
@@ -546,19 +538,19 @@ function PortfolioPageContent() {
                     >
                       <Box
                         sx={{
-                          width: 10,
-                          height: 10,
+                          width: isCompact ? 8 : 10,
+                          height: isCompact ? 8 : 10,
                           borderRadius: "50%",
                           bgcolor: "primary.main",
                           flexShrink: 0,
                         }}
                       />
-                      {index < experienceHighlights.length - 1 ? (
+                      {!isLast ? (
                         <Box
                           sx={{
                             width: 2,
                             flexGrow: 1,
-                            minHeight: 24,
+                            minHeight: isCompact ? 16 : 24,
                             mt: 0.5,
                             bgcolor: "divider",
                             borderRadius: 1,
@@ -572,13 +564,28 @@ function PortfolioPageContent() {
                           display: "grid",
                           gridTemplateColumns: { xs: "1fr", sm: "1fr 10.5rem" },
                           columnGap: 2,
-                          rowGap: 0.25,
+                          rowGap: 0.15,
                           alignItems: "baseline",
                         }}
                       >
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                          {item.role} — {item.company}
-                        </Typography>
+                        <Box>
+                          <Typography
+                            variant={isCompact ? "body2" : "subtitle2"}
+                            sx={{ fontWeight: 700 }}
+                          >
+                            {item.role}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{
+                              mt: 0.1,
+                              fontSize: isCompact ? "0.8rem" : undefined,
+                            }}
+                          >
+                            {item.company}
+                          </Typography>
+                        </Box>
                         <Typography
                           variant="caption"
                           color="text.secondary"
@@ -593,43 +600,127 @@ function PortfolioPageContent() {
                           {item.period}
                         </Typography>
                       </Box>
-                      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.4 }}>
-                        {item.details}
-                      </Typography>
+
+                      {isCompact ? (
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ mt: 0.45, lineHeight: 1.45, fontSize: "0.82rem" }}
+                        >
+                          {item.details}
+                        </Typography>
+                      ) : item.highlights?.length > 0 ? (
+                        <Box
+                          component="ul"
+                          sx={{
+                            mt: 0.8,
+                            mb: 0,
+                            pl: 2.2,
+                            color: "text.secondary",
+                          }}
+                        >
+                          {item.highlights.map((highlight) => (
+                            <Typography
+                              key={highlight}
+                              component="li"
+                              variant="body2"
+                              sx={{ mt: 0.55, lineHeight: 1.55 }}
+                            >
+                              {highlight}
+                            </Typography>
+                          ))}
+                        </Box>
+                      ) : (
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ mt: 0.4 }}
+                        >
+                          {item.details}
+                        </Typography>
+                      )}
+
+                      {item.technicalHighlight ? (
+                        <Paper
+                          variant="outlined"
+                          sx={{
+                            mt: 1.2,
+                            p: 1.25,
+                            bgcolor: "action.hover",
+                            borderColor: "primary.main",
+                          }}
+                        >
+                          <Typography
+                            variant="overline"
+                            color="primary.main"
+                            sx={{ fontWeight: 700, letterSpacing: 0.8 }}
+                          >
+                            {ui.technicalHighlightLabel}
+                          </Typography>
+                          <Typography
+                            variant="subtitle2"
+                            sx={{ fontWeight: 700, mt: 0.2 }}
+                          >
+                            {item.technicalHighlight.title}
+                          </Typography>
+                          <Stack
+                            direction="row"
+                            spacing={0.75}
+                            useFlexGap
+                            flexWrap="wrap"
+                            sx={{ mt: 1 }}
+                          >
+                            {item.technicalHighlight.metrics.map((metric) => (
+                              <Chip
+                                key={`${metric.label}-${metric.value}`}
+                                size="small"
+                                color="primary"
+                                variant="outlined"
+                                label={`${metric.label}: ${metric.value}`}
+                              />
+                            ))}
+                          </Stack>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ mt: 1, lineHeight: 1.5 }}
+                          >
+                            {item.technicalHighlight.description}
+                          </Typography>
+                        </Paper>
+                      ) : null}
+
                       {item.stack?.length > 0 ? (
                         <Stack
                           direction="row"
                           spacing={0.6}
                           useFlexGap
                           flexWrap="wrap"
-                          sx={{ mt: 0.8 }}
+                          sx={{ mt: isCompact ? 0.6 : 0.9 }}
                         >
                           {item.stack.map((tech) => (
-                            <Chip key={tech} label={tech} size="small" variant="outlined" />
+                            <Chip
+                              key={tech}
+                              label={tech}
+                              size="small"
+                              variant="outlined"
+                              sx={
+                                isCompact
+                                  ? {
+                                      height: 22,
+                                      "& .MuiChip-label": { px: 0.8, fontSize: "0.7rem" },
+                                    }
+                                  : undefined
+                              }
+                            />
                           ))}
                         </Stack>
                       ) : null}
                     </Box>
                   </Box>
-                ))}
-              </Paper>
-
-              <Paper variant="outlined" sx={{ p: 2, borderRadius: 1 }}>
-                <Typography component="h2" variant="h6" sx={{ mb: 1 }}>
-                  {ui.educationCertifications}
-                </Typography>
-                {educationHighlights.map((item) => (
-                  <Typography
-                    key={item}
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ mb: 1 }}
-                  >
-                    {item}
-                  </Typography>
-                ))}
-              </Paper>
-            </Box>
+                );
+              })}
+            </Paper>
 
             <Box component="section" aria-labelledby="projects-heading">
               <Typography
@@ -662,10 +753,42 @@ function PortfolioPageContent() {
                       action: ui.caseStudyAction,
                       result: ui.caseStudyResult,
                     }}
+                    uiLabels={{
+                      liveDemo: ui.projectLiveDemo,
+                      sourceCode: ui.projectSourceCode,
+                      demoSoon: ui.projectDemoSoon,
+                      roleLabel: ui.projectRoleLabel,
+                    }}
                   />
                 ))}
               </Box>
             </Box>
+
+            <Paper
+              component="section"
+              aria-labelledby="education-heading"
+              variant="outlined"
+              sx={{ p: 2, borderRadius: 1, alignSelf: "start" }}
+            >
+              <Typography
+                id="education-heading"
+                component="h2"
+                variant="h6"
+                sx={{ mb: 1 }}
+              >
+                {ui.educationCertifications}
+              </Typography>
+              {educationHighlights.map((item) => (
+                <Typography
+                  key={item}
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 1, "&:last-child": { mb: 0 } }}
+                >
+                  {item}
+                </Typography>
+              ))}
+            </Paper>
           </Stack>
         </Container>
       </Box>

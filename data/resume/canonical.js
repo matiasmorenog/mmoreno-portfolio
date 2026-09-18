@@ -3,10 +3,8 @@ export const CANONICAL_SITE_URL = "https://mmoreno-portfolio.vercel.app";
 export const canonicalProfile = {
   name: "Matías Moreno",
   legalName: "Matias Adrian Moreno Gallo",
-  headline:
-    "Senior Frontend Engineer | React & TypeScript | Performance & Scalable UI Systems",
-  linkedinHeadline:
-    "Senior Frontend Engineer | React & TypeScript | Performance & Scalable UI Systems",
+  headline: "Software Engineer | React, TypeScript, Next.js & Node.js",
+  linkedinHeadline: "Software Engineer | React, TypeScript, Next.js & Node.js",
   location: "Tigre, Buenos Aires, Argentina",
   phone: "+54 11 6353 7809",
   whatsappUrl: "https://wa.me/541163537809",
@@ -21,99 +19,80 @@ export const canonicalProfile = {
 };
 
 /**
- * Canonical job titles, companies, dates and stack for CV, portfolio and LinkedIn.
- * Keep LinkedIn experience entries aligned with these exact values.
+ * Canonical job ids, dates and stack for CV, portfolio and LinkedIn.
+ * Localized role/company/periodDisplay/highlights live in experience-content.*.js.
  *
- * Title format: role only — stack and domain live in bullets, not in the title.
+ * Reverse chronological order by end/start date.
  */
 export const experienceJobs = [
   {
+    id: "rocha",
+    period: "2026 – Present",
+    stack: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "NextAuth"],
+  },
+  {
     id: "ine",
-    role: "Senior Frontend Engineer",
-    company: "INE",
     period: "2022 – 2025",
-    periodDisplay: "Mar 2022 - Jul 2025",
     stack: ["React", "Vue.js", "TypeScript", "Jest", "Web Workers"],
   },
   {
     id: "santander",
-    role: "Full Stack Engineer",
-    company: "Santander Tecnología Argentina",
     period: "2021 – 2022",
-    periodDisplay: "Dec 2021 - Mar 2022",
-    stack: ["SQL Server", "Stored Procedures", "Banking Systems"],
+    stack: ["SQL", "Stored Procedures"],
   },
   {
     id: "genetrics",
-    role: "Full Stack Engineer",
-    company: "Genetrics",
     period: "2021 – 2021",
-    periodDisplay: "Jul 2021 - Sep 2021",
-    stack: ["React", "REST APIs", "Healthcare"],
+    stack: ["React", "Material UI", "REST APIs"],
   },
   {
     id: "envone",
-    role: "Full Stack Engineer",
-    company: "Envone",
     period: "2015 – 2021",
-    periodDisplay: "Jul 2015 - Jun 2021",
-    stack: ["Vue.js", "Node.js", "PostgreSQL", "Scrum"],
+    stack: ["Vue.js", "Node.js", "Express", "PostgreSQL", "MySQL"],
   },
 ];
 
 export const linkedInSyncChecklist = [
   `Headline: ${canonicalProfile.linkedinHeadline}`,
   `Location: ${canonicalProfile.location}`,
-  ...experienceJobs.map(
-    (job) => `${job.company}: ${job.role} (${job.periodDisplay}) · ${job.stack.join(", ")}`,
-  ),
+  ...experienceJobs.map((job) => `${job.id}: (${job.period}) · ${job.stack.join(", ")}`),
 ];
 
-/** Professional summary — aligned with LinkedIn About (EN / ES). */
+/** Professional summary — single source of truth (EN / ES). */
 export const professionalProfileEn = [
-  "I specialize in building scalable SaaS and B2B platforms, with production experience across React and Vue ecosystems — banking, healthcare, and global certification products.",
-  "Delivered high-traffic interfaces for 150,000+ active users, combining performance optimization, automated testing, and cross-functional delivery with backend and product teams.",
-  "Full-stack foundation with Node.js and PostgreSQL from 6+ years building CRM and B2B products — with frontend as my primary focus.",
-  "Previously led frontend ownership of INE's B2B SaaS platform as an individual contributor (no direct reports). Comfortable in regulated, high-compliance environments and agile (Scrum) delivery.",
-  "Seeking to contribute frontend architecture leadership, code quality standards, and user-centered product execution in remote or hybrid engineering teams.",
+  "Software Engineer with 10+ years of experience building production web applications across SaaS, B2B, healthcare, banking, and industrial platforms. Strong frontend background in React, TypeScript, Vue.js, and web performance, combined with full-stack experience in Next.js, Node.js, REST APIs, and PostgreSQL. Experienced in delivering production features, complex business logic, API integrations, testing, and end-to-end software development.",
 ];
 
 export const professionalProfileEs = [
-  "Me especializo en construir plataformas SaaS y B2B escalables, con experiencia en producción en los ecosistemas React y Vue — banca, salud y certificaciones globales.",
-  "Entregué interfaces de alto tráfico para más de 150.000 usuarios activos, combinando optimización de performance, testing automatizado y trabajo cross-funcional con equipos de backend y producto.",
-  "Base full stack con Node.js y PostgreSQL (6+ años en CRM y productos B2B), con el frontend como foco principal.",
-  "Lideré la entrega frontend de la plataforma SaaS B2B de INE como contributor individual (sin personas a cargo). Experiencia en entornos regulados de alta compliance y entrega ágil (Scrum).",
-  "Busco aportar liderazgo en arquitectura frontend, estándares de calidad de código y ejecución centrada en el usuario en equipos de ingeniería remotos o híbridos.",
+  "Ingeniero de Software con más de 10 años de experiencia desarrollando aplicaciones web en producción para plataformas SaaS, B2B, salud, banca y sector industrial. Sólida experiencia frontend con React, TypeScript, Vue.js y optimización de rendimiento web, combinada con experiencia full-stack en Next.js, Node.js, APIs REST y PostgreSQL. Experiencia desarrollando funcionalidades en producción, lógica de negocio compleja, integraciones con APIs, testing y desarrollo de software end-to-end.",
 ];
 
 /** Shared site / metadata description (layout, Open Graph, JSON-LD). */
 export const siteDescription =
-  "Senior Frontend Engineer specializing in React, TypeScript, and scalable UI systems. Experience in SaaS platforms, banking, healthcare, and B2B solutions.";
+  "Software Engineer with a strong React, TypeScript, and Next.js frontend background, plus full-stack experience with Node.js, REST APIs, and PostgreSQL. Production work across SaaS, B2B, healthcare, banking, and industrial platforms.";
 
 /** Person JSON-LD — single source of truth for structured data on the homepage. */
-export const jsonLdJobTitle = "Senior Frontend Engineer";
+export const jsonLdJobTitle = "Software Engineer";
 
 export const jsonLdPersonDescription = professionalProfileEn[0];
 
 export const jsonLdKnowsAbout = [
-  "Senior Frontend Engineer",
+  "Software Engineer",
+  "Frontend Engineer",
   "React",
   "TypeScript",
-  "Vue.js",
   "Next.js",
+  "Vue.js",
   "Node.js",
-  "Nest.js",
   "JavaScript",
-  "Frontend Architecture",
-  "Performance Optimization",
-  "Scalable UI Systems",
-  "SaaS",
-  "B2B",
-  "Jest",
-  "Cypress",
-  "Automated Testing",
   "PostgreSQL",
   "REST APIs",
+  "Prisma",
+  "Jest",
+  "Cypress",
+  "Web Performance",
+  "SaaS",
+  "B2B",
 ];
 
 /** Curated SEO keywords for layout metadata (EN default). */

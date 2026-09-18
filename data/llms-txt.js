@@ -7,6 +7,7 @@ import {
   professionalProfileEn,
   siteDescription,
 } from "@/data/resume/canonical";
+import { experienceContentById } from "@/data/resume/experience-content.en";
 import { getLocaleUrl } from "@/data/resume/index";
 
 /**
@@ -14,12 +15,13 @@ import { getLocaleUrl } from "@/data/resume/index";
  * @returns {string}
  */
 export function buildLlmsTxt() {
-  const experienceLines = experienceJobs.map(
-    (job) => `- ${job.role} at ${job.company} (${job.period})`,
-  );
+  const experienceLines = experienceJobs.map((job) => {
+    const content = experienceContentById[job.id];
+    return `- ${content.role} at ${content.company} (${content.periodDisplay})`;
+  });
 
   const skillsLine = jsonLdKnowsAbout
-    .filter((skill) => !["Senior Frontend Engineer"].includes(skill))
+    .filter((skill) => !["Software Engineer", "Frontend Engineer"].includes(skill))
     .join(", ");
 
   const projectSections = getProjects("en").flatMap((project) => [
@@ -39,7 +41,6 @@ export function buildLlmsTxt() {
     "",
     `${canonicalProfile.name} is a ${canonicalProfile.headline.split(" | ")[0]} based in ${canonicalProfile.location}.`,
     professionalProfileEn[0],
-    professionalProfileEn[1],
     "",
     "## Key Pages",
     "",

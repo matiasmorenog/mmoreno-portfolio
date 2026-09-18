@@ -26,25 +26,26 @@ export default function SkillsIconGrid({ title, subtitle }) {
 
       <Box
         sx={{
-          display: { xs: "grid", md: "flex" },
+          display: "grid",
           gridTemplateColumns: {
             xs: "repeat(4, minmax(0, 1fr))",
             sm: "repeat(5, minmax(0, 1fr))",
+            md: "repeat(5, minmax(0, 1fr))",
+            lg: "repeat(10, minmax(0, 1fr))",
           },
-          flexWrap: { md: "nowrap" },
-          alignItems: { md: "flex-start" },
+          alignItems: "flex-start",
           justifyItems: "center",
           width: "100%",
-          gap: { xs: 1, md: 1.5 },
-          rowGap: { xs: 1.2, md: 1.5 },
+          gap: { xs: 1, md: 1.25 },
+          rowGap: { xs: 1.2, md: 1.25 },
         }}
       >
         {portfolioSkillKeys.map((techKey) => (
-          <Box key={techKey} sx={{ flexShrink: { md: 0 } }}>
-            <Box sx={{ display: { xs: "block", md: "none" } }}>
+          <Box key={techKey}>
+            <Box sx={{ display: { xs: "block", lg: "none" } }}>
               <TechIcon techKey={techKey} compact />
             </Box>
-            <Box sx={{ display: { xs: "none", md: "block" } }}>
+            <Box sx={{ display: { xs: "none", lg: "block" } }}>
               <TechIcon techKey={techKey} />
             </Box>
           </Box>

@@ -16,6 +16,7 @@ import TechStack from "@/components/TechStack";
 
 const statusColorMap = {
   Live: "success",
+  "Live Demo": "success",
   Prototype: "warning",
   Archived: "default",
 };
@@ -35,20 +36,30 @@ const livePulse = keyframes`
   }
 `;
 
-function LiveStatusChip({ projectStatus, liveStatus }) {
-  if (projectStatus !== "Live") {
+function isLiveStatus(projectStatus) {
+  return projectStatus === "Live" || projectStatus === "Live Demo";
+}
+
+function LiveStatusChip({ projectStatus, statusLabel, liveStatus }) {
+  if (!isLiveStatus(projectStatus)) {
     return (
       <Chip
         size="small"
-        label={projectStatus}
+        label={statusLabel ?? projectStatus}
         color={statusColorMap[projectStatus] ?? "default"}
         variant="outlined"
       />
     );
   }
 
+  const onlineLabel =
+    statusLabel ?? (projectStatus === "Live Demo" ? "Live Demo" : "Live");
   const label =
-    liveStatus === "checking" ? "Checking…" : liveStatus === "offline" ? "Offline" : "Live";
+    liveStatus === "checking"
+      ? "Checking…"
+      : liveStatus === "offline"
+        ? "Offline"
+        : onlineLabel;
 
   const color =
     liveStatus === "offline" ? "warning" : liveStatus === "live" ? "success" : "default";
@@ -105,19 +116,27 @@ function CaseStudyItem({ label, children }) {
       >
         {label}
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.4, lineHeight: 1.6 }}>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ mt: 0.4, lineHeight: 1.6 }}
+      >
         {children}
       </Typography>
     </Box>
   );
 }
 
-export default function ProjectCard({ project, caseStudyLabels }) {
+export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
   const PreviewComponent = getProjectPreviewComponent(project.previewKey);
-  const shouldPingLive = project.status === "Live" && Boolean(project.demoUrl);
+  const shouldPingLive = isLiveStatus(project.status) && Boolean(project.demoUrl);
   const liveStatus = useDemoUrlStatus(project.demoUrl, shouldPingLive);
   const hasPreviewImage = Boolean(project.previewImage);
   const hasPreview = hasPreviewImage || Boolean(PreviewComponent);
+  const roleLabel = uiLabels?.roleLabel ?? "Role";
+  const liveDemoLabel = uiLabels?.liveDemo ?? "Live Demo";
+  const sourceCodeLabel = uiLabels?.sourceCode ?? "Source Code";
+  const demoSoonLabel = uiLabels?.demoSoon ?? "Demo Soon";
 
   return (
     <Paper
@@ -178,7 +197,9 @@ export default function ProjectCard({ project, caseStudyLabels }) {
         </Box>
       ) : null}
 
-      <Box sx={{ p: { xs: 2, md: 2.5 }, flex: 1, display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{ p: { xs: 2, md: 2.5 }, flex: 1, display: "flex", flexDirection: "column" }}
+      >
         <Stack
           direction="row"
           alignItems="center"
@@ -190,25 +211,38 @@ export default function ProjectCard({ project, caseStudyLabels }) {
           <Typography component="h3" variant="h5" sx={{ fontWeight: 700 }}>
             {project.title}
           </Typography>
-          <LiveStatusChip projectStatus={project.status} liveStatus={liveStatus} />
+          <LiveStatusChip
+            projectStatus={project.status}
+            statusLabel={project.statusLabel}
+            liveStatus={liveStatus}
+          />
           {project.category ? (
-            <Chip size="small" label={project.category} variant="outlined" />
+            <Chip
+              size="small"
+              color="primary"
+              variant="outlined"
+              label={project.category}
+            />
           ) : null}
-          <Box sx={{ flexGrow: 1 }} />
-          <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>
-            {project.level}
-          </Typography>
         </Stack>
 
-        <TechStack labels={project.stack} />
-
-        <Typography variant="body1" color="text.secondary" sx={{ mt: 2, lineHeight: 1.65 }}>
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          sx={{ mt: 0.5, lineHeight: 1.65 }}
+        >
           {project.summary}
         </Typography>
 
-        <Typography variant="body2" sx={{ mt: 1.4, lineHeight: 1.6 }}>
-          {project.impact}
-        </Typography>
+        {project.impact ? (
+          <Typography variant="body2" sx={{ mt: 1.2, lineHeight: 1.6 }}>
+            {project.impact}
+          </Typography>
+        ) : null}
+
+        <Box sx={{ mt: 1.4 }}>
+          <TechStack labels={project.stack} />
+        </Box>
 
         {project.caseStudy && caseStudyLabels ? (
           <Stack spacing={1.2} sx={{ mt: 1.6 }}>
@@ -224,8 +258,12 @@ export default function ProjectCard({ project, caseStudyLabels }) {
           </Stack>
         ) : null}
 
-        <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
-          {project.role ? `Role: ${project.role}. ` : ""}
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ mt: 1, display: "block" }}
+        >
+          {project.role ? `${roleLabel}: ${project.role}. ` : ""}
           {project.usage}
         </Typography>
 
@@ -241,11 +279,11 @@ export default function ProjectCard({ project, caseStudyLabels }) {
               target="_blank"
               rel="noreferrer"
             >
-              Live Demo
+              {liveDemoLabel}
             </Button>
           ) : (
             <Button size="small" variant="outlined" disabled>
-              Demo Soon
+              {demoSoonLabel}
             </Button>
           )}
 
@@ -258,7 +296,7 @@ export default function ProjectCard({ project, caseStudyLabels }) {
               target="_blank"
               rel="noreferrer"
             >
-              Source Code
+              {sourceCodeLabel}
             </Button>
           ) : null}
         </Stack>

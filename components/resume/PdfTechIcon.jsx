@@ -13,8 +13,8 @@ const styles = StyleSheet.create({
   itemCompact: {
     alignItems: "center",
     marginRight: 4,
-    marginBottom: 0,
-    width: 28,
+    marginBottom: 4,
+    width: 30,
   },
   itemSidebarGrid: {
     alignItems: "center",
