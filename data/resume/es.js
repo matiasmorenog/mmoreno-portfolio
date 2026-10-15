@@ -46,7 +46,7 @@ export const resume = {
     {
       category: "Herramientas / Prácticas",
       items:
-        "Git, GitHub, Code Review, Agile / Scrum, Vercel, Desarrollo asistido por IA, Cursor, Codex",
+        "Git, GitHub, Code Review, Agile / Scrum, Vercel, Desarrollo asistido por IA, Claude Code, Cursor, Codex",
     },
   ],
   selectedProject: selectedProjectByLocale.es,
