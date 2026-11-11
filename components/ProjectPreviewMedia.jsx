@@ -39,10 +39,19 @@ export default function ProjectPreviewMedia({
   const [activeIndex, setActiveIndex] = useState(0);
   const [preferReducedMotion, setPreferReducedMotion] = useState(false);
   const trackRef = useRef(null);
+  const suppressScrollRef = useRef(false);
 
   const hasVideo = Boolean(project.previewVideo) && !preferReducedMotion;
   const showCarousel = slides.length > 1 && !hasVideo;
   const posterSrc = slides[0]?.src ?? project.previewImage ?? null;
+
+  // [cloneLast, ...slides, cloneFirst] so wrap keeps sliding in the same direction.
+  const loopSlides = useMemo(() => {
+    if (slides.length < 2) return slides;
+    return [slides[slides.length - 1], ...slides, slides[0]];
+  }, [slides]);
+
+  const realToTrack = useCallback((realIndex) => realIndex + 1, []);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -59,42 +68,111 @@ export default function ProjectPreviewMedia({
     });
   }, [slides.length]);
 
-  const scrollToIndex = useCallback(
-    (index, { forceInstant = false } = {}) => {
+  const jumpToTrack = useCallback((trackIndex) => {
+    const track = trackRef.current;
+    if (!track || track.clientWidth === 0) return;
+    suppressScrollRef.current = true;
+    track.scrollTo({
+      left: track.clientWidth * trackIndex,
+      behavior: "auto",
+    });
+    requestAnimationFrame(() => {
+      suppressScrollRef.current = false;
+    });
+  }, []);
+
+  const scrollToTrack = useCallback(
+    (trackIndex, { smooth = true } = {}) => {
       const track = trackRef.current;
-      if (!track) return;
-      const clamped = Math.max(0, Math.min(index, slides.length - 1));
-      const width = track.clientWidth;
-      const distance = Math.abs(clamped - activeIndex);
-      const useInstant = forceInstant || preferReducedMotion || distance > 1;
+      if (!track || track.clientWidth === 0) return;
       track.scrollTo({
-        left: width * clamped,
-        behavior: useInstant ? "auto" : "smooth",
+        left: track.clientWidth * trackIndex,
+        behavior: smooth && !preferReducedMotion ? "smooth" : "auto",
       });
-      setActiveIndex(clamped);
     },
-    [activeIndex, preferReducedMotion, slides.length]
+    [preferReducedMotion]
+  );
+
+  // Start on the first real slide (track index 1), not the leading clone.
+  useEffect(() => {
+    if (!showCarousel) return;
+    jumpToTrack(1);
+    setActiveIndex(0);
+  }, [jumpToTrack, showCarousel, slides.length]);
+
+  const settleFromTrackIndex = useCallback(
+    (trackIndex) => {
+      if (trackIndex === 0) {
+        jumpToTrack(slides.length);
+        setActiveIndex(slides.length - 1);
+        return;
+      }
+      if (trackIndex === slides.length + 1) {
+        jumpToTrack(1);
+        setActiveIndex(0);
+        return;
+      }
+      setActiveIndex(trackIndex - 1);
+    },
+    [jumpToTrack, slides.length]
   );
 
   const handleScroll = useCallback(() => {
+    if (suppressScrollRef.current) return;
     const track = trackRef.current;
     if (!track || track.clientWidth === 0) return;
-    const nextIndex = Math.round(track.scrollLeft / track.clientWidth);
-    setActiveIndex(nextIndex);
-  }, []);
-
-  const canGoPrev = activeIndex > 0;
-  const canGoNext = activeIndex < slides.length - 1;
+    const trackIndex = Math.round(track.scrollLeft / track.clientWidth);
+    settleFromTrackIndex(trackIndex);
+  }, [settleFromTrackIndex]);
 
   const goPrev = useCallback(() => {
-    if (!canGoPrev) return;
-    scrollToIndex(activeIndex - 1);
-  }, [activeIndex, canGoPrev, scrollToIndex]);
+    if (slides.length < 2) return;
+    if (activeIndex > 0) {
+      const next = activeIndex - 1;
+      scrollToTrack(realToTrack(next), { smooth: true });
+      setActiveIndex(next);
+      return;
+    }
+    // Keep sliding left onto clone of last, then snap to real last.
+    scrollToTrack(0, { smooth: true });
+    setActiveIndex(slides.length - 1);
+  }, [activeIndex, realToTrack, scrollToTrack, slides.length]);
 
   const goNext = useCallback(() => {
-    if (!canGoNext) return;
-    scrollToIndex(activeIndex + 1);
-  }, [activeIndex, canGoNext, scrollToIndex]);
+    if (slides.length < 2) return;
+    if (activeIndex < slides.length - 1) {
+      const next = activeIndex + 1;
+      scrollToTrack(realToTrack(next), { smooth: true });
+      setActiveIndex(next);
+      return;
+    }
+    // Keep sliding right onto clone of first, then snap to real first.
+    scrollToTrack(slides.length + 1, { smooth: true });
+    setActiveIndex(0);
+  }, [activeIndex, realToTrack, scrollToTrack, slides.length]);
+
+  const goTo = useCallback(
+    (target) => {
+      if (target === activeIndex || slides.length < 2) return;
+      const last = slides.length - 1;
+
+      if (activeIndex === last && target === 0) {
+        scrollToTrack(slides.length + 1, { smooth: true });
+        setActiveIndex(0);
+        return;
+      }
+      if (activeIndex === 0 && target === last) {
+        scrollToTrack(0, { smooth: true });
+        setActiveIndex(last);
+        return;
+      }
+
+      const distance = Math.abs(target - activeIndex);
+      scrollToTrack(realToTrack(target), { smooth: distance === 1 });
+      setActiveIndex(target);
+    },
+    [activeIndex, realToTrack, scrollToTrack, slides.length]
+  );
 
   const handleKeyDown = useCallback(
     (event) => {
@@ -240,45 +318,60 @@ export default function ProjectPreviewMedia({
           "&::-webkit-scrollbar": { display: "none" },
         }}
       >
-        {slides.map((slide, index) => (
-          <Box
-            key={slide.src}
-            component={project.demoUrl ? "a" : "div"}
-            href={project.demoUrl ?? undefined}
-            target={project.demoUrl ? "_blank" : undefined}
-            rel={project.demoUrl ? "noreferrer" : undefined}
-            aria-label={
-              project.demoUrl
-                ? `Open live demo: ${project.title} (${index + 1} of ${slides.length})`
-                : undefined
-            }
-            aria-hidden={index !== activeIndex ? true : undefined}
-            sx={{
-              position: "relative",
-              flex: "0 0 100%",
-              width: "100%",
-              height: "100%",
-              scrollSnapAlign: "start",
-              textDecoration: "none",
-              color: "inherit",
-              cursor: project.demoUrl ? "pointer" : "default",
-            }}
-          >
-            <Image
-              src={slide.src}
-              alt={slide.alt}
-              fill
-              sizes="(max-width: 768px) 100vw, 960px"
-              style={{ objectFit: "cover", objectPosition: "top center" }}
-            />
-          </Box>
-        ))}
+        {loopSlides.map((slide, trackIndex) => {
+          const isClone = trackIndex === 0 || trackIndex === loopSlides.length - 1;
+          const realIndex = isClone
+            ? trackIndex === 0
+              ? slides.length - 1
+              : 0
+            : trackIndex - 1;
+
+          return (
+            <Box
+              key={
+                trackIndex === 0
+                  ? `clone-start-${slide.src}`
+                  : trackIndex === loopSlides.length - 1
+                    ? `clone-end-${slide.src}`
+                    : slide.src
+              }
+              component={project.demoUrl ? "a" : "div"}
+              href={project.demoUrl ?? undefined}
+              target={project.demoUrl ? "_blank" : undefined}
+              rel={project.demoUrl ? "noreferrer" : undefined}
+              aria-label={
+                project.demoUrl && !isClone
+                  ? `Open live demo: ${project.title} (${realIndex + 1} of ${slides.length})`
+                  : undefined
+              }
+              aria-hidden={isClone || realIndex !== activeIndex ? true : undefined}
+              tabIndex={isClone ? -1 : undefined}
+              sx={{
+                position: "relative",
+                flex: "0 0 100%",
+                width: "100%",
+                height: "100%",
+                scrollSnapAlign: "start",
+                textDecoration: "none",
+                color: "inherit",
+                cursor: project.demoUrl ? "pointer" : "default",
+              }}
+            >
+              <Image
+                src={slide.src}
+                alt={isClone ? "" : slide.alt}
+                fill
+                sizes="(max-width: 768px) 100vw, 960px"
+                style={{ objectFit: "cover", objectPosition: "top center" }}
+              />
+            </Box>
+          );
+        })}
       </Box>
 
       <IconButton
         size="small"
         aria-label={previousLabel}
-        disabled={!canGoPrev}
         onClick={(event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -292,10 +385,6 @@ export default function ProjectPreviewMedia({
           bgcolor: "rgba(15, 20, 25, 0.55)",
           color: "#fff",
           "&:hover": { bgcolor: "rgba(15, 20, 25, 0.75)" },
-          "&.Mui-disabled": {
-            bgcolor: "rgba(15, 20, 25, 0.25)",
-            color: "rgba(255,255,255,0.35)",
-          },
         }}
       >
         <ChevronLeftRoundedIcon fontSize="small" />
@@ -304,7 +393,6 @@ export default function ProjectPreviewMedia({
       <IconButton
         size="small"
         aria-label={nextLabel}
-        disabled={!canGoNext}
         onClick={(event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -318,10 +406,6 @@ export default function ProjectPreviewMedia({
           bgcolor: "rgba(15, 20, 25, 0.55)",
           color: "#fff",
           "&:hover": { bgcolor: "rgba(15, 20, 25, 0.75)" },
-          "&.Mui-disabled": {
-            bgcolor: "rgba(15, 20, 25, 0.25)",
-            color: "rgba(255,255,255,0.35)",
-          },
         }}
       >
         <ChevronRightRoundedIcon fontSize="small" />
@@ -358,7 +442,7 @@ export default function ProjectPreviewMedia({
             onClick={(event) => {
               event.preventDefault();
               event.stopPropagation();
-              scrollToIndex(index);
+              goTo(index);
             }}
             sx={{
               pointerEvents: "auto",
