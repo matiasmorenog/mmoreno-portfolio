@@ -29,30 +29,13 @@ function resolveSlides(project) {
   return [];
 }
 
-function probeImage(src) {
-  return new Promise((resolve) => {
-    if (typeof window === "undefined") {
-      resolve(false);
-      return;
-    }
-
-    const image = new window.Image();
-    image.onload = () => resolve(true);
-    image.onerror = () => resolve(false);
-    image.src = src;
-  });
-}
-
 export default function ProjectPreviewMedia({
   project,
   PreviewComponent,
   previousLabel = "Previous image",
   nextLabel = "Next image",
 }) {
-  const initialSlides = useMemo(() => resolveSlides(project), [project]);
-  const [slides, setSlides] = useState(() =>
-    initialSlides.length > 0 ? [initialSlides[0]] : []
-  );
+  const slides = useMemo(() => resolveSlides(project), [project]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [preferReducedMotion, setPreferReducedMotion] = useState(false);
   const trackRef = useRef(null);
@@ -68,43 +51,6 @@ export default function ProjectPreviewMedia({
     media.addEventListener("change", sync);
     return () => media.removeEventListener("change", sync);
   }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function verifyOptionalSlides() {
-      if (initialSlides.length === 0) {
-        if (!cancelled) setSlides([]);
-        return;
-      }
-
-      if (initialSlides.length === 1) {
-        if (!cancelled) setSlides(initialSlides);
-        return;
-      }
-
-      const [first, ...optional] = initialSlides;
-      const availableOptional = [];
-
-      for (const slide of optional) {
-        const ok = await probeImage(slide.src);
-        if (cancelled) return;
-        if (ok) availableOptional.push(slide);
-      }
-
-      if (!cancelled) {
-        setSlides([first, ...availableOptional]);
-        setActiveIndex(0);
-      }
-    }
-
-    setSlides(initialSlides.length > 0 ? [initialSlides[0]] : []);
-    verifyOptionalSlides();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [initialSlides]);
 
   useEffect(() => {
     setActiveIndex((current) => {

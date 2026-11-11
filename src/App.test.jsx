@@ -19,6 +19,19 @@ describe("App", () => {
     expect(screen.queryByText("Problem")).not.toBeInTheDocument();
   });
 
+  it("renders Rocha preview carousel with three slides", () => {
+    render(<PortfolioPage />);
+
+    expect(
+      screen.getByRole("region", { name: "Rocha Cotizador previews" })
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Previous image" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Next image" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Show image 1 of 3" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Show image 2 of 3" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Show image 3 of 3" })).toBeInTheDocument();
+  });
+
   it("renders positioning and primary CTAs", () => {
     render(<PortfolioPage />);
 
