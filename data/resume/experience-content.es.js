@@ -11,6 +11,11 @@ export const experienceContentById = {
       "Llevé el producto desde el relevamiento de requerimientos hasta producción en pocas semanas, trabajando directamente con el dueño del negocio y ampliando funcionalidades en función de necesidades operativas reales.",
       "Actualmente mantengo y continúo desarrollando la plataforma como un servicio de software pago, dando soporte a pedidos mayoristas recurrentes de múltiples sucursales.",
     ],
+    webHighlights: [
+      "Puse en producción una plataforma B2B de pedidos y cotizaciones que reemplazó el flujo mayorista por WhatsApp/Excel con autogestión y administración centralizada.",
+      "Desarrollé end-to-end con Next.js, TypeScript, PostgreSQL, Prisma y NextAuth — precios, stock, cotizaciones, pedidos y sync con Excel.",
+      "Llevé el producto del relevamiento a producción en pocas semanas; lo mantengo como servicio de software pago en múltiples sucursales.",
+    ],
   },
   ine: {
     role: "Desarrollador Frontend",
@@ -24,6 +29,11 @@ export const experienceContentById = {
       "Desarrollé un motor de filtrado y ordenamiento basado en Web Workers para aproximadamente 14.000 registros, manteniendo el dataset en memoria dentro del Worker y trasladando el procesamiento fuera del hilo principal del navegador para conservar una interacción fluida.",
       "Alcancé 98% de cobertura de tests sobre la lógica de filtrado y ordenamiento del Web Worker.",
       "Apliqué técnicas de rendimiento frontend como lazy loading, code splitting, memoization y optimizaciones de requests y renderizado, además de participar regularmente en code reviews y refactorizaciones.",
+    ],
+    webHighlights: [
+      "Desarrollé apps en producción con React, Vue.js y TypeScript para una plataforma de formación online con más de 150.000 usuarios.",
+      "Aporté cerca de un año de frontend B2B — interfaces responsive e integración con APIs REST.",
+      "Apliqué técnicas de rendimiento frontend (lazy loading, code splitting, memoization, optimización de requests y render) con code reviews regulares.",
     ],
     technicalHighlight: {
       title: "Filtrado y ordenamiento con Web Worker",
@@ -49,6 +59,11 @@ export const experienceContentById = {
       "Diseñé e implementé, junto con el líder técnico, un sistema de permisos basado en roles y registros que controlaba las capacidades de lectura, edición y compartición entre usuarios.",
       "Desarrollé funcionalidades para inventario, maquinaria, repuestos, servicios, automatización de tareas y notificaciones basadas en eventos.",
       "Participé en la migración de Ember.js a Vue.js 2 y desarrollé tests de integración con Mocha y Cypress dentro de un flujo de pull requests y code reviews.",
+    ],
+    webHighlights: [
+      "Seis años construyendo y manteniendo una plataforma B2B multi-módulo de maquinaria industrial con Vue.js, Node.js, Express, Sequelize, MySQL y luego PostgreSQL.",
+      "Co-diseñé un sistema de permisos por roles y registros (lectura, edición y compartición entre usuarios).",
+      "Participé en la migración Ember.js → Vue.js 2 y en tests de integración con Mocha y Cypress.",
     ],
   },
   genetrics: {
