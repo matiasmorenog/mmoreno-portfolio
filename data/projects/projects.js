@@ -8,6 +8,20 @@ export const projects = [
     status: "Live",
     previewKey: "rocha-cotizador",
     previewImage: "/project-previews/rocha-cotizador.webp",
+    previewImages: [
+      {
+        src: "/project-previews/rocha-cotizador.webp",
+        alt: "Rocha Cotizador — Nueva cotización with product lines and totals",
+      },
+      {
+        src: "/project-previews/rocha-remitos.webp",
+        alt: "Rocha Cotizador — Remitos screen",
+      },
+      {
+        src: "/project-previews/rocha-admin.webp",
+        alt: "Rocha Cotizador — Admin screen",
+      },
+    ],
     previewAlt:
       "Preview of B2B wholesale quoting interface with product lines and totals",
     demoUrl: "https://rocha-cotizador-dev.vercel.app/",

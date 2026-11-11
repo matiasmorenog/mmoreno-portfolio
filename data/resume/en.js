@@ -106,6 +106,8 @@ export const portfolioUi = {
   projectSourceCode: "Source Code",
   projectDemoSoon: "Demo Soon",
   projectRoleLabel: "Role",
+  projectPreviousImage: "Previous image",
+  projectNextImage: "Next image",
 };
 
 export const resumePdfFilename = "Matias_Moreno_CV_EN.pdf";

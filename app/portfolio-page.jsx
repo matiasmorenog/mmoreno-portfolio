@@ -537,6 +537,8 @@ function PortfolioPageContent() {
                       sourceCode: ui.projectSourceCode,
                       demoSoon: ui.projectDemoSoon,
                       roleLabel: ui.projectRoleLabel,
+                      previousImage: ui.projectPreviousImage,
+                      nextImage: ui.projectNextImage,
                     }}
                   />
                 ))}

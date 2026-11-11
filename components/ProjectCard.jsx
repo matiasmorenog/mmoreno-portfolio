@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
@@ -11,6 +10,7 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import { keyframes } from "@mui/material/styles";
 import { getProjectPreviewComponent } from "@/components/project-previews";
+import ProjectPreviewMedia from "@/components/ProjectPreviewMedia";
 import { useDemoUrlStatus } from "@/hooks/useDemoUrlStatus";
 import TechStack from "@/components/TechStack";
 
@@ -131,12 +131,17 @@ export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
   const PreviewComponent = getProjectPreviewComponent(project.previewKey);
   const shouldPingLive = isLiveStatus(project.status) && Boolean(project.demoUrl);
   const liveStatus = useDemoUrlStatus(project.demoUrl, shouldPingLive);
-  const hasPreviewImage = Boolean(project.previewImage);
+  const hasPreviewImage =
+    Boolean(project.previewImage) ||
+    (Array.isArray(project.previewImages) && project.previewImages.length > 0) ||
+    Boolean(project.previewVideo);
   const hasPreview = hasPreviewImage || Boolean(PreviewComponent);
   const roleLabel = uiLabels?.roleLabel ?? "Role";
   const liveDemoLabel = uiLabels?.liveDemo ?? "Live Demo";
   const sourceCodeLabel = uiLabels?.sourceCode ?? "Source Code";
   const demoSoonLabel = uiLabels?.demoSoon ?? "Demo Soon";
+  const previousImageLabel = uiLabels?.previousImage ?? "Previous image";
+  const nextImageLabel = uiLabels?.nextImage ?? "Next image";
 
   return (
     <Paper
@@ -151,50 +156,12 @@ export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
       }}
     >
       {hasPreview ? (
-        <Box
-          component={project.demoUrl ? "a" : "div"}
-          href={project.demoUrl ?? undefined}
-          target={project.demoUrl ? "_blank" : undefined}
-          rel={project.demoUrl ? "noreferrer" : undefined}
-          aria-label={project.demoUrl ? `Open live demo: ${project.title}` : undefined}
-          sx={{
-            display: "block",
-            width: "100%",
-            aspectRatio: hasPreviewImage ? "40 / 23" : "16 / 9",
-            position: "relative",
-            overflow: "hidden",
-            bgcolor: "#152535",
-            textDecoration: "none",
-            color: "inherit",
-            cursor: project.demoUrl ? "pointer" : "default",
-            transition: "opacity 0.2s ease",
-            "&:hover": project.demoUrl
-              ? {
-                  opacity: 0.92,
-                }
-              : undefined,
-          }}
-        >
-          {hasPreviewImage ? (
-            <Image
-              src={project.previewImage}
-              alt={project.previewAlt ?? project.title}
-              fill
-              sizes="(max-width: 768px) 100vw, 960px"
-              style={{ objectFit: "cover", objectPosition: "top center" }}
-            />
-          ) : (
-            <PreviewComponent
-              aria-label={project.previewAlt ?? `${project.title} preview`}
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "block",
-                pointerEvents: "none",
-              }}
-            />
-          )}
-        </Box>
+        <ProjectPreviewMedia
+          project={project}
+          PreviewComponent={PreviewComponent}
+          previousLabel={previousImageLabel}
+          nextLabel={nextImageLabel}
+        />
       ) : null}
 
       <Box
