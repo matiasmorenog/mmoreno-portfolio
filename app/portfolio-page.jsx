@@ -539,6 +539,8 @@ function PortfolioPageContent() {
                       roleLabel: ui.projectRoleLabel,
                       previousImage: ui.projectPreviousImage,
                       nextImage: ui.projectNextImage,
+                      viewCaseStudy: ui.projectViewCaseStudy,
+                      hideCaseStudy: ui.projectHideCaseStudy,
                     }}
                   />
                 ))}

@@ -12,7 +12,11 @@ describe("App", () => {
     expect(
       screen.getAllByRole("link", { name: "Live Demo" }).length
     ).toBeGreaterThanOrEqual(2);
-    expect(screen.getAllByText("Problem").length).toBeGreaterThanOrEqual(2);
+    expect(
+      screen.getAllByRole("button", { name: "View case study" }).length
+    ).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByText(/Result:/).length).toBeGreaterThanOrEqual(2);
+    expect(screen.queryByText("Problem")).not.toBeInTheDocument();
   });
 
   it("renders positioning and primary CTAs", () => {
