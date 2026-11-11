@@ -105,7 +105,8 @@ export function getExperienceHighlights(locale = defaultLocale) {
     period: item.periodDisplay,
     stack: item.stack ?? [],
     details: item.portfolioSummary,
-    highlights: item.highlights ?? [],
+    // Portfolio uses short webHighlights; PDF keeps full highlights.
+    highlights: item.webHighlights ?? item.highlights ?? [],
     technicalHighlight: item.technicalHighlight ?? null,
     compact: COMPACT_EXPERIENCE_IDS.has(item.id),
   }));

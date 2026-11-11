@@ -500,6 +500,53 @@ function PortfolioPageContent() {
 
             <SkillsIconGrid title={ui.coreSkillsTitle} subtitle={ui.skillsSubtitle} />
 
+            <Box component="section" aria-labelledby="projects-heading">
+              <Typography
+                id="projects-heading"
+                component="h2"
+                variant="h6"
+                sx={{ mb: 0.5 }}
+              >
+                {ui.liveDemoProjects}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+                {ui.portfolioSubtitle}
+              </Typography>
+
+              <Box
+                id="projects"
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+                  gap: 2,
+                  width: "100%",
+                  alignItems: "stretch",
+                }}
+              >
+                {localizedProjects.map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    caseStudyLabels={{
+                      problem: ui.caseStudyProblem,
+                      action: ui.caseStudyAction,
+                      result: ui.caseStudyResult,
+                    }}
+                    uiLabels={{
+                      liveDemo: ui.projectLiveDemo,
+                      sourceCode: ui.projectSourceCode,
+                      demoSoon: ui.projectDemoSoon,
+                      roleLabel: ui.projectRoleLabel,
+                      previousImage: ui.projectPreviousImage,
+                      nextImage: ui.projectNextImage,
+                      viewCaseStudy: ui.projectViewCaseStudy,
+                      hideCaseStudy: ui.projectHideCaseStudy,
+                    }}
+                  />
+                ))}
+              </Box>
+            </Box>
+
             <Paper
               component="section"
               aria-labelledby="experience-heading"
@@ -721,48 +768,6 @@ function PortfolioPageContent() {
                 );
               })}
             </Paper>
-
-            <Box component="section" aria-labelledby="projects-heading">
-              <Typography
-                id="projects-heading"
-                component="h2"
-                variant="h6"
-                sx={{ mb: 0.5 }}
-              >
-                {ui.liveDemoProjects}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
-                {ui.portfolioSubtitle}
-              </Typography>
-
-              <Box
-                id="projects"
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-                  gap: 2,
-                  width: "100%",
-                }}
-              >
-                {localizedProjects.map((project) => (
-                  <ProjectCard
-                    key={project.id}
-                    project={project}
-                    caseStudyLabels={{
-                      problem: ui.caseStudyProblem,
-                      action: ui.caseStudyAction,
-                      result: ui.caseStudyResult,
-                    }}
-                    uiLabels={{
-                      liveDemo: ui.projectLiveDemo,
-                      sourceCode: ui.projectSourceCode,
-                      demoSoon: ui.projectDemoSoon,
-                      roleLabel: ui.projectRoleLabel,
-                    }}
-                  />
-                ))}
-              </Box>
-            </Box>
 
             <Paper
               component="section"

@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import Image from "next/image";
+import React, { useState } from "react";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
@@ -9,8 +8,12 @@ import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
+import Collapse from "@mui/material/Collapse";
 import { keyframes } from "@mui/material/styles";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
 import { getProjectPreviewComponent } from "@/components/project-previews";
+import ProjectPreviewMedia from "@/components/ProjectPreviewMedia";
 import { useDemoUrlStatus } from "@/hooks/useDemoUrlStatus";
 import TechStack from "@/components/TechStack";
 
@@ -128,15 +131,32 @@ function CaseStudyItem({ label, children }) {
 }
 
 export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
+  const [caseStudyOpen, setCaseStudyOpen] = useState(false);
   const PreviewComponent = getProjectPreviewComponent(project.previewKey);
   const shouldPingLive = isLiveStatus(project.status) && Boolean(project.demoUrl);
   const liveStatus = useDemoUrlStatus(project.demoUrl, shouldPingLive);
-  const hasPreviewImage = Boolean(project.previewImage);
+  const hasPreviewImage =
+    Boolean(project.previewImage) ||
+    (Array.isArray(project.previewImages) && project.previewImages.length > 0) ||
+    Boolean(project.previewVideo);
   const hasPreview = hasPreviewImage || Boolean(PreviewComponent);
   const roleLabel = uiLabels?.roleLabel ?? "Role";
   const liveDemoLabel = uiLabels?.liveDemo ?? "Live Demo";
   const sourceCodeLabel = uiLabels?.sourceCode ?? "Source Code";
   const demoSoonLabel = uiLabels?.demoSoon ?? "Demo Soon";
+  const previousImageLabel = uiLabels?.previousImage ?? "Previous image";
+  const nextImageLabel = uiLabels?.nextImage ?? "Next image";
+  const viewCaseStudyLabel = uiLabels?.viewCaseStudy ?? "View case study";
+  const hideCaseStudyLabel = uiLabels?.hideCaseStudy ?? "Hide case study";
+  const caseStudyPanelId = `${project.id}-case-study`;
+  const hasCaseStudyDetails = Boolean(
+    project.caseStudy &&
+    caseStudyLabels &&
+    (project.caseStudy.problem ||
+      project.caseStudy.action ||
+      project.role ||
+      project.usage)
+  );
 
   return (
     <Paper
@@ -151,50 +171,12 @@ export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
       }}
     >
       {hasPreview ? (
-        <Box
-          component={project.demoUrl ? "a" : "div"}
-          href={project.demoUrl ?? undefined}
-          target={project.demoUrl ? "_blank" : undefined}
-          rel={project.demoUrl ? "noreferrer" : undefined}
-          aria-label={project.demoUrl ? `Open live demo: ${project.title}` : undefined}
-          sx={{
-            display: "block",
-            width: "100%",
-            aspectRatio: hasPreviewImage ? "40 / 23" : "16 / 9",
-            position: "relative",
-            overflow: "hidden",
-            bgcolor: "#152535",
-            textDecoration: "none",
-            color: "inherit",
-            cursor: project.demoUrl ? "pointer" : "default",
-            transition: "opacity 0.2s ease",
-            "&:hover": project.demoUrl
-              ? {
-                  opacity: 0.92,
-                }
-              : undefined,
-          }}
-        >
-          {hasPreviewImage ? (
-            <Image
-              src={project.previewImage}
-              alt={project.previewAlt ?? project.title}
-              fill
-              sizes="(max-width: 768px) 100vw, 960px"
-              style={{ objectFit: "cover", objectPosition: "top center" }}
-            />
-          ) : (
-            <PreviewComponent
-              aria-label={project.previewAlt ?? `${project.title} preview`}
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "block",
-                pointerEvents: "none",
-              }}
-            />
-          )}
-        </Box>
+        <ProjectPreviewMedia
+          project={project}
+          PreviewComponent={PreviewComponent}
+          previousLabel={previousImageLabel}
+          nextLabel={nextImageLabel}
+        />
       ) : null}
 
       <Box
@@ -244,28 +226,71 @@ export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
           <TechStack labels={project.stack} />
         </Box>
 
-        {project.caseStudy && caseStudyLabels ? (
-          <Stack spacing={1.2} sx={{ mt: 1.6 }}>
-            <CaseStudyItem label={caseStudyLabels.problem}>
-              {project.caseStudy.problem}
-            </CaseStudyItem>
-            <CaseStudyItem label={caseStudyLabels.action}>
-              {project.caseStudy.action}
-            </CaseStudyItem>
-            <CaseStudyItem label={caseStudyLabels.result}>
-              {project.caseStudy.result}
-            </CaseStudyItem>
-          </Stack>
+        {project.caseStudy?.result && caseStudyLabels ? (
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              mt: 1.4,
+              lineHeight: 1.55,
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            <Box component="span" sx={{ fontWeight: 700, color: "primary.main" }}>
+              {caseStudyLabels.result}:{" "}
+            </Box>
+            {project.caseStudy.result}
+          </Typography>
         ) : null}
 
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          sx={{ mt: 1, display: "block" }}
-        >
-          {project.role ? `${roleLabel}: ${project.role}. ` : ""}
-          {project.usage}
-        </Typography>
+        {hasCaseStudyDetails ? (
+          <Box sx={{ mt: 1 }}>
+            <Button
+              size="small"
+              variant="text"
+              onClick={() => setCaseStudyOpen((open) => !open)}
+              aria-expanded={caseStudyOpen}
+              aria-controls={caseStudyPanelId}
+              endIcon={
+                caseStudyOpen ? (
+                  <ExpandLessRoundedIcon fontSize="small" />
+                ) : (
+                  <ExpandMoreRoundedIcon fontSize="small" />
+                )
+              }
+              sx={{ px: 0.5, minWidth: 0, alignSelf: "flex-start" }}
+            >
+              {caseStudyOpen ? hideCaseStudyLabel : viewCaseStudyLabel}
+            </Button>
+            <Collapse in={caseStudyOpen} timeout="auto" unmountOnExit>
+              <Stack id={caseStudyPanelId} spacing={1.2} sx={{ mt: 1 }}>
+                {project.caseStudy?.problem ? (
+                  <CaseStudyItem label={caseStudyLabels.problem}>
+                    {project.caseStudy.problem}
+                  </CaseStudyItem>
+                ) : null}
+                {project.caseStudy?.action ? (
+                  <CaseStudyItem label={caseStudyLabels.action}>
+                    {project.caseStudy.action}
+                  </CaseStudyItem>
+                ) : null}
+                {project.role || project.usage ? (
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ display: "block" }}
+                  >
+                    {project.role ? `${roleLabel}: ${project.role}. ` : ""}
+                    {project.usage}
+                  </Typography>
+                ) : null}
+              </Stack>
+            </Collapse>
+          </Box>
+        ) : null}
 
         <Divider sx={{ mt: "auto", mb: 2 }} />
 

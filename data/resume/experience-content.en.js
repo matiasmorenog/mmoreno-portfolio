@@ -11,6 +11,11 @@ export const experienceContentById = {
       "Took the product from requirements discovery to production within weeks, working directly with the business owner and expanding functionality based on real operational needs.",
       "Continue to maintain and evolve the platform as a paid software service, supporting recurring wholesale ordering across multiple business locations.",
     ],
+    webHighlights: [
+      "Shipped a production B2B ordering and quotation platform that replaced WhatsApp/Excel wholesale workflows with customer self-service and centralized administration.",
+      "Built end-to-end with Next.js, TypeScript, PostgreSQL, Prisma, and NextAuth — pricing, stock, quotations, orders, and Excel sync.",
+      "Took the product from discovery to production within weeks; continue maintaining it as a paid software service across multiple locations.",
+    ],
   },
   ine: {
     role: "Frontend Developer",
@@ -24,6 +29,11 @@ export const experienceContentById = {
       "Built a Web Worker-based filtering and sorting engine for approximately 14,000 records, keeping the dataset in worker memory and moving processing off the browser's main thread to maintain responsive interactions.",
       "Achieved 98% test coverage for the Web Worker filtering and sorting logic.",
       "Applied frontend performance techniques including lazy loading, code splitting, memoization, request optimization, and rendering optimization, while participating in regular code reviews and refactoring.",
+    ],
+    webHighlights: [
+      "Built production React, Vue.js, and TypeScript apps for an online learning platform serving 150,000+ users.",
+      "Delivered about a year of B2B frontend work — responsive UIs and REST API integrations.",
+      "Applied frontend performance techniques (lazy loading, code splitting, memoization, request and render optimization) with regular code reviews.",
     ],
     technicalHighlight: {
       title: "Web Worker filtering & sorting",
@@ -49,6 +59,11 @@ export const experienceContentById = {
       "Designed and implemented, together with the technical lead, a role- and record-based permissions system controlling read, edit, and sharing capabilities between users.",
       "Developed functionality for inventory, machinery, spare parts, services, task automation, and event-driven notifications.",
       "Contributed to the migration from Ember.js to Vue.js 2 and developed integration tests with Mocha and Cypress within a pull-request and code-review workflow.",
+    ],
+    webHighlights: [
+      "Spent six years building and maintaining a multi-module B2B industrial machinery platform across Vue.js, Node.js, Express, Sequelize, MySQL, and later PostgreSQL.",
+      "Co-designed a role- and record-based permissions system controlling read, edit, and sharing between users.",
+      "Contributed to the Ember.js → Vue.js 2 migration and integration tests with Mocha and Cypress.",
     ],
   },
   genetrics: {

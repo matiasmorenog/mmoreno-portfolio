@@ -20,7 +20,8 @@ export const canonicalProfile = {
 
 /**
  * Canonical job ids, dates and stack for CV, portfolio and LinkedIn.
- * Localized role/company/periodDisplay/highlights live in experience-content.*.js.
+ * Localized role/company/periodDisplay/highlights/webHighlights live in experience-content.*.js.
+ * PDF uses highlights; portfolio Experience section prefers webHighlights when present.
  *
  * Reverse chronological order by end/start date.
  */
