@@ -60,17 +60,20 @@ export default function ProjectPreviewMedia({
   }, [slides.length]);
 
   const scrollToIndex = useCallback(
-    (index) => {
+    (index, { forceInstant = false } = {}) => {
       const track = trackRef.current;
       if (!track) return;
+      const clamped = Math.max(0, Math.min(index, slides.length - 1));
       const width = track.clientWidth;
+      const distance = Math.abs(clamped - activeIndex);
+      const useInstant = forceInstant || preferReducedMotion || distance > 1;
       track.scrollTo({
-        left: width * index,
-        behavior: preferReducedMotion ? "auto" : "smooth",
+        left: width * clamped,
+        behavior: useInstant ? "auto" : "smooth",
       });
-      setActiveIndex(index);
+      setActiveIndex(clamped);
     },
-    [preferReducedMotion]
+    [activeIndex, preferReducedMotion, slides.length]
   );
 
   const handleScroll = useCallback(() => {
@@ -80,15 +83,18 @@ export default function ProjectPreviewMedia({
     setActiveIndex(nextIndex);
   }, []);
 
+  const canGoPrev = activeIndex > 0;
+  const canGoNext = activeIndex < slides.length - 1;
+
   const goPrev = useCallback(() => {
-    if (slides.length < 2) return;
-    scrollToIndex((activeIndex - 1 + slides.length) % slides.length);
-  }, [activeIndex, scrollToIndex, slides.length]);
+    if (!canGoPrev) return;
+    scrollToIndex(activeIndex - 1);
+  }, [activeIndex, canGoPrev, scrollToIndex]);
 
   const goNext = useCallback(() => {
-    if (slides.length < 2) return;
-    scrollToIndex((activeIndex + 1) % slides.length);
-  }, [activeIndex, scrollToIndex, slides.length]);
+    if (!canGoNext) return;
+    scrollToIndex(activeIndex + 1);
+  }, [activeIndex, canGoNext, scrollToIndex]);
 
   const handleKeyDown = useCallback(
     (event) => {
@@ -272,6 +278,7 @@ export default function ProjectPreviewMedia({
       <IconButton
         size="small"
         aria-label={previousLabel}
+        disabled={!canGoPrev}
         onClick={(event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -285,6 +292,10 @@ export default function ProjectPreviewMedia({
           bgcolor: "rgba(15, 20, 25, 0.55)",
           color: "#fff",
           "&:hover": { bgcolor: "rgba(15, 20, 25, 0.75)" },
+          "&.Mui-disabled": {
+            bgcolor: "rgba(15, 20, 25, 0.25)",
+            color: "rgba(255,255,255,0.35)",
+          },
         }}
       >
         <ChevronLeftRoundedIcon fontSize="small" />
@@ -293,6 +304,7 @@ export default function ProjectPreviewMedia({
       <IconButton
         size="small"
         aria-label={nextLabel}
+        disabled={!canGoNext}
         onClick={(event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -306,6 +318,10 @@ export default function ProjectPreviewMedia({
           bgcolor: "rgba(15, 20, 25, 0.55)",
           color: "#fff",
           "&:hover": { bgcolor: "rgba(15, 20, 25, 0.75)" },
+          "&.Mui-disabled": {
+            bgcolor: "rgba(15, 20, 25, 0.25)",
+            color: "rgba(255,255,255,0.35)",
+          },
         }}
       >
         <ChevronRightRoundedIcon fontSize="small" />
@@ -317,12 +333,17 @@ export default function ProjectPreviewMedia({
         aria-label={`${project.title} preview slides`}
         sx={{
           position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 8,
+          left: "50%",
+          bottom: 10,
+          transform: "translateX(-50%)",
           display: "flex",
+          alignItems: "center",
           justifyContent: "center",
-          gap: 0.75,
+          gap: 0.85,
+          px: 1.1,
+          py: 0.55,
+          borderRadius: 999,
+          bgcolor: "rgba(15, 20, 25, 0.55)",
           pointerEvents: "none",
         }}
       >
@@ -341,13 +362,14 @@ export default function ProjectPreviewMedia({
             }}
             sx={{
               pointerEvents: "auto",
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
+              width: index === activeIndex ? 18 : 9,
+              height: 9,
+              borderRadius: 999,
               border: 0,
               p: 0,
               cursor: "pointer",
-              bgcolor: index === activeIndex ? "#fff" : "rgba(255,255,255,0.45)",
+              bgcolor: index === activeIndex ? "#fff" : "rgba(255,255,255,0.5)",
+              transition: "width 0.15s ease, background-color 0.15s ease",
             }}
           />
         ))}
