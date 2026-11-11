@@ -11,73 +11,152 @@ export default function RochaCotizadorPreview({ style, ...props }) {
       {...props}
     >
       <defs>
-        <linearGradient id="rochaBg" x1="0" y1="0" x2="800" y2="720" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#1A1F2E" />
-          <stop offset="1" stopColor="#232B3D" />
+        <linearGradient
+          id="rochaBg"
+          x1="0"
+          y1="0"
+          x2="800"
+          y2="720"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#EEF3F1" />
+          <stop offset="1" stopColor="#F4F6F5" />
         </linearGradient>
         <linearGradient id="rochaPanel" x1="0" y1="0" x2="0" y2="1">
-          <stop stopColor="#2C3548" />
-          <stop offset="1" stopColor="#242C3C" />
+          <stop stopColor="#FFFFFF" />
+          <stop offset="1" stopColor="#F7FAF9" />
         </linearGradient>
       </defs>
 
       <rect width="800" height="720" fill="url(#rochaBg)" />
 
-      <rect width="800" height="52" fill="#1E2535" />
-      <rect x="24" y="16" width="120" height="20" rx="5" fill="#C45C26" />
-      <rect x="160" y="16" width="72" height="20" rx="5" fill="#354055" />
-      <rect x="248" y="16" width="64" height="20" rx="5" fill="#354055" />
-      <rect x="648" y="12" width="128" height="28" rx="8" fill="#C45C26" opacity="0.9" />
+      <rect width="800" height="52" fill="#2F6B5E" />
+      <rect x="24" y="16" width="120" height="20" rx="5" fill="#EEF3F1" opacity="0.95" />
+      <rect x="160" y="16" width="72" height="20" rx="5" fill="#3F7F71" />
+      <rect x="248" y="16" width="64" height="20" rx="5" fill="#3F7F71" />
+      <rect x="648" y="12" width="128" height="28" rx="8" fill="#EEF3F1" opacity="0.92" />
 
-      <rect x="24" y="72" width="752" height="56" rx="10" fill="url(#rochaPanel)" />
-      <rect x="40" y="88" width="180" height="14" rx="4" fill="#4A5568" />
-      <rect x="40" y="108" width="120" height="10" rx="3" fill="#3A4558" />
-      <rect x="560" y="86" width="96" height="28" rx="7" fill="#354055" />
-      <rect x="672" y="86" width="88" height="28" rx="7" fill="#C45C26" />
+      <rect
+        x="24"
+        y="72"
+        width="176"
+        height="624"
+        rx="10"
+        fill="url(#rochaPanel)"
+        stroke="#DCE5E1"
+      />
+      <rect x="40" y="92" width="120" height="14" rx="4" fill="#2F6B5E" />
+      <rect x="40" y="122" width="144" height="28" rx="7" fill="#2F6B5E" />
+      <rect x="40" y="166" width="144" height="28" rx="7" fill="#E7EEEC" />
+      <rect x="40" y="210" width="144" height="28" rx="7" fill="#E7EEEC" />
+      <rect x="40" y="254" width="144" height="28" rx="7" fill="#E7EEEC" />
+      <rect x="40" y="650" width="96" height="12" rx="3" fill="#A8B8B2" />
+      <rect x="40" y="670" width="120" height="10" rx="3" fill="#C5D1CC" />
 
-      <rect x="24" y="148" width="752" height="36" rx="8" fill="#2A3345" />
-      <rect x="40" y="158" width="80" height="16" rx="4" fill="#4A5568" />
-      <rect x="180" y="158" width="200" height="16" rx="4" fill="#4A5568" />
-      <rect x="420" y="158" width="72" height="16" rx="4" fill="#4A5568" />
-      <rect x="540" y="158" width="72" height="16" rx="4" fill="#4A5568" />
-      <rect x="660" y="158" width="88" height="16" rx="4" fill="#4A5568" />
+      <rect
+        x="216"
+        y="72"
+        width="560"
+        height="56"
+        rx="10"
+        fill="url(#rochaPanel)"
+        stroke="#DCE5E1"
+      />
+      <rect x="232" y="88" width="180" height="14" rx="4" fill="#5C726B" />
+      <rect x="232" y="108" width="120" height="10" rx="3" fill="#A8B8B2" />
+      <rect x="568" y="86" width="96" height="28" rx="7" fill="#E7EEEC" />
+      <rect x="676" y="86" width="84" height="28" rx="7" fill="#2F6B5E" />
+
+      <rect x="216" y="144" width="560" height="36" rx="8" fill="#E7EEEC" />
+      <rect x="232" y="154" width="72" height="16" rx="4" fill="#7A9089" />
+      <rect x="340" y="154" width="160" height="16" rx="4" fill="#7A9089" />
+      <rect x="540" y="154" width="64" height="16" rx="4" fill="#7A9089" />
+      <rect x="640" y="154" width="64" height="16" rx="4" fill="#7A9089" />
+      <rect x="728" y="154" width="32" height="16" rx="4" fill="#7A9089" />
 
       {[0, 1, 2, 3, 4].map((row) => (
         <g key={row}>
           <rect
-            x="24"
-            y={200 + row * 72}
-            width="752"
+            x="216"
+            y={196 + row * 72}
+            width="560"
             height="60"
             rx="8"
-            fill={row % 2 === 0 ? "#242C3C" : "#283142"}
+            fill={row % 2 === 0 ? "#FFFFFF" : "#F7FAF9"}
+            stroke="#DCE5E1"
           />
-          <rect x="40" y={218 + row * 72} width="56" height="12" rx="3" fill="#3A4558" />
-          <rect x="120" y={214 + row * 72} width="220" height="16" rx="4" fill="#4A5568" />
-          <rect x="420" y={214 + row * 72} width="48" height="16" rx="4" fill="#354055" />
-          <rect x="500" y={214 + row * 72} width="64" height="16" rx="4" fill="#354055" />
-          <rect x="600" y={210 + row * 72} width="72" height="24" rx="6" fill="#C45C26" opacity={row < 3 ? 0.85 : 0.45} />
-          <rect x="688" y={218 + row * 72} width="72" height="12" rx="3" fill="#5A6578" />
+          <rect x="232" y={214 + row * 72} width="48" height="12" rx="3" fill="#C5D1CC" />
+          <rect
+            x="296"
+            y={210 + row * 72}
+            width="180"
+            height="16"
+            rx="4"
+            fill="#A8B8B2"
+          />
+          <rect x="520" y={210 + row * 72} width="48" height="16" rx="4" fill="#DCE5E1" />
+          <rect x="588" y={210 + row * 72} width="56" height="16" rx="4" fill="#DCE5E1" />
+          <rect
+            x="668"
+            y={206 + row * 72}
+            width="84"
+            height="24"
+            rx="6"
+            fill="#2F6B5E"
+            opacity={row < 3 ? 0.9 : 0.45}
+          />
         </g>
       ))}
 
-      <rect x="24" y="572" width="480" height="48" rx="8" fill="#2A3345" />
-      <rect x="40" y="588" width="200" height="16" rx="4" fill="#4A5568" />
+      <rect
+        x="216"
+        y="568"
+        width="340"
+        height="48"
+        rx="8"
+        fill="#FFFFFF"
+        stroke="#DCE5E1"
+      />
+      <rect x="232" y="584" width="180" height="16" rx="4" fill="#A8B8B2" />
 
-      <rect x="520" y="572" width="256" height="48" rx="8" fill="#C45C26" />
-      <rect x="580" y="588" width="136" height="16" rx="4" fill="#F4D5C4" />
+      <rect x="572" y="568" width="204" height="48" rx="8" fill="#2F6B5E" />
+      <rect x="612" y="584" width="124" height="16" rx="4" fill="#EEF3F1" />
 
-      <rect x="24" y="640" width="160" height="56" rx="8" fill="#2A3345" />
-      <rect x="40" y="656" width="96" height="12" rx="3" fill="#5A6578" />
-      <rect x="40" y="674" width="120" height="10" rx="3" fill="#4A5568" />
+      <rect
+        x="216"
+        y="632"
+        width="176"
+        height="64"
+        rx="8"
+        fill="#FFFFFF"
+        stroke="#DCE5E1"
+      />
+      <rect x="232" y="648" width="96" height="12" rx="3" fill="#A8B8B2" />
+      <rect x="232" y="668" width="120" height="10" rx="3" fill="#C5D1CC" />
 
-      <rect x="204" y="640" width="160" height="56" rx="8" fill="#2A3345" />
-      <rect x="220" y="656" width="88" height="12" rx="3" fill="#5A6578" />
-      <rect x="220" y="674" width="104" height="10" rx="3" fill="#4A5568" />
+      <rect
+        x="408"
+        y="632"
+        width="176"
+        height="64"
+        rx="8"
+        fill="#FFFFFF"
+        stroke="#DCE5E1"
+      />
+      <rect x="424" y="648" width="88" height="12" rx="3" fill="#A8B8B2" />
+      <rect x="424" y="668" width="112" height="10" rx="3" fill="#C5D1CC" />
 
-      <rect x="384" y="640" width="392" height="56" rx="8" fill="#283142" />
-      <rect x="400" y="658" width="280" height="12" rx="3" fill="#4A5568" />
-      <rect x="400" y="676" width="200" height="10" rx="3" fill="#3A4558" />
+      <rect
+        x="600"
+        y="632"
+        width="176"
+        height="64"
+        rx="8"
+        fill="#F7FAF9"
+        stroke="#DCE5E1"
+      />
+      <rect x="616" y="650" width="96" height="12" rx="3" fill="#2F6B5E" />
+      <rect x="616" y="670" width="128" height="10" rx="3" fill="#7A9089" />
     </svg>
   );
 }
