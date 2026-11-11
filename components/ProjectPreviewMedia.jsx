@@ -1,11 +1,21 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
+import { keyframes } from "@mui/material/styles";
+
+const slideFadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 function resolveSlides(project) {
   if (Array.isArray(project.previewImages) && project.previewImages.length > 0) {
@@ -38,20 +48,11 @@ export default function ProjectPreviewMedia({
   const slides = useMemo(() => resolveSlides(project), [project]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [preferReducedMotion, setPreferReducedMotion] = useState(false);
-  const trackRef = useRef(null);
-  const suppressScrollRef = useRef(false);
 
   const hasVideo = Boolean(project.previewVideo) && !preferReducedMotion;
   const showCarousel = slides.length > 1 && !hasVideo;
   const posterSrc = slides[0]?.src ?? project.previewImage ?? null;
-
-  // [cloneLast, ...slides, cloneFirst] so wrap keeps sliding in the same direction.
-  const loopSlides = useMemo(() => {
-    if (slides.length < 2) return slides;
-    return [slides[slides.length - 1], ...slides, slides[0]];
-  }, [slides]);
-
-  const realToTrack = useCallback((realIndex) => realIndex + 1, []);
+  const activeSlide = slides[activeIndex] ?? slides[0];
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -68,111 +69,16 @@ export default function ProjectPreviewMedia({
     });
   }, [slides.length]);
 
-  const jumpToTrack = useCallback((trackIndex) => {
-    const track = trackRef.current;
-    if (!track || track.clientWidth === 0) return;
-    suppressScrollRef.current = true;
-    track.scrollTo({
-      left: track.clientWidth * trackIndex,
-      behavior: "auto",
-    });
-    requestAnimationFrame(() => {
-      suppressScrollRef.current = false;
-    });
-  }, []);
-
-  const scrollToTrack = useCallback(
-    (trackIndex, { smooth = true } = {}) => {
-      const track = trackRef.current;
-      if (!track || track.clientWidth === 0) return;
-      track.scrollTo({
-        left: track.clientWidth * trackIndex,
-        behavior: smooth && !preferReducedMotion ? "smooth" : "auto",
-      });
-    },
-    [preferReducedMotion]
-  );
-
-  // Start on the first real slide (track index 1), not the leading clone.
-  useEffect(() => {
-    if (!showCarousel) return;
-    jumpToTrack(1);
-    setActiveIndex(0);
-  }, [jumpToTrack, showCarousel, slides.length]);
-
-  const settleFromTrackIndex = useCallback(
-    (trackIndex) => {
-      if (trackIndex === 0) {
-        jumpToTrack(slides.length);
-        setActiveIndex(slides.length - 1);
-        return;
-      }
-      if (trackIndex === slides.length + 1) {
-        jumpToTrack(1);
-        setActiveIndex(0);
-        return;
-      }
-      setActiveIndex(trackIndex - 1);
-    },
-    [jumpToTrack, slides.length]
-  );
-
-  const handleScroll = useCallback(() => {
-    if (suppressScrollRef.current) return;
-    const track = trackRef.current;
-    if (!track || track.clientWidth === 0) return;
-    const trackIndex = Math.round(track.scrollLeft / track.clientWidth);
-    settleFromTrackIndex(trackIndex);
-  }, [settleFromTrackIndex]);
-
-  const goPrev = useCallback(() => {
-    if (slides.length < 2) return;
-    if (activeIndex > 0) {
-      const next = activeIndex - 1;
-      scrollToTrack(realToTrack(next), { smooth: true });
-      setActiveIndex(next);
-      return;
-    }
-    // Keep sliding left onto clone of last, then snap to real last.
-    scrollToTrack(0, { smooth: true });
-    setActiveIndex(slides.length - 1);
-  }, [activeIndex, realToTrack, scrollToTrack, slides.length]);
-
-  const goNext = useCallback(() => {
-    if (slides.length < 2) return;
-    if (activeIndex < slides.length - 1) {
-      const next = activeIndex + 1;
-      scrollToTrack(realToTrack(next), { smooth: true });
-      setActiveIndex(next);
-      return;
-    }
-    // Keep sliding right onto clone of first, then snap to real first.
-    scrollToTrack(slides.length + 1, { smooth: true });
-    setActiveIndex(0);
-  }, [activeIndex, realToTrack, scrollToTrack, slides.length]);
-
   const goTo = useCallback(
-    (target) => {
-      if (target === activeIndex || slides.length < 2) return;
-      const last = slides.length - 1;
-
-      if (activeIndex === last && target === 0) {
-        scrollToTrack(slides.length + 1, { smooth: true });
-        setActiveIndex(0);
-        return;
-      }
-      if (activeIndex === 0 && target === last) {
-        scrollToTrack(0, { smooth: true });
-        setActiveIndex(last);
-        return;
-      }
-
-      const distance = Math.abs(target - activeIndex);
-      scrollToTrack(realToTrack(target), { smooth: distance === 1 });
-      setActiveIndex(target);
+    (index) => {
+      if (slides.length < 2) return;
+      setActiveIndex((index + slides.length) % slides.length);
     },
-    [activeIndex, realToTrack, scrollToTrack, slides.length]
+    [slides.length]
   );
+
+  const goPrev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
+  const goNext = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
 
   const handleKeyDown = useCallback(
     (event) => {
@@ -265,12 +171,11 @@ export default function ProjectPreviewMedia({
     );
   }
 
-  if (slides.length === 0) {
+  if (slides.length === 0 || !activeSlide) {
     return null;
   }
 
   if (!showCarousel) {
-    const slide = slides[0];
     return (
       <Box
         component={project.demoUrl ? "a" : "div"}
@@ -281,8 +186,8 @@ export default function ProjectPreviewMedia({
         sx={mediaShellSx}
       >
         <Image
-          src={slide.src}
-          alt={slide.alt}
+          src={activeSlide.src}
+          alt={activeSlide.alt}
           fill
           sizes="(max-width: 768px) 100vw, 960px"
           style={{ objectFit: "cover", objectPosition: "top center" }}
@@ -302,71 +207,40 @@ export default function ProjectPreviewMedia({
       role="region"
       aria-roledescription="carousel"
       aria-label={`${project.title} previews`}
+      aria-live="polite"
       onKeyDown={handleKeyDown}
     >
       <Box
-        ref={trackRef}
-        onScroll={handleScroll}
+        key={activeSlide.src}
+        component={project.demoUrl ? "a" : "div"}
+        href={project.demoUrl ?? undefined}
+        target={project.demoUrl ? "_blank" : undefined}
+        rel={project.demoUrl ? "noreferrer" : undefined}
+        aria-label={
+          project.demoUrl
+            ? `Open live demo: ${project.title} (${activeIndex + 1} of ${slides.length})`
+            : undefined
+        }
         sx={{
-          display: "flex",
-          width: "100%",
-          height: "100%",
-          overflowX: "auto",
-          overflowY: "hidden",
-          scrollSnapType: "x mandatory",
-          scrollbarWidth: "none",
-          "&::-webkit-scrollbar": { display: "none" },
+          position: "absolute",
+          inset: 0,
+          display: "block",
+          textDecoration: "none",
+          color: "inherit",
+          cursor: project.demoUrl ? "pointer" : "default",
+          ...(!preferReducedMotion && {
+            animation: `${slideFadeIn} 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
+          }),
         }}
       >
-        {loopSlides.map((slide, trackIndex) => {
-          const isClone = trackIndex === 0 || trackIndex === loopSlides.length - 1;
-          const realIndex = isClone
-            ? trackIndex === 0
-              ? slides.length - 1
-              : 0
-            : trackIndex - 1;
-
-          return (
-            <Box
-              key={
-                trackIndex === 0
-                  ? `clone-start-${slide.src}`
-                  : trackIndex === loopSlides.length - 1
-                    ? `clone-end-${slide.src}`
-                    : slide.src
-              }
-              component={project.demoUrl ? "a" : "div"}
-              href={project.demoUrl ?? undefined}
-              target={project.demoUrl ? "_blank" : undefined}
-              rel={project.demoUrl ? "noreferrer" : undefined}
-              aria-label={
-                project.demoUrl && !isClone
-                  ? `Open live demo: ${project.title} (${realIndex + 1} of ${slides.length})`
-                  : undefined
-              }
-              aria-hidden={isClone || realIndex !== activeIndex ? true : undefined}
-              tabIndex={isClone ? -1 : undefined}
-              sx={{
-                position: "relative",
-                flex: "0 0 100%",
-                width: "100%",
-                height: "100%",
-                scrollSnapAlign: "start",
-                textDecoration: "none",
-                color: "inherit",
-                cursor: project.demoUrl ? "pointer" : "default",
-              }}
-            >
-              <Image
-                src={slide.src}
-                alt={isClone ? "" : slide.alt}
-                fill
-                sizes="(max-width: 768px) 100vw, 960px"
-                style={{ objectFit: "cover", objectPosition: "top center" }}
-              />
-            </Box>
-          );
-        })}
+        <Image
+          src={activeSlide.src}
+          alt={activeSlide.alt}
+          fill
+          sizes="(max-width: 768px) 100vw, 960px"
+          style={{ objectFit: "cover", objectPosition: "top center" }}
+          priority={activeIndex === 0}
+        />
       </Box>
 
       <IconButton
@@ -381,6 +255,7 @@ export default function ProjectPreviewMedia({
           position: "absolute",
           top: "50%",
           left: 6,
+          zIndex: 2,
           transform: "translateY(-50%)",
           bgcolor: "rgba(15, 20, 25, 0.55)",
           color: "#fff",
@@ -402,6 +277,7 @@ export default function ProjectPreviewMedia({
           position: "absolute",
           top: "50%",
           right: 6,
+          zIndex: 2,
           transform: "translateY(-50%)",
           bgcolor: "rgba(15, 20, 25, 0.55)",
           color: "#fff",
@@ -419,6 +295,7 @@ export default function ProjectPreviewMedia({
           position: "absolute",
           left: "50%",
           bottom: 10,
+          zIndex: 2,
           transform: "translateX(-50%)",
           display: "flex",
           alignItems: "center",
