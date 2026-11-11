@@ -7,10 +7,10 @@ export const projects = [
     level: "Production",
     status: "Live",
     previewKey: "rocha-cotizador",
-    previewImage: "/project-previews/rocha-cotizador.webp",
+    previewImage: "/project-previews/rocha-cotizador-quote.webp",
     previewImages: [
       {
-        src: "/project-previews/rocha-cotizador.webp",
+        src: "/project-previews/rocha-cotizador-quote.webp",
         alt: "Rocha Cotizador — Nueva cotización with product lines and totals",
       },
       {
