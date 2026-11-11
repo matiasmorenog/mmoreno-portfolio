@@ -14,12 +14,12 @@ export const projects = [
         alt: "Rocha Cotizador — Nueva cotización with product lines and totals",
       },
       {
-        src: "/project-previews/rocha-remitos.webp",
-        alt: "Rocha Cotizador — Remitos screen",
+        src: "/project-previews/rocha-admin.webp",
+        alt: "Rocha Cotizador — Admin dashboard with daily KPIs and yearly quote activity chart",
       },
       {
-        src: "/project-previews/rocha-admin.webp",
-        alt: "Rocha Cotizador — Admin screen",
+        src: "/project-previews/rocha-remitos.webp",
+        alt: "Rocha Cotizador — Admin quotes list with remito numbers, customers, delivery dates and totals",
       },
     ],
     previewAlt:
