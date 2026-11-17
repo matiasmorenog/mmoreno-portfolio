@@ -7,23 +7,31 @@ export const projects = [
     level: "Production",
     status: "Live",
     previewKey: "rocha-cotizador",
-    previewImage: "/project-previews/rocha-admin.webp",
+    previewImage: "/project-previews/rocha-customer-home.webp",
     previewImages: [
       {
+        src: "/project-previews/rocha-customer-home.webp",
+        alt: "Rocha Cotizador — Customer home hub with branded backdrop and module cards",
+      },
+      {
         src: "/project-previews/rocha-admin.webp",
-        alt: "Rocha Cotizador — Admin dashboard with daily KPIs and yearly quote activity chart",
+        alt: "Rocha Cotizador — Admin dashboard with KPIs and yearly quote activity chart",
       },
       {
-        src: "/project-previews/rocha-cotizador-quote.webp",
-        alt: "Rocha Cotizador — Nueva cotización with product lines and totals",
+        src: "/project-previews/rocha-admin-stock.webp",
+        alt: "Rocha Cotizador — Admin stock module with branch waste summary and product table",
       },
       {
-        src: "/project-previews/rocha-remitos.webp",
-        alt: "Rocha Cotizador — Admin quotes list with remito numbers, customers, delivery dates and totals",
+        src: "/project-previews/rocha-admin-clientes.webp",
+        alt: "Rocha Cotizador — Admin customers with assigned price lists and status",
+      },
+      {
+        src: "/project-previews/rocha-admin-listas.webp",
+        alt: "Rocha Cotizador — Admin price lists with products and customers per list",
       },
     ],
     previewAlt:
-      "Preview of Rocha Cotizador admin dashboard with KPIs and yearly quote activity chart",
+      "Preview of Rocha Cotizador customer home and admin modules from the live demo",
     demoUrl: "https://rocha-cotizador-dev.vercel.app/",
     repoUrl: "https://github.com/matiasmorenog/rocha-cotizador",
   },
