@@ -49,11 +49,13 @@ export default function ProjectPreviewMedia({
   const [activeIndex, setActiveIndex] = useState(0);
   const [preferReducedMotion, setPreferReducedMotion] = useState(false);
   const [hovering, setHovering] = useState(false);
+  const [hoveringControls, setHoveringControls] = useState(false);
 
   const hasVideo = Boolean(project.previewVideo) && !preferReducedMotion;
   const showCarousel = slides.length > 1 && !hasVideo;
   const posterSrc = slides[0]?.src ?? project.previewImage ?? null;
   const activeSlide = slides[activeIndex] ?? slides[0];
+  const autoplayActive = hovering && !hoveringControls && !preferReducedMotion;
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -81,14 +83,19 @@ export default function ProjectPreviewMedia({
   const goPrev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
   const goNext = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
 
-  // Auto-advance while hovered (pause on leave / reduced motion).
+  // Auto-advance while media hovered; pause on leave, controls hover, reduced motion.
   useEffect(() => {
-    if (!showCarousel || !hovering || preferReducedMotion) return undefined;
+    if (!showCarousel || !autoplayActive) return undefined;
     const id = window.setInterval(() => {
       setActiveIndex((current) => (current + 1) % slides.length);
     }, 2200);
     return () => window.clearInterval(id);
-  }, [hovering, preferReducedMotion, showCarousel, slides.length]);
+  }, [autoplayActive, showCarousel, slides.length]);
+
+  const pauseAutoplayOnControls = {
+    onPointerEnter: () => setHoveringControls(true),
+    onPointerLeave: () => setHoveringControls(false),
+  };
 
   const handleKeyDown = useCallback(
     (event) => {
@@ -220,7 +227,10 @@ export default function ProjectPreviewMedia({
       aria-live="polite"
       onKeyDown={handleKeyDown}
       onPointerEnter={() => setHovering(true)}
-      onPointerLeave={() => setHovering(false)}
+      onPointerLeave={() => {
+        setHovering(false);
+        setHoveringControls(false);
+      }}
     >
       <Box
         key={activeSlide.src}
@@ -258,6 +268,7 @@ export default function ProjectPreviewMedia({
       <IconButton
         size="small"
         aria-label={previousLabel}
+        {...pauseAutoplayOnControls}
         onClick={(event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -280,6 +291,7 @@ export default function ProjectPreviewMedia({
       <IconButton
         size="small"
         aria-label={nextLabel}
+        {...pauseAutoplayOnControls}
         onClick={(event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -303,6 +315,7 @@ export default function ProjectPreviewMedia({
         component="div"
         role="tablist"
         aria-label={`${project.title} preview slides`}
+        {...pauseAutoplayOnControls}
         sx={{
           position: "absolute",
           left: "50%",
@@ -317,7 +330,7 @@ export default function ProjectPreviewMedia({
           py: 0.55,
           borderRadius: 999,
           bgcolor: "rgba(15, 20, 25, 0.55)",
-          pointerEvents: "none",
+          pointerEvents: "auto",
         }}
       >
         {slides.map((slide, index) => (
