@@ -22,10 +22,6 @@ export const projects = [
         alt: "Rocha Cotizador — Admin stock module with branch waste summary and product table",
       },
       {
-        src: "/project-previews/rocha-admin-productos.webp",
-        alt: "Rocha Cotizador — Admin products table with base price and discount lists",
-      },
-      {
         src: "/project-previews/rocha-admin-clientes.webp",
         alt: "Rocha Cotizador — Admin customers with assigned price lists and status",
       },
