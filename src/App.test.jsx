@@ -1,6 +1,6 @@
 import React from "react";
-import { render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import PortfolioPage from "../app/portfolio-page";
 
 describe("App", () => {
@@ -41,6 +41,44 @@ describe("App", () => {
     expect(within(nexus).getByRole("tab", { name: "Show image 3 of 5" })).toBeInTheDocument();
     expect(within(nexus).getByRole("tab", { name: "Show image 4 of 5" })).toBeInTheDocument();
     expect(within(nexus).getByRole("tab", { name: "Show image 5 of 5" })).toBeInTheDocument();
+  });
+
+  describe("preview carousel hover autoplay", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("advances slides while hovered and pauses on leave", () => {
+      render(<PortfolioPage />);
+
+      const rocha = screen.getByRole("region", { name: "Rocha Cotizador previews" });
+      expect(within(rocha).getByRole("tab", { name: "Show image 1 of 3" })).toHaveAttribute(
+        "aria-selected",
+        "true"
+      );
+
+      fireEvent.pointerEnter(rocha);
+      act(() => {
+        vi.advanceTimersByTime(2200);
+      });
+      expect(within(rocha).getByRole("tab", { name: "Show image 2 of 3" })).toHaveAttribute(
+        "aria-selected",
+        "true"
+      );
+
+      fireEvent.pointerLeave(rocha);
+      act(() => {
+        vi.advanceTimersByTime(4400);
+      });
+      expect(within(rocha).getByRole("tab", { name: "Show image 2 of 3" })).toHaveAttribute(
+        "aria-selected",
+        "true"
+      );
+    });
   });
 
   it("renders positioning and primary CTAs", () => {
