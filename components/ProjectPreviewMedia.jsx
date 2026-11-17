@@ -48,6 +48,7 @@ export default function ProjectPreviewMedia({
   const slides = useMemo(() => resolveSlides(project), [project]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [preferReducedMotion, setPreferReducedMotion] = useState(false);
+  const [hovering, setHovering] = useState(false);
 
   const hasVideo = Boolean(project.previewVideo) && !preferReducedMotion;
   const showCarousel = slides.length > 1 && !hasVideo;
@@ -79,6 +80,15 @@ export default function ProjectPreviewMedia({
 
   const goPrev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
   const goNext = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
+
+  // Auto-advance while hovered (pause on leave / reduced motion).
+  useEffect(() => {
+    if (!showCarousel || !hovering || preferReducedMotion) return undefined;
+    const id = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % slides.length);
+    }, 2200);
+    return () => window.clearInterval(id);
+  }, [hovering, preferReducedMotion, showCarousel, slides.length]);
 
   const handleKeyDown = useCallback(
     (event) => {
@@ -209,6 +219,8 @@ export default function ProjectPreviewMedia({
       aria-label={`${project.title} previews`}
       aria-live="polite"
       onKeyDown={handleKeyDown}
+      onPointerEnter={() => setHovering(true)}
+      onPointerLeave={() => setHovering(false)}
     >
       <Box
         key={activeSlide.src}

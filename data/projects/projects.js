@@ -44,8 +44,31 @@ export const projects = [
     level: "Personal product",
     status: "Live Demo",
     previewKey: "nexus-apparel",
-    previewImage: "/project-previews/nexus-web-store.webp",
-    previewAlt: "Preview of e-commerce storefront with product catalog and cart",
+    previewImage: "/project-previews/nexus-home.webp",
+    previewImages: [
+      {
+        src: "/project-previews/nexus-home.webp",
+        alt: "Nexus Web Store — Goat Indumentaria storefront hero with 2x1 promo carousel",
+      },
+      {
+        src: "/project-previews/nexus-productos.webp",
+        alt: "Nexus Web Store — Product catalog with filters and product cards",
+      },
+      {
+        src: "/project-previews/nexus-admin-dashboard.webp",
+        alt: "Nexus Web Store — Admin dashboard with attention alerts and best sellers",
+      },
+      {
+        src: "/project-previews/nexus-admin-reportes.webp",
+        alt: "Nexus Web Store — Admin reports with revenue KPIs, funnel and top products",
+      },
+      {
+        src: "/project-previews/nexus-admin-pedidos.webp",
+        alt: "Nexus Web Store — Admin orders with customer detail, payment and shipping status",
+      },
+    ],
+    previewAlt:
+      "Preview of Nexus Web Store Goat Indumentaria demo — storefront and admin",
     demoUrl: "https://nexus-web-store.vercel.app/",
     repoUrl: "https://github.com/matiasmorenog/nexus-web-store",
   },
