@@ -19,15 +19,18 @@ describe("App", () => {
     expect(screen.queryByText("Problem")).not.toBeInTheDocument();
   });
 
-  it("renders Rocha preview carousel with three slides", () => {
+  it("renders Rocha preview carousel with six slides", () => {
     render(<PortfolioPage />);
 
     const rocha = screen.getByRole("region", { name: "Rocha Cotizador previews" });
     expect(within(rocha).getByRole("button", { name: "Previous image" })).toBeInTheDocument();
     expect(within(rocha).getByRole("button", { name: "Next image" })).toBeInTheDocument();
-    expect(within(rocha).getByRole("tab", { name: "Show image 1 of 3" })).toBeInTheDocument();
-    expect(within(rocha).getByRole("tab", { name: "Show image 2 of 3" })).toBeInTheDocument();
-    expect(within(rocha).getByRole("tab", { name: "Show image 3 of 3" })).toBeInTheDocument();
+    expect(within(rocha).getByRole("tab", { name: "Show image 1 of 6" })).toBeInTheDocument();
+    expect(within(rocha).getByRole("tab", { name: "Show image 2 of 6" })).toBeInTheDocument();
+    expect(within(rocha).getByRole("tab", { name: "Show image 3 of 6" })).toBeInTheDocument();
+    expect(within(rocha).getByRole("tab", { name: "Show image 4 of 6" })).toBeInTheDocument();
+    expect(within(rocha).getByRole("tab", { name: "Show image 5 of 6" })).toBeInTheDocument();
+    expect(within(rocha).getByRole("tab", { name: "Show image 6 of 6" })).toBeInTheDocument();
   });
 
   it("renders Nexus preview carousel with five slides", () => {
@@ -56,7 +59,7 @@ describe("App", () => {
       render(<PortfolioPage />);
 
       const rocha = screen.getByRole("region", { name: "Rocha Cotizador previews" });
-      expect(within(rocha).getByRole("tab", { name: "Show image 1 of 3" })).toHaveAttribute(
+      expect(within(rocha).getByRole("tab", { name: "Show image 1 of 6" })).toHaveAttribute(
         "aria-selected",
         "true"
       );
@@ -65,7 +68,7 @@ describe("App", () => {
       act(() => {
         vi.advanceTimersByTime(2200);
       });
-      expect(within(rocha).getByRole("tab", { name: "Show image 2 of 3" })).toHaveAttribute(
+      expect(within(rocha).getByRole("tab", { name: "Show image 2 of 6" })).toHaveAttribute(
         "aria-selected",
         "true"
       );
@@ -74,7 +77,7 @@ describe("App", () => {
       act(() => {
         vi.advanceTimersByTime(4400);
       });
-      expect(within(rocha).getByRole("tab", { name: "Show image 2 of 3" })).toHaveAttribute(
+      expect(within(rocha).getByRole("tab", { name: "Show image 2 of 6" })).toHaveAttribute(
         "aria-selected",
         "true"
       );
