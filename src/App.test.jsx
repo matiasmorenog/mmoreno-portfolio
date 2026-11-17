@@ -82,6 +82,29 @@ describe("App", () => {
         "true"
       );
     });
+
+    it("pauses autoplay while hovering carousel controls", () => {
+      render(<PortfolioPage />);
+
+      const rocha = screen.getByRole("region", { name: "Rocha Cotizador previews" });
+      fireEvent.pointerEnter(rocha);
+      act(() => {
+        vi.advanceTimersByTime(2200);
+      });
+      expect(within(rocha).getByRole("tab", { name: "Show image 2 of 6" })).toHaveAttribute(
+        "aria-selected",
+        "true"
+      );
+
+      fireEvent.pointerEnter(within(rocha).getByRole("button", { name: "Next image" }));
+      act(() => {
+        vi.advanceTimersByTime(4400);
+      });
+      expect(within(rocha).getByRole("tab", { name: "Show image 2 of 6" })).toHaveAttribute(
+        "aria-selected",
+        "true"
+      );
+    });
   });
 
   it("renders positioning and primary CTAs", () => {
