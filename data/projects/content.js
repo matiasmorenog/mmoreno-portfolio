@@ -12,9 +12,8 @@ export const projectContentById = {
         "Public demo uses its own development database with no real customer data. Demo authentication lets you explore customer and administrator accounts with different roles and permissions.",
       caseStudy: {
         problem:
-          "Wholesale orders were managed through WhatsApp and Excel, without customer self-service or centralized administration.",
-        action:
-          "Met face-to-face with the client to understand the business problem, then designed and shipped the full wholesale ordering flow so customers can place orders themselves — with per-customer pricing, stock visibility, quotes delivered as PDFs, Excel sync for existing ops, and push alerts for admins — replacing the WhatsApp/Excel back-and-forth.",
+          "Wholesale orders were managed through WhatsApp and Excel, without customer self-service or centralized administration. I met face-to-face with the client to understand the business problem, then designed and shipped the full wholesale ordering flow so customers can place orders themselves — with per-customer pricing, stock visibility, quotes delivered as PDFs, Excel sync for existing ops, and push alerts for admins — replacing the WhatsApp/Excel back-and-forth.",
+        action: null,
         result:
           "In daily use by 4 ordering locations; 61 wholesale orders (delivery notes) processed in Nov 2026.",
       },
@@ -31,9 +30,8 @@ export const projectContentById = {
         "La demo pública usa su propia base de desarrollo y no contiene datos reales de clientes. Incluye autenticación demo para explorar cuentas de cliente y administrador con distintos roles y permisos.",
       caseStudy: {
         problem:
-          "Los pedidos mayoristas se gestionaban por WhatsApp y Excel, sin autogestión para clientes ni administración centralizada.",
-        action:
-          "Trabajé presencialmente con el cliente para entender el problema de negocio y, a partir de eso, diseñé y entregué el flujo completo de pedidos mayoristas para que los clientes carguen pedidos solos — con precios por cliente, visibilidad de stock, cotizaciones en PDF, sync con Excel para la operación existente y avisos push para administración — reemplazando el ida y vuelta por WhatsApp/Excel.",
+          "Los pedidos mayoristas se gestionaban por WhatsApp y Excel, sin autogestión para clientes ni administración centralizada. Trabajé presencialmente con el cliente para entender el problema de negocio y, a partir de eso, diseñé y entregué el flujo completo de pedidos mayoristas para que los clientes carguen pedidos solos — con precios por cliente, visibilidad de stock, cotizaciones en PDF, sync con Excel para la operación existente y avisos push para administración — reemplazando el ida y vuelta por WhatsApp/Excel.",
+        action: null,
         result:
           "En uso diario por 4 sucursales; 61 pedidos mayoristas (remitos) procesados en noviembre 2026.",
       },

@@ -24,21 +24,21 @@ describe("App", () => {
     expect(screen.queryByText("Describe")).not.toBeInTheDocument();
   });
 
-  it("puts Rocha face-to-face client discovery in Action, context in Describe", () => {
+  it("merges Rocha Describe into one paragraph and keeps Result separate", () => {
     render(<PortfolioPage initialLocale="en" />);
 
     fireEvent.click(screen.getAllByRole("button", { name: "View case study" })[0]);
 
     expect(screen.getByText("Describe")).toBeInTheDocument();
-    expect(screen.getByText("Action")).toBeInTheDocument();
+    expect(screen.queryByText("Action")).not.toBeInTheDocument();
     expect(
       screen.getByText(
-        /^Wholesale orders were managed through WhatsApp and Excel/
+        /Wholesale orders were managed through WhatsApp and Excel[\s\S]*met face-to-face with the client to understand the business problem[\s\S]*designed and shipped the full wholesale ordering flow/i
       )
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        /Met face-to-face with the client to understand the business problem, then designed and shipped/
+        /In daily use by 4 ordering locations; 61 wholesale orders \(delivery notes\) processed in Nov 2026\./
       )
     ).toBeInTheDocument();
   });
