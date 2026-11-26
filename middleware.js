@@ -6,15 +6,12 @@ export function middleware(request) {
   const { pathname } = request.nextUrl;
 
   // Serve English at `/` via internal rewrite to `/en` (URL stays `/`).
+  // Do NOT also redirect `/en` → `/`: Next can re-run middleware on the
+  // rewritten `/en` path, which would loop (`/` → rewrite `/en` → redirect `/`).
   if (pathname === "/") {
-    return NextResponse.rewrite(new URL("/en", request.url));
-  }
-
-  // Canonicalize `/en` → `/` for a single English URL.
-  if (pathname === "/en" || pathname.startsWith("/en/")) {
     const url = request.nextUrl.clone();
-    url.pathname = pathname.replace(/^\/en/, "") || "/";
-    return NextResponse.redirect(url);
+    url.pathname = "/en";
+    return NextResponse.rewrite(url);
   }
 
   const first = pathname.split("/").filter(Boolean)[0];

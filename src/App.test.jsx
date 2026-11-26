@@ -23,7 +23,7 @@ describe("App", () => {
     expect(screen.queryByText("Problem")).not.toBeInTheDocument();
   });
 
-  it("points Rocha Live Demo to the public demo and shows production metrics", () => {
+  it("points Rocha Live Demo to the public demo and links production-since to prod", () => {
     render(<PortfolioPage initialLocale="en" />);
 
     const rochaDemo = screen
@@ -37,13 +37,22 @@ describe("App", () => {
     expect(rochaDemo?.getAttribute("href")).not.toBe(
       "https://rocha-cotizador.vercel.app/"
     );
-    expect(screen.getByText("Demo access available")).toBeInTheDocument();
-    expect(screen.getByText("In production since Jul 2026")).toBeInTheDocument();
+    expect(screen.queryByText("Demo access available")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("link", {
+        name: "In production since Jul 2026 (production)",
+      })
+    ).toHaveAttribute("href", "https://rocha-cotizador.vercel.app/");
     expect(
       screen.getByText(
         /In daily use by 4 ordering locations; 61 wholesale orders \(delivery notes\) processed in Nov 2026\./
       )
     ).toBeInTheDocument();
+    expect(screen.getAllByText("NextAuth").length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText("Stripe")).toBeInTheDocument();
+    expect(screen.getByText("Resend")).toBeInTheDocument();
+    expect(screen.getByText("Vercel Blob")).toBeInTheDocument();
+    expect(screen.queryByText("Next.js, TypeScript, PostgreSQL")).not.toBeInTheDocument();
 
     const nexusDemo = screen
       .getAllByRole("link", { name: "Live Demo" })
@@ -51,11 +60,15 @@ describe("App", () => {
     expect(nexusDemo).toHaveAttribute("href", "https://nexus-web-store.vercel.app/");
   });
 
-  it("shows Rocha demo hint and metrics in Spanish", () => {
+  it("shows Rocha production metrics in Spanish without demo-access hint", () => {
     render(<PortfolioPage initialLocale="es" />);
 
-    expect(screen.getByText("Acceso demo disponible")).toBeInTheDocument();
-    expect(screen.getByText("En producción desde jul 2026")).toBeInTheDocument();
+    expect(screen.queryByText("Acceso demo disponible")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("link", {
+        name: "En producción desde jul 2026 (production)",
+      })
+    ).toHaveAttribute("href", "https://rocha-cotizador.vercel.app/");
     expect(
       screen.getByText(
         /En uso diario por 4 sucursales; 61 pedidos mayoristas \(remitos\) procesados en noviembre 2026\./

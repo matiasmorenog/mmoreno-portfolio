@@ -26,11 +26,18 @@ const technologies = {
   nestjs: { slug: "nestjs", color: "E0234E" },
   vercel: { slug: "vercel", color: "000000", darkColor: "FFFFFF" },
   sqlserver: { slug: "microsoftsqlserver", color: "CC2927" },
+  nextauth: { slug: null, color: "000000", darkColor: "FFFFFF" },
+  stripe: { slug: "stripe", color: "635BFF" },
+  resend: { slug: "resend", color: "000000", darkColor: "FFFFFF" },
+  vercelblob: { slug: "vercel", color: "000000", darkColor: "FFFFFF" },
 };
 
 const customSvgByTechKey = {
   zustand: (color) =>
     `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#${color}" d="M12 3c-2.8 0-5 2.2-5 5 0 1.2.4 2.3 1.1 3.2-.8.5-1.4 1.4-1.4 2.4v1.4c0 1.7 1.3 3 3 3h4.6c1.7 0 3-1.3 3-3v-1.4c0-1-.6-1.9-1.4-2.4.7-.9 1.1-2 1.1-3.2 0-2.8-2.2-5-5-5zm-2.8 5c.5 0 .9-.4.9-.9s-.4-.9-.9-.9-.9.4-.9.9.4.9.9.9zm5.6 0c.5 0 .9-.4.9-.9s-.4-.9-.9-.9-.9.4-.9.9.4.9.9.9z"/></svg>`,
+  // Auth-style lock mark — Simple Icons has no NextAuth/Auth.js slug.
+  nextauth: (color) =>
+    `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#${color}" d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5zm-3 5a3 3 0 0 1 6 0v3H9V6zm3 8.5a1.75 1.75 0 0 1 .75 3.33V19a.75.75 0 0 1-1.5 0v-1.17A1.75 1.75 0 0 1 12 14.5z"/></svg>`,
 };
 
 const contactIcons = {
@@ -78,6 +85,10 @@ async function fetchSvg(itemKey, slug, color, customSvg) {
 
   if (customSvgByTechKey[itemKey]) {
     return customSvgByTechKey[itemKey](color);
+  }
+
+  if (!slug) {
+    throw new Error(`Missing slug/custom SVG for ${itemKey}`);
   }
 
   const sources = [

@@ -199,13 +199,34 @@ export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
             liveStatus={liveStatus}
           />
           {project.productionSince ? (
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ fontWeight: 500, letterSpacing: 0.2 }}
-            >
-              {project.productionSince}
-            </Typography>
+            project.productionUrl ? (
+              <Typography
+                component="a"
+                href={project.productionUrl}
+                target="_blank"
+                rel="noreferrer"
+                variant="caption"
+                color="text.secondary"
+                aria-label={`${project.productionSince} (production)`}
+                sx={{
+                  fontWeight: 500,
+                  letterSpacing: 0.2,
+                  textDecoration: "underline",
+                  textUnderlineOffset: 2,
+                  "&:hover": { color: "primary.main" },
+                }}
+              >
+                {project.productionSince}
+              </Typography>
+            ) : (
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ fontWeight: 500, letterSpacing: 0.2 }}
+              >
+                {project.productionSince}
+              </Typography>
+            )
           ) : null}
           {project.category ? (
             <Chip
@@ -303,42 +324,35 @@ export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
 
         <Divider sx={{ mt: "auto", mb: 2 }} />
 
-        <Stack spacing={0.75}>
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
-            {project.demoUrl ? (
-              <Button
-                size="small"
-                variant="contained"
-                component="a"
-                href={project.demoUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {liveDemoLabel}
-              </Button>
-            ) : (
-              <Button size="small" variant="outlined" disabled>
-                {demoSoonLabel}
-              </Button>
-            )}
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
+          {project.demoUrl ? (
+            <Button
+              size="small"
+              variant="contained"
+              component="a"
+              href={project.demoUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {liveDemoLabel}
+            </Button>
+          ) : (
+            <Button size="small" variant="outlined" disabled>
+              {demoSoonLabel}
+            </Button>
+          )}
 
-            {project.repoUrl ? (
-              <Button
-                size="small"
-                variant="outlined"
-                component="a"
-                href={project.repoUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {sourceCodeLabel}
-              </Button>
-            ) : null}
-          </Stack>
-          {project.demoUrl && project.demoHint ? (
-            <Typography variant="caption" color="text.secondary">
-              {project.demoHint}
-            </Typography>
+          {project.repoUrl ? (
+            <Button
+              size="small"
+              variant="outlined"
+              component="a"
+              href={project.repoUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {sourceCodeLabel}
+            </Button>
           ) : null}
         </Stack>
       </Box>

@@ -17,11 +17,27 @@ export const technologies = {
   mysql: { label: "MySQL", slug: "mysql", color: "4479A1" },
   nestjs: { label: "NestJS", slug: "nestjs", color: "E0234E" },
   vercel: { label: "Vercel", slug: "vercel", color: "000000", darkColor: "FFFFFF" },
+  nextauth: {
+    label: "NextAuth",
+    slug: null,
+    color: "000000",
+    darkColor: "FFFFFF",
+    // Custom mark — Simple Icons has no NextAuth/Auth.js slug.
+    custom: true,
+  },
+  stripe: { label: "Stripe", slug: "stripe", color: "635BFF" },
+  resend: { label: "Resend", slug: "resend", color: "000000", darkColor: "FFFFFF" },
+  vercelblob: {
+    label: "Vercel Blob",
+    slug: "vercel",
+    color: "000000",
+    darkColor: "FFFFFF",
+  },
 };
 
 export function getTechnologyIconUrl(techKey, { forDarkBackground = false } = {}) {
   const tech = technologies[techKey];
-  if (!tech) return null;
+  if (!tech?.slug || tech.custom) return null;
 
   const color = forDarkBackground && tech.darkColor ? tech.darkColor : tech.color;
 
@@ -60,13 +76,16 @@ const labelToKey = {
   "Node.js": "nodejs",
   PostgreSQL: "postgresql",
   Prisma: "prisma",
-  NextAuth: null,
+  NextAuth: "nextauth",
   Express: "express",
   Git: "git",
   MySQL: "mysql",
   SQL: null,
   "Material UI": null,
   "Mercado Pago": "mercadopago",
+  Stripe: "stripe",
+  Resend: "resend",
+  "Vercel Blob": "vercelblob",
   Zustand: "zustand",
   "Tailwind CSS": "tailwindcss",
   Jest: "jest",

@@ -33,6 +33,7 @@ export const projects = [
     previewAlt:
       "Preview of Rocha Cotizador customer home and admin modules from the live demo",
     demoUrl: "https://rocha-cotizador-dev.vercel.app/",
+    productionUrl: "https://rocha-cotizador.vercel.app/",
     repoUrl: "https://github.com/matiasmorenog/rocha-cotizador",
   },
   {
