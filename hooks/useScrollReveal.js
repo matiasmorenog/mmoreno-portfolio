@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 
 /**
  * Subtle one-shot scroll reveal for below-the-fold blocks.
+ * Preferred production API: `components/ScrollReveal.jsx` + `hooks/useInViewOnce.js`
+ * (PR #11). This thin hook remains as a minimal guide/utility.
  *
  * Design notes for Matías / PR #11 coexistence:
  * - Visible without JS (CSS defaults to opacity:1; see `.reveal` in locale layout).

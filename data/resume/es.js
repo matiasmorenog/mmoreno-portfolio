@@ -71,7 +71,6 @@ export const portfolioUi = {
   availableFor: "Disponible freelance / full-time",
   openToRemote: "Abierto a remoto",
   viewProjects: "Ver proyectos",
-  contactMe: "Contacto",
   contactTitle: "Contacto",
   contactMailSubject: "Contacto desde portfolio",
   copyEmail: "Copiar email",

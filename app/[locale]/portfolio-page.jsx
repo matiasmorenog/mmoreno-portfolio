@@ -25,6 +25,7 @@ import SkillsIconGrid from "@/components/SkillsIconGrid";
 import ProjectCard from "@/components/ProjectCard";
 import DownloadCtaHint from "@/components/DownloadCtaHint";
 import PortfolioContact from "@/components/PortfolioContact";
+import ScrollReveal from "@/components/ScrollReveal";
 import { getProjects } from "@/data/projects";
 import {
   getPortfolioProfile,
@@ -38,7 +39,6 @@ import {
   parseLocale,
 } from "@/data/resume";
 import { createPortfolioTheme } from "@/app/theme";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const toolbarIconButtonSx = {
   border: 1,
@@ -136,10 +136,6 @@ export default function PortfolioPage({ initialLocale = defaultLocale }) {
   const localizedProjects = useMemo(() => getProjects(locale), [locale]);
   const cvPaths = useMemo(() => getStaticCvPaths(locale), [locale]);
 
-  const projectsRevealRef = useScrollReveal();
-  const experienceRevealRef = useScrollReveal();
-  const educationRevealRef = useScrollReveal();
-
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -191,6 +187,7 @@ export default function PortfolioPage({ initialLocale = defaultLocale }) {
         />
         <Container maxWidth="lg">
           <Stack spacing={2}>
+            <ScrollReveal component="div" immediate>
             <Paper
               component="section"
               aria-labelledby="hero-heading"
@@ -333,24 +330,6 @@ export default function PortfolioPage({ initialLocale = defaultLocale }) {
                         {ui.downloadCv}
                       </Button>
                     </DownloadCtaHint>
-                    <Button
-                      size="small"
-                      variant="text"
-                      component="a"
-                      href="#contact"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        document.getElementById("contact")?.scrollIntoView({
-                          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
-                            .matches
-                            ? "auto"
-                            : "smooth",
-                          block: "start",
-                        });
-                      }}
-                    >
-                      {ui.contactMe}
-                    </Button>
                   </Stack>
                 </Box>
 
@@ -455,14 +434,14 @@ export default function PortfolioPage({ initialLocale = defaultLocale }) {
                 </Stack>
               </Box>
             </Paper>
+            </ScrollReveal>
 
-            <SkillsIconGrid title={ui.coreSkillsTitle} subtitle={ui.skillsSubtitle} />
+            <ScrollReveal>
+              <SkillsIconGrid title={ui.coreSkillsTitle} subtitle={ui.skillsSubtitle} />
+            </ScrollReveal>
 
             <Box
               id="projects"
-              ref={projectsRevealRef}
-              className="reveal"
-              data-reveal
               component="section"
               aria-labelledby="projects-heading"
               sx={{
@@ -470,17 +449,19 @@ export default function PortfolioPage({ initialLocale = defaultLocale }) {
                 scrollMarginTop: { xs: 16, md: 24 },
               }}
             >
-              <Typography
-                id="projects-heading"
-                component="h2"
-                variant="h6"
-                sx={{ mb: 0.5 }}
-              >
-                {ui.liveDemoProjects}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
-                {ui.portfolioSubtitle}
-              </Typography>
+              <ScrollReveal>
+                <Typography
+                  id="projects-heading"
+                  component="h2"
+                  variant="h6"
+                  sx={{ mb: 0.5 }}
+                >
+                  {ui.liveDemoProjects}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+                  {ui.portfolioSubtitle}
+                </Typography>
+              </ScrollReveal>
 
               <Box
                 sx={{
@@ -491,54 +472,60 @@ export default function PortfolioPage({ initialLocale = defaultLocale }) {
                   alignItems: "stretch",
                 }}
               >
-                {localizedProjects.map((project) => (
-                  <ProjectCard
+                {localizedProjects.map((project, index) => (
+                  <ScrollReveal
                     key={project.id}
-                    project={project}
-                    caseStudyLabels={{
-                      problem: ui.caseStudyProblem,
-                      action: ui.caseStudyAction,
-                      result: ui.caseStudyResult,
-                    }}
-                    uiLabels={{
-                      liveDemo: ui.projectLiveDemo,
-                      sourceCode: ui.projectSourceCode,
-                      demoSoon: ui.projectDemoSoon,
-                      roleLabel: ui.projectRoleLabel,
-                      previousImage: ui.projectPreviousImage,
-                      nextImage: ui.projectNextImage,
-                      viewCaseStudy: ui.projectViewCaseStudy,
-                      hideCaseStudy: ui.projectHideCaseStudy,
-                    }}
-                  />
+                    delayMs={index * 120}
+                    sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+                  >
+                    <ProjectCard
+                      project={project}
+                      caseStudyLabels={{
+                        problem: ui.caseStudyProblem,
+                        action: ui.caseStudyAction,
+                        result: ui.caseStudyResult,
+                      }}
+                      uiLabels={{
+                        liveDemo: ui.projectLiveDemo,
+                        sourceCode: ui.projectSourceCode,
+                        demoSoon: ui.projectDemoSoon,
+                        roleLabel: ui.projectRoleLabel,
+                        previousImage: ui.projectPreviousImage,
+                        nextImage: ui.projectNextImage,
+                        viewCaseStudy: ui.projectViewCaseStudy,
+                        hideCaseStudy: ui.projectHideCaseStudy,
+                      }}
+                    />
+                  </ScrollReveal>
                 ))}
               </Box>
             </Box>
 
-            <Paper
-              ref={experienceRevealRef}
-              className="reveal"
-              data-reveal
-              component="section"
-              aria-labelledby="experience-heading"
-              variant="outlined"
-              sx={{ p: 2, borderRadius: 1 }}
-            >
-              <Typography
-                id="experience-heading"
-                component="h2"
-                variant="h6"
-                sx={{ mb: 1 }}
+            <ScrollReveal>
+              <Paper
+                component="section"
+                aria-labelledby="experience-heading"
+                variant="outlined"
+                sx={{ p: 2, borderRadius: 1 }}
               >
-                {ui.experienceHighlights}
-              </Typography>
-              {experienceHighlights.map((item, index) => {
+                <Typography
+                  id="experience-heading"
+                  component="h2"
+                  variant="h6"
+                  sx={{ mb: 1 }}
+                >
+                  {ui.experienceHighlights}
+                </Typography>
+                {experienceHighlights.map((item, index) => {
                 const isCompact = Boolean(item.compact);
                 const isLast = index === experienceHighlights.length - 1;
 
                 return (
-                  <Box
+                  <ScrollReveal
                     key={item.id ?? item.company}
+                    delayMs={Math.min(index, 5) * 95}
+                  >
+                  <Box
                     sx={{
                       display: "grid",
                       gridTemplateColumns: "auto 1fr",
@@ -737,38 +724,42 @@ export default function PortfolioPage({ initialLocale = defaultLocale }) {
                       ) : null}
                     </Box>
                   </Box>
+                  </ScrollReveal>
                 );
               })}
-            </Paper>
+              </Paper>
+            </ScrollReveal>
 
-            <Paper
-              ref={educationRevealRef}
-              className="reveal"
-              data-reveal
-              component="section"
-              aria-labelledby="education-heading"
-              variant="outlined"
-              sx={{ p: 2, borderRadius: 1, alignSelf: "start" }}
-            >
-              <Typography
-                id="education-heading"
-                component="h2"
-                variant="h6"
-                sx={{ mb: 1 }}
+            <ScrollReveal>
+              <Paper
+                component="section"
+                aria-labelledby="education-heading"
+                variant="outlined"
+                sx={{ p: 2, borderRadius: 1, alignSelf: "start" }}
               >
-                {ui.educationCertifications}
-              </Typography>
-              {educationHighlights.map((item) => (
                 <Typography
-                  key={item}
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 1, "&:last-child": { mb: 0 } }}
+                  id="education-heading"
+                  component="h2"
+                  variant="h6"
+                  sx={{ mb: 1 }}
                 >
-                  {item}
+                  {ui.educationCertifications}
                 </Typography>
-              ))}
-            </Paper>
+                {educationHighlights.map((item, index) => (
+                  <ScrollReveal key={item} delayMs={index * 80}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        mb: index === educationHighlights.length - 1 ? 0 : 1,
+                      }}
+                    >
+                      {item}
+                    </Typography>
+                  </ScrollReveal>
+                ))}
+              </Paper>
+            </ScrollReveal>
           </Stack>
         </Container>
       </Box>
