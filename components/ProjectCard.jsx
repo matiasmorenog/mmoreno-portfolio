@@ -198,6 +198,36 @@ export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
             statusLabel={project.statusLabel}
             liveStatus={liveStatus}
           />
+          {project.productionSince ? (
+            project.productionUrl ? (
+              <Typography
+                component="a"
+                href={project.productionUrl}
+                target="_blank"
+                rel="noreferrer"
+                variant="caption"
+                color="text.secondary"
+                aria-label={`${project.productionSince} (production)`}
+                sx={{
+                  fontWeight: 500,
+                  letterSpacing: 0.2,
+                  textDecoration: "underline",
+                  textUnderlineOffset: 2,
+                  "&:hover": { color: "primary.main" },
+                }}
+              >
+                {project.productionSince}
+              </Typography>
+            ) : (
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ fontWeight: 500, letterSpacing: 0.2 }}
+              >
+                {project.productionSince}
+              </Typography>
+            )
+          ) : null}
           {project.category ? (
             <Chip
               size="small"

@@ -21,6 +21,98 @@ describe("App", () => {
     ).toBeGreaterThanOrEqual(2);
     expect(screen.getAllByText(/Result:/).length).toBeGreaterThanOrEqual(2);
     expect(screen.queryByText("Problem")).not.toBeInTheDocument();
+    expect(screen.queryByText("Describe")).not.toBeInTheDocument();
+  });
+
+  it("merges Rocha Describe into one paragraph and keeps Result separate", () => {
+    render(<PortfolioPage initialLocale="en" />);
+
+    fireEvent.click(screen.getAllByRole("button", { name: "View case study" })[0]);
+
+    expect(screen.getByText("Describe")).toBeInTheDocument();
+    expect(screen.queryByText("Action")).not.toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /Wholesale orders were managed through WhatsApp and Excel[\s\S]*met face-to-face with the client to understand the business problem[\s\S]*designed and shipped the full wholesale ordering flow/i
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /In daily use by 4 ordering locations; 61 wholesale orders \(delivery notes\) processed in Nov 2026\./
+      )
+    ).toBeInTheDocument();
+  });
+
+  it("merges Nexus Describe into one paragraph without Action heading", () => {
+    render(<PortfolioPage initialLocale="en" />);
+
+    fireEvent.click(screen.getAllByRole("button", { name: "View case study" })[1]);
+
+    expect(screen.getByText("Describe")).toBeInTheDocument();
+    expect(screen.queryByText("Action")).not.toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /Needed a production-shaped multi-tenant e-commerce foundation[\s\S]*Built a multi-tenant storefront and merchant admin/i
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /Live personal SaaS-oriented platform in production with several isolated stores/
+      )
+    ).toBeInTheDocument();
+  });
+
+  it("points Rocha Live Demo to the public demo and links production-since to prod", () => {
+    render(<PortfolioPage initialLocale="en" />);
+
+    const rochaDemo = screen
+      .getAllByRole("link", { name: "Live Demo" })
+      .find((link) => link.getAttribute("href")?.includes("rocha-cotizador"));
+
+    expect(rochaDemo).toHaveAttribute(
+      "href",
+      "https://rocha-cotizador-dev.vercel.app/"
+    );
+    expect(rochaDemo?.getAttribute("href")).not.toBe(
+      "https://rocha-cotizador.vercel.app/"
+    );
+    expect(screen.queryByText("Demo access available")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("link", {
+        name: "In production since Jul 2026 (production)",
+      })
+    ).toHaveAttribute("href", "https://rocha-cotizador.vercel.app/");
+    expect(
+      screen.getByText(
+        /In daily use by 4 ordering locations; 61 wholesale orders \(delivery notes\) processed in Nov 2026\./
+      )
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("NextAuth").length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText("Stripe")).toBeInTheDocument();
+    expect(screen.getByText("Resend")).toBeInTheDocument();
+    expect(screen.getByText("Vercel Blob")).toBeInTheDocument();
+    expect(screen.queryByText("Next.js, TypeScript, PostgreSQL")).not.toBeInTheDocument();
+
+    const nexusDemo = screen
+      .getAllByRole("link", { name: "Live Demo" })
+      .find((link) => link.getAttribute("href")?.includes("nexus-web-store"));
+    expect(nexusDemo).toHaveAttribute("href", "https://nexus-web-store.vercel.app/");
+  });
+
+  it("shows Rocha production metrics in Spanish without demo-access hint", () => {
+    render(<PortfolioPage initialLocale="es" />);
+
+    expect(screen.queryByText("Acceso demo disponible")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("link", {
+        name: "En producción desde jul 2026 (production)",
+      })
+    ).toHaveAttribute("href", "https://rocha-cotizador.vercel.app/");
+    expect(
+      screen.getByText(
+        /En uso diario por 4 sucursales; 61 pedidos mayoristas \(remitos\) procesados en noviembre 2026\./
+      )
+    ).toBeInTheDocument();
   });
 
   it("renders Rocha preview carousel with five slides", () => {
@@ -124,6 +216,18 @@ describe("App", () => {
     expect(screen.getByRole("link", { name: "Download ATS CV" })).toBeInTheDocument();
     expect(screen.getAllByText("Software Engineer").length).toBeGreaterThanOrEqual(1);
     expect(screen.queryByText("Working style")).not.toBeInTheDocument();
+  });
+
+  it("shows email and WhatsApp contact links without a tel button", () => {
+    render(<PortfolioPage initialLocale="en" />);
+
+    expect(
+      screen.getByRole("link", { name: /Email: matiasmorenog@gmail.com/i })
+    ).toHaveAttribute("href", expect.stringContaining("mailto:"));
+    expect(
+      screen.getByRole("link", { name: /Open WhatsApp chat/i })
+    ).toBeInTheDocument();
+    expect(document.querySelector('a[href^="tel:"]')).toBeNull();
   });
 
   it("highlights INE Web Worker technical work", () => {

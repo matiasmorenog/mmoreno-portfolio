@@ -97,7 +97,7 @@ export const portfolioUi = {
   languageEn: "EN",
   languageEs: "ES",
   heroChips: ["Más de 10 años de experiencia", "Foco frontend · Experiencia full-stack"],
-  caseStudyProblem: "Problema",
+  caseStudyProblem: "Descripción",
   caseStudyAction: "Acción",
   caseStudyResult: "Resultado",
   technicalHighlightLabel: "Highlight técnico",

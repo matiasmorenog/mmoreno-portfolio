@@ -425,7 +425,6 @@ export default function PortfolioPage({ initialLocale = defaultLocale }) {
                     <PortfolioContact
                       title={ui.contactTitle}
                       email={profile.email}
-                      phone={profile.phone}
                       whatsappHref={profile.whatsapp}
                       openWhatsAppLabel={ui.openWhatsApp}
                       mailSubject={ui.contactMailSubject}

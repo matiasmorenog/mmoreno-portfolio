@@ -6,7 +6,6 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
-import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 
 function ContactItem({ icon, href, label, linkLabel, external = false }) {
   return (
@@ -50,7 +49,6 @@ export default function PortfolioContact({
   title,
   showTitle = true,
   email,
-  phone,
   whatsappHref,
   openWhatsAppLabel,
   mailSubject,
@@ -58,7 +56,6 @@ export default function PortfolioContact({
   const mailto = mailSubject
     ? `mailto:${email}?subject=${encodeURIComponent(mailSubject)}`
     : `mailto:${email}`;
-  const telHref = `tel:${String(phone).replace(/[^\d+]/g, "")}`;
 
   return (
     <Box>
@@ -79,12 +76,6 @@ export default function PortfolioContact({
           href={mailto}
           label={email}
           linkLabel="Email"
-        />
-        <ContactItem
-          icon={<PhoneRoundedIcon sx={{ fontSize: 16 }} />}
-          href={telHref}
-          label={phone}
-          linkLabel="Phone"
         />
         <ContactItem
           icon={<WhatsAppIcon />}
