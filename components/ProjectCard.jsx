@@ -130,7 +130,12 @@ function CaseStudyItem({ label, children }) {
   );
 }
 
-export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
+export default function ProjectCard({
+  project,
+  caseStudyLabels,
+  uiLabels,
+  locale = "en",
+}) {
   const [caseStudyOpen, setCaseStudyOpen] = useState(false);
   const PreviewComponent = getProjectPreviewComponent(project.previewKey);
   const shouldPingLive = isLiveStatus(project.status) && Boolean(project.demoUrl);
@@ -174,6 +179,7 @@ export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
         <ProjectPreviewMedia
           project={project}
           PreviewComponent={PreviewComponent}
+          locale={locale}
           previousLabel={previousImageLabel}
           nextLabel={nextImageLabel}
         />

@@ -479,6 +479,7 @@ export default function PortfolioPage({ initialLocale = defaultLocale }) {
                   >
                     <ProjectCard
                       project={project}
+                      locale={locale}
                       caseStudyLabels={{
                         problem: ui.caseStudyProblem,
                         action: ui.caseStudyAction,
