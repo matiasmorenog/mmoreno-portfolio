@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
+import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 
 function ContactItem({ icon, href, label, linkLabel, external = false }) {
   return (
@@ -34,39 +34,6 @@ function ContactItem({ icon, href, label, linkLabel, external = false }) {
   );
 }
 
-function EmailContactItem({ email, copyLabel, copiedLabel }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopyEmail = async () => {
-    await navigator.clipboard.writeText(email);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2000);
-  };
-
-  return (
-    <Tooltip title={copied ? copiedLabel : copyLabel}>
-      <Button
-        size="small"
-        variant="outlined"
-        onClick={handleCopyEmail}
-        aria-label={copyLabel}
-        startIcon={<EmailRoundedIcon sx={{ fontSize: 16 }} />}
-        sx={{
-          justifyContent: "flex-start",
-          textTransform: "none",
-          fontWeight: 600,
-          py: 0.7,
-          px: 1.2,
-          whiteSpace: "nowrap",
-          flexShrink: 0,
-        }}
-      >
-        {email}
-      </Button>
-    </Tooltip>
-  );
-}
-
 function WhatsAppIcon() {
   return (
     <Box
@@ -83,12 +50,16 @@ export default function PortfolioContact({
   title,
   showTitle = true,
   email,
-  copyEmailLabel,
-  emailCopiedLabel,
   phone,
   whatsappHref,
   openWhatsAppLabel,
+  mailSubject,
 }) {
+  const mailto = mailSubject
+    ? `mailto:${email}?subject=${encodeURIComponent(mailSubject)}`
+    : `mailto:${email}`;
+  const telHref = `tel:${String(phone).replace(/[^\d+]/g, "")}`;
+
   return (
     <Box>
       {showTitle && title ? (
@@ -103,15 +74,22 @@ export default function PortfolioContact({
         flexWrap="wrap"
         sx={{ mt: 1 }}
       >
-        <EmailContactItem
-          email={email}
-          copyLabel={copyEmailLabel}
-          copiedLabel={emailCopiedLabel}
+        <ContactItem
+          icon={<EmailRoundedIcon sx={{ fontSize: 16 }} />}
+          href={mailto}
+          label={email}
+          linkLabel="Email"
+        />
+        <ContactItem
+          icon={<PhoneRoundedIcon sx={{ fontSize: 16 }} />}
+          href={telHref}
+          label={phone}
+          linkLabel="Phone"
         />
         <ContactItem
           icon={<WhatsAppIcon />}
           href={whatsappHref}
-          label={phone}
+          label="WhatsApp"
           linkLabel={openWhatsAppLabel}
           external
         />

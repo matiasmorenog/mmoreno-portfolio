@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
-import { getTechnologyIconPath, getTechnologyIconUrl, technologies } from "@/data/technologies";
+import {
+  getTechnologyIconPath,
+  getTechnologyIconUrl,
+  technologies,
+} from "@/data/technologies";
 
 const COMPACT_SLOT_WIDTH = 54;
 const DEFAULT_SLOT_WIDTH = 76;
@@ -14,6 +18,7 @@ export default function TechIcon({
   showLabel = true,
   size = 22,
   compact = false,
+  responsive = false,
 }) {
   const theme = useTheme();
   const tech = technologies[techKey];
@@ -29,19 +34,21 @@ export default function TechIcon({
 
   return (
     <Box
+      className="tech-icon-slot"
       sx={{
         display: "inline-flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: compact ? 0.35 : 0.6,
-        width: slotWidth,
+        gap: compact || responsive ? { xs: 0.35, lg: responsive ? 0.6 : 0.35 } : 0.6,
+        width: responsive ? undefined : slotWidth,
         flexShrink: 0,
       }}
     >
       <Box
+        className="tech-icon-box"
         sx={{
-          width: iconBoxSize,
-          height: iconBoxSize,
+          width: responsive ? undefined : iconBoxSize,
+          height: responsive ? undefined : iconBoxSize,
           borderRadius: 1,
           border: 1,
           borderColor: "divider",
@@ -53,26 +60,32 @@ export default function TechIcon({
       >
         <Box
           component="img"
+          className="tech-icon-img"
           src={iconSrc}
           alt=""
           aria-hidden
           onError={() => {
             if (iconSrc !== remoteIcon && remoteIcon) setIconSrc(remoteIcon);
           }}
-          sx={{ width: size, height: size, display: "block" }}
+          sx={{
+            width: responsive ? undefined : size,
+            height: responsive ? undefined : size,
+            display: "block",
+          }}
         />
       </Box>
       {showLabel ? (
         <Typography
+          className="tech-icon-label"
           variant="caption"
           color="text.secondary"
           sx={{
             width: "100%",
             fontWeight: 600,
-            fontSize: compact ? "0.62rem" : "0.72rem",
+            fontSize: responsive ? undefined : compact ? "0.62rem" : "0.72rem",
             textAlign: "center",
             lineHeight: 1.15,
-            minHeight: compact ? "2.3em" : "2.4em",
+            minHeight: responsive ? undefined : compact ? "2.3em" : "2.4em",
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",

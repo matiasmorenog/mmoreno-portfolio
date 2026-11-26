@@ -1,7 +1,7 @@
 "use client";
 
-import React, { Suspense, useCallback, useEffect, useMemo, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
@@ -32,11 +32,13 @@ import {
   getExperienceHighlights,
   getEducationHighlights,
   getPortfolioUi,
+  getLocalePath,
+  getStaticCvPaths,
   defaultLocale,
-  localeQueryParam,
   parseLocale,
 } from "@/data/resume";
 import { createPortfolioTheme } from "@/app/theme";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const toolbarIconButtonSx = {
   border: 1,
@@ -114,17 +116,11 @@ function FloatingDisplayControls({
   );
 }
 
-function PortfolioPageContent() {
+export default function PortfolioPage({ initialLocale = defaultLocale }) {
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const locale = parseLocale(initialLocale);
 
   const [darkMode, setDarkMode] = useState(true);
-  const [locale, setLocale] = useState(() =>
-    parseLocale(searchParams.get(localeQueryParam))
-  );
-  const [downloadingCv, setDownloadingCv] = useState(false);
-  const [downloadingCvAts, setDownloadingCvAts] = useState(false);
   const [downloadHint, setDownloadHint] = useState(true);
 
   const handleDownloadHintComplete = useCallback(() => {
@@ -138,15 +134,11 @@ function PortfolioPageContent() {
   const experienceHighlights = useMemo(() => getExperienceHighlights(locale), [locale]);
   const educationHighlights = useMemo(() => getEducationHighlights(locale), [locale]);
   const localizedProjects = useMemo(() => getProjects(locale), [locale]);
+  const cvPaths = useMemo(() => getStaticCvPaths(locale), [locale]);
 
-  useEffect(() => {
-    document.documentElement.lang = locale;
-  }, [locale]);
-
-  useEffect(() => {
-    const urlLocale = parseLocale(searchParams.get(localeQueryParam));
-    setLocale((current) => (current === urlLocale ? current : urlLocale));
-  }, [searchParams]);
+  const projectsRevealRef = useScrollReveal();
+  const experienceRevealRef = useScrollReveal();
+  const educationRevealRef = useScrollReveal();
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -157,26 +149,9 @@ function PortfolioPageContent() {
     }
   }, []);
 
-  const updateLocale = useCallback(
-    (nextLocale) => {
-      const resolvedLocale = parseLocale(nextLocale);
-      setLocale(resolvedLocale);
-
-      const params = new URLSearchParams(searchParams.toString());
-      if (resolvedLocale === defaultLocale) {
-        params.delete(localeQueryParam);
-      } else {
-        params.set(localeQueryParam, resolvedLocale);
-      }
-
-      const query = params.toString();
-      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
-    },
-    [pathname, router, searchParams]
-  );
-
   const handleToggleLocale = () => {
-    updateLocale(locale === "en" ? "es" : "en");
+    const nextLocale = locale === "en" ? "es" : "en";
+    router.push(getLocalePath(nextLocale));
   };
 
   const handleScrollToProjects = (event) => {
@@ -191,26 +166,6 @@ function PortfolioPageContent() {
       behavior: prefersReducedMotion ? "auto" : "smooth",
       block: "start",
     });
-  };
-
-  const handleDownloadCv = async () => {
-    setDownloadingCv(true);
-    try {
-      const { downloadResumePdf } = await import("@/lib/downloadResumePdf");
-      await downloadResumePdf(locale);
-    } finally {
-      setDownloadingCv(false);
-    }
-  };
-
-  const handleDownloadCvAts = async () => {
-    setDownloadingCvAts(true);
-    try {
-      const { downloadResumePdfAts } = await import("@/lib/downloadResumePdf");
-      await downloadResumePdfAts(locale);
-    } finally {
-      setDownloadingCvAts(false);
-    }
   };
 
   return (
@@ -289,6 +244,7 @@ function PortfolioPageContent() {
                   </Stack>
                   <Typography
                     variant="h6"
+                    component="p"
                     sx={{
                       mt: 0.5,
                       fontWeight: 700,
@@ -357,6 +313,7 @@ function PortfolioPageContent() {
                       component="a"
                       href="#projects"
                       onClick={handleScrollToProjects}
+                      sx={{ display: { xs: "inline-flex", md: "none" } }}
                     >
                       {ui.viewProjects}
                     </Button>
@@ -368,11 +325,12 @@ function PortfolioPageContent() {
                         size="small"
                         variant="outlined"
                         className="download-cta-button"
-                        onClick={handleDownloadCv}
-                        disabled={downloadingCv || downloadingCvAts}
+                        component="a"
+                        href={cvPaths.designed}
+                        download
                         startIcon={<DownloadRoundedIcon fontSize="small" />}
                       >
-                        {downloadingCv ? ui.generating : ui.downloadCv}
+                        {ui.downloadCv}
                       </Button>
                     </DownloadCtaHint>
                     <Button
@@ -450,11 +408,12 @@ function PortfolioPageContent() {
                       <Button
                         size="small"
                         variant="outlined"
-                        onClick={handleDownloadCvAts}
-                        disabled={downloadingCv || downloadingCvAts}
+                        component="a"
+                        href={cvPaths.ats}
+                        download
                         startIcon={<DownloadRoundedIcon fontSize="small" />}
                       >
-                        {downloadingCvAts ? ui.generating : ui.downloadCvAts}
+                        {ui.downloadCvAts}
                       </Button>
                       <Button
                         size="small"
@@ -487,11 +446,10 @@ function PortfolioPageContent() {
                     <PortfolioContact
                       title={ui.contactTitle}
                       email={profile.email}
-                      copyEmailLabel={ui.copyEmail}
-                      emailCopiedLabel={ui.emailCopied}
                       phone={profile.phone}
                       whatsappHref={profile.whatsapp}
                       openWhatsAppLabel={ui.openWhatsApp}
+                      mailSubject={ui.contactMailSubject}
                     />
                   </Box>
                 </Stack>
@@ -500,7 +458,18 @@ function PortfolioPageContent() {
 
             <SkillsIconGrid title={ui.coreSkillsTitle} subtitle={ui.skillsSubtitle} />
 
-            <Box component="section" aria-labelledby="projects-heading">
+            <Box
+              id="projects"
+              ref={projectsRevealRef}
+              className="reveal"
+              data-reveal
+              component="section"
+              aria-labelledby="projects-heading"
+              sx={{
+                // Keep section title in view after in-page jump (no sticky top nav today).
+                scrollMarginTop: { xs: 16, md: 24 },
+              }}
+            >
               <Typography
                 id="projects-heading"
                 component="h2"
@@ -514,7 +483,6 @@ function PortfolioPageContent() {
               </Typography>
 
               <Box
-                id="projects"
                 sx={{
                   display: "grid",
                   gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
@@ -548,6 +516,9 @@ function PortfolioPageContent() {
             </Box>
 
             <Paper
+              ref={experienceRevealRef}
+              className="reveal"
+              data-reveal
               component="section"
               aria-labelledby="experience-heading"
               variant="outlined"
@@ -617,6 +588,7 @@ function PortfolioPageContent() {
                       >
                         <Box>
                           <Typography
+                            component="h3"
                             variant={isCompact ? "body2" : "subtitle2"}
                             sx={{ fontWeight: 700 }}
                           >
@@ -770,6 +742,9 @@ function PortfolioPageContent() {
             </Paper>
 
             <Paper
+              ref={educationRevealRef}
+              className="reveal"
+              data-reveal
               component="section"
               aria-labelledby="education-heading"
               variant="outlined"
@@ -798,13 +773,5 @@ function PortfolioPageContent() {
         </Container>
       </Box>
     </ThemeProvider>
-  );
-}
-
-export default function PortfolioPage() {
-  return (
-    <Suspense fallback={null}>
-      <PortfolioPageContent />
-    </Suspense>
   );
 }

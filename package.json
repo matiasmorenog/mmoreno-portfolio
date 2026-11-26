@@ -12,7 +12,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "start": "next start",
-    "generate:resume-icons": "node scripts/generate-resume-icons.mjs"
+    "generate:resume-icons": "node scripts/generate-resume-icons.mjs",
+    "generate:static-assets": "node scripts/generate-static-assets.mjs",
+    "generate:resume-pdfs": "node scripts/generate-resume-pdfs.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -32,6 +34,7 @@
     "jsdom": "^28.1.0",
     "prettier": "^3.8.1",
     "sharp": "^0.35.3",
+    "vite": "^6.4.6",
     "vitest": "^4.0.18",
     "yaml": "^2.8.2"
   }

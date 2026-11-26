@@ -32,7 +32,7 @@ export const projects = [
     ],
     previewAlt:
       "Preview of Rocha Cotizador customer home and admin modules from the live demo",
-    demoUrl: "https://rocha-cotizador-dev.vercel.app/",
+    demoUrl: "https://rocha-cotizador.vercel.app/",
     repoUrl: "https://github.com/matiasmorenog/rocha-cotizador",
   },
   {
@@ -46,6 +46,9 @@ export const projects = [
       "PostgreSQL",
       "NextAuth",
       "Mercado Pago",
+      "Stripe",
+      "Resend",
+      "Vercel Blob",
       "Zustand",
       "Tailwind CSS",
     ],
@@ -56,7 +59,7 @@ export const projects = [
     previewImages: [
       {
         src: "/project-previews/nexus-home.webp",
-        alt: "Nexus Web Store — Goat Indumentaria storefront hero with 2x1 promo carousel",
+        alt: "Nexus Web Store — Demo storefront hero with promotional carousel",
       },
       {
         src: "/project-previews/nexus-productos.webp",
@@ -76,7 +79,7 @@ export const projects = [
       },
     ],
     previewAlt:
-      "Preview of Nexus Web Store Goat Indumentaria demo — storefront and admin",
+      "Preview of Nexus Web Store demo storefront and merchant admin",
     demoUrl: "https://nexus-web-store.vercel.app/",
     repoUrl: "https://github.com/matiasmorenog/nexus-web-store",
   },

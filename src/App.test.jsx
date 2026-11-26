@@ -1,11 +1,15 @@
 import React from "react";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import PortfolioPage from "../app/portfolio-page";
+import PortfolioPage from "../app/[locale]/portfolio-page";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+}));
 
 describe("App", () => {
   it("renders project content", () => {
-    render(<PortfolioPage />);
+    render(<PortfolioPage initialLocale="en" />);
 
     expect(screen.getByText("Rocha Cotizador")).toBeInTheDocument();
     expect(screen.getByText("Nexus Web Store")).toBeInTheDocument();
@@ -20,7 +24,7 @@ describe("App", () => {
   });
 
   it("renders Rocha preview carousel with five slides", () => {
-    render(<PortfolioPage />);
+    render(<PortfolioPage initialLocale="en" />);
 
     const rocha = screen.getByRole("region", { name: "Rocha Cotizador previews" });
     expect(within(rocha).getByRole("button", { name: "Previous image" })).toBeInTheDocument();
@@ -33,7 +37,7 @@ describe("App", () => {
   });
 
   it("renders Nexus preview carousel with five slides", () => {
-    render(<PortfolioPage />);
+    render(<PortfolioPage initialLocale="en" />);
 
     const nexus = screen.getByRole("region", { name: "Nexus Web Store previews" });
     expect(within(nexus).getByRole("button", { name: "Previous image" })).toBeInTheDocument();
@@ -55,7 +59,7 @@ describe("App", () => {
     });
 
     it("advances slides while hovered and pauses on leave", () => {
-      render(<PortfolioPage />);
+      render(<PortfolioPage initialLocale="en" />);
 
       const rocha = screen.getByRole("region", { name: "Rocha Cotizador previews" });
       expect(within(rocha).getByRole("tab", { name: "Show image 1 of 5" })).toHaveAttribute(
@@ -83,7 +87,7 @@ describe("App", () => {
     });
 
     it("pauses autoplay while hovering carousel controls", () => {
-      render(<PortfolioPage />);
+      render(<PortfolioPage initialLocale="en" />);
 
       const rocha = screen.getByRole("region", { name: "Rocha Cotizador previews" });
       fireEvent.pointerEnter(rocha);
@@ -107,7 +111,7 @@ describe("App", () => {
   });
 
   it("renders positioning and primary CTAs", () => {
-    render(<PortfolioPage />);
+    render(<PortfolioPage initialLocale="en" />);
 
     expect(screen.getByRole("heading", { name: "Quick Links" })).toBeInTheDocument();
     expect(
@@ -116,14 +120,14 @@ describe("App", () => {
     expect(screen.getAllByRole("link", { name: "GitHub" }).length).toBeGreaterThanOrEqual(
       1
     );
-    expect(screen.getByRole("button", { name: "Download CV" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Download ATS CV" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Download CV" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Download ATS CV" })).toBeInTheDocument();
     expect(screen.getAllByText("Software Engineer").length).toBeGreaterThanOrEqual(1);
     expect(screen.queryByText("Working style")).not.toBeInTheDocument();
   });
 
   it("highlights INE Web Worker technical work", () => {
-    render(<PortfolioPage />);
+    render(<PortfolioPage initialLocale="en" />);
 
     expect(screen.getByText("Technical highlight")).toBeInTheDocument();
     expect(screen.getByText("Web Worker filtering & sorting")).toBeInTheDocument();
@@ -131,5 +135,15 @@ describe("App", () => {
     expect(
       screen.getByText("Frontend-focused · Full-stack experienced")
     ).toBeInTheDocument();
+  });
+
+  it("shows freelance umbrella and Santander Feb end date", () => {
+    render(<PortfolioPage initialLocale="en" />);
+
+    expect(screen.getByText("Freelance & personal projects")).toBeInTheDocument();
+    expect(screen.getByText("Aug 2025 – Present")).toBeInTheDocument();
+    expect(screen.getByText("Dec 2021 – Feb 2022")).toBeInTheDocument();
+    expect(screen.getByText("Mar 2022 – Jul 2025")).toBeInTheDocument();
+    expect(screen.queryByText("Dec 2021 – Mar 2022")).not.toBeInTheDocument();
   });
 });

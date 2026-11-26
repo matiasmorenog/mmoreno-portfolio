@@ -15,6 +15,7 @@ const locales = {
 
 export const supportedLocales = ["en", "es"];
 export const defaultLocale = "en";
+/** @deprecated Query-param i18n removed; kept for any leftover callers. */
 export const localeQueryParam = "lang";
 
 export function parseLocale(value) {
@@ -24,17 +25,27 @@ export function parseLocale(value) {
   return defaultLocale;
 }
 
-/** Relative path for Next.js metadata (resolved via metadataBase). */
+/** Relative path for Next.js metadata (resolved via metadataBase). EN = `/`, ES = `/es`. */
 export function getLocalePath(locale = defaultLocale) {
-  if (locale === defaultLocale) {
+  if (parseLocale(locale) === defaultLocale) {
     return "/";
   }
-  return `/?${localeQueryParam}=${locale}`;
+  return `/${parseLocale(locale)}`;
 }
 
 /** Absolute URL for sitemap and external references. */
 export function getLocaleUrl(locale = defaultLocale) {
-  return `${CANONICAL_SITE_URL}${getLocalePath(locale)}`;
+  const path = getLocalePath(locale);
+  return path === "/" ? `${CANONICAL_SITE_URL}/` : `${CANONICAL_SITE_URL}${path}`;
+}
+
+/** Static CV files under /public/cv (no client PDF generation required to download). */
+export function getStaticCvPaths(locale = defaultLocale) {
+  const resolved = parseLocale(locale);
+  return {
+    designed: `/cv/matias-moreno-cv-${resolved}.pdf`,
+    ats: `/cv/matias-moreno-cv-ats-${resolved}.pdf`,
+  };
 }
 
 /**

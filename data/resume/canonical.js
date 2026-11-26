@@ -15,7 +15,7 @@ export const canonicalProfile = {
   githubUrl: "https://github.com/matiasmorenog",
   portfolioLabel: "mmoreno-portfolio.vercel.app",
   portfolioUrl: CANONICAL_SITE_URL,
-  profilePhoto: "/profile-photo.jpg",
+  profilePhoto: "/profile-photo.webp",
 };
 
 /**
@@ -27,9 +27,9 @@ export const canonicalProfile = {
  */
 export const experienceJobs = [
   {
-    id: "rocha",
-    period: "2026 – Present",
-    stack: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "NextAuth"],
+    id: "freelance",
+    period: "2025 – Present",
+    stack: ["Next.js", "TypeScript", "Expo", "PostgreSQL", "Prisma"],
   },
   {
     id: "ine",

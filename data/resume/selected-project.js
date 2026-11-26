@@ -3,21 +3,21 @@ export const selectedProjectByLocale = {
   en: {
     name: "Nexus Web Store",
     subtitle: "Personal SaaS Product",
-    periodDisplay: "Jun 2026 – Jul 2026",
+    periodDisplay: "Jun 2026 – Present",
     highlights: [
-      "Built a multi-tenant e-commerce platform using Next.js 16, TypeScript, PostgreSQL, Prisma, NextAuth, Zustand, and Tailwind CSS.",
-      "Developed storefront, checkout, merchant administration, products, variants, orders, inventory, dashboards, and configurable SaaS-oriented modules.",
-      "Implemented store-level data isolation and layered Next.js caching using ISR, unstable_cache, dynamic rendering, and tag-based invalidation.",
+      "Production multi-tenant SaaS e-commerce platform with several isolated stores, built with Next.js, TypeScript, PostgreSQL, Prisma, and NextAuth.",
+      "Integrations include Mercado Pago, Stripe, Resend, and Vercel Blob for payments, email, and media.",
+      "Includes a navigable demo storefront showcasing the full merchant and customer experience.",
     ],
   },
   es: {
     name: "Nexus Web Store",
     subtitle: "Producto SaaS Personal",
-    periodDisplay: "Jun 2026 – Jul 2026",
+    periodDisplay: "Jun 2026 – Actualidad",
     highlights: [
-      "Desarrollé una plataforma e-commerce multi-tenant utilizando Next.js 16, TypeScript, PostgreSQL, Prisma, NextAuth, Zustand y Tailwind CSS.",
-      "Desarrollé storefront, checkout y administración comercial, incluyendo productos, variantes, pedidos, inventario, dashboards y módulos configurables orientados a SaaS.",
-      "Implementé aislamiento de datos por tienda y una estrategia de caché por capas en Next.js utilizando ISR, unstable_cache, renderizado dinámico e invalidación por tags.",
+      "Plataforma SaaS e-commerce multi-tenant en producción con varias tiendas aisladas, construida con Next.js, TypeScript, PostgreSQL, Prisma y NextAuth.",
+      "Integraciones con Mercado Pago, Stripe, Resend y Vercel Blob para pagos, email y media.",
+      "Incluye una tienda demo navegable que muestra la experiencia completa de comercio y cliente.",
     ],
   },
 };

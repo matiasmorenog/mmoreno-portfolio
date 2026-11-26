@@ -41,13 +41,28 @@ export default function SkillsIconGrid({ title, subtitle }) {
         }}
       >
         {portfolioSkillKeys.map((techKey) => (
-          <Box key={techKey}>
-            <Box sx={{ display: { xs: "block", lg: "none" } }}>
-              <TechIcon techKey={techKey} compact />
-            </Box>
-            <Box sx={{ display: { xs: "none", lg: "block" } }}>
-              <TechIcon techKey={techKey} />
-            </Box>
+          <Box
+            key={techKey}
+            sx={{
+              // Single icon instance; compact sizing below lg via CSS, not duplicated DOM.
+              "& .tech-icon-slot": {
+                width: { xs: 54, lg: 76 },
+              },
+              "& .tech-icon-box": {
+                width: { xs: 34, lg: 44 },
+                height: { xs: 34, lg: 44 },
+              },
+              "& .tech-icon-img": {
+                width: { xs: 20, lg: 22 },
+                height: { xs: 20, lg: 22 },
+              },
+              "& .tech-icon-label": {
+                fontSize: { xs: "0.62rem", lg: "0.72rem" },
+                minHeight: { xs: "2.3em", lg: "2.4em" },
+              },
+            }}
+          >
+            <TechIcon techKey={techKey} responsive />
           </Box>
         ))}
       </Box>
