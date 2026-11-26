@@ -115,7 +115,7 @@ describe("App", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders Rocha preview carousel with five slides", () => {
+  it("renders Rocha preview carousel with six slides", () => {
     render(<PortfolioPage initialLocale="en" />);
 
     const rocha = screen.getByRole("region", { name: "Rocha Cotizador previews" });
@@ -129,17 +129,20 @@ describe("App", () => {
     expect(within(rocha).getByRole("tab", { name: "Show image 6 of 6" })).toBeInTheDocument();
   });
 
-  it("renders Nexus preview carousel with five slides", () => {
+  it("renders Nexus preview carousel with eight slides", () => {
     render(<PortfolioPage initialLocale="en" />);
 
     const nexus = screen.getByRole("region", { name: "Nexus Web Store previews" });
     expect(within(nexus).getByRole("button", { name: "Previous image" })).toBeInTheDocument();
     expect(within(nexus).getByRole("button", { name: "Next image" })).toBeInTheDocument();
-    expect(within(nexus).getByRole("tab", { name: "Show image 1 of 5" })).toBeInTheDocument();
-    expect(within(nexus).getByRole("tab", { name: "Show image 2 of 5" })).toBeInTheDocument();
-    expect(within(nexus).getByRole("tab", { name: "Show image 3 of 5" })).toBeInTheDocument();
-    expect(within(nexus).getByRole("tab", { name: "Show image 4 of 5" })).toBeInTheDocument();
-    expect(within(nexus).getByRole("tab", { name: "Show image 5 of 5" })).toBeInTheDocument();
+    expect(within(nexus).getByRole("tab", { name: "Show image 1 of 8" })).toBeInTheDocument();
+    expect(within(nexus).getByRole("tab", { name: "Show image 2 of 8" })).toBeInTheDocument();
+    expect(within(nexus).getByRole("tab", { name: "Show image 3 of 8" })).toBeInTheDocument();
+    expect(within(nexus).getByRole("tab", { name: "Show image 4 of 8" })).toBeInTheDocument();
+    expect(within(nexus).getByRole("tab", { name: "Show image 5 of 8" })).toBeInTheDocument();
+    expect(within(nexus).getByRole("tab", { name: "Show image 6 of 8" })).toBeInTheDocument();
+    expect(within(nexus).getByRole("tab", { name: "Show image 7 of 8" })).toBeInTheDocument();
+    expect(within(nexus).getByRole("tab", { name: "Show image 8 of 8" })).toBeInTheDocument();
   });
 
   describe("preview carousel hover autoplay", () => {
@@ -219,12 +222,17 @@ describe("App", () => {
     expect(screen.queryByText("Working style")).not.toBeInTheDocument();
   });
 
-  it("shows email and WhatsApp contact links without a tel button", () => {
+  it("shows email copy control and WhatsApp without a tel button", () => {
     render(<PortfolioPage initialLocale="en" />);
 
-    expect(
-      screen.getByRole("link", { name: /Email: matiasmorenog@gmail.com/i })
-    ).toHaveAttribute("href", expect.stringContaining("mailto:"));
+    const emailControl = screen.getByRole("link", {
+      name: /Copy email/i,
+    });
+    expect(emailControl).toHaveAttribute(
+      "href",
+      expect.stringContaining("mailto:")
+    );
+    expect(emailControl).toHaveTextContent(/matiasmorenog@gmail.com/i);
     expect(
       screen.getByRole("link", { name: /Open WhatsApp chat/i })
     ).toBeInTheDocument();

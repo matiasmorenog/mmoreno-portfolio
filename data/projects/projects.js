@@ -35,10 +35,10 @@ export const projects = [
           "Rocha Cotizador — Clientes admin con listas de precios asignadas y estado",
       },
       {
-        src: "/project-previews/rocha-admin-listas-r20261126.webp",
-        alt: "Rocha Cotizador — Admin price lists with products and customers per list",
+        src: "/project-previews/rocha-cotizacion-r20261126.webp",
+        alt: "Rocha Cotizador — Quote detail with multiple line items, quantities, and totals",
         altEs:
-          "Rocha Cotizador — Listas de precios admin con productos y clientes por lista",
+          "Rocha Cotizador — Detalle de cotización con múltiples ítems, cantidades y totales",
       },
       {
         src: "/project-previews/rocha-admin-cotizaciones-r20261126.webp",
@@ -106,6 +106,24 @@ export const projects = [
         alt: "Nexus Web Store — Admin orders with customer detail, payment and shipping status",
         altEs:
           "Nexus Web Store — Pedidos admin con detalle de cliente, pago y envío",
+      },
+      {
+        src: "/project-previews/nexus-admin-productos-r20261126.webp",
+        alt: "Nexus Web Store — Admin products catalog with stock, prices, and status",
+        altEs:
+          "Nexus Web Store — Catálogo admin de productos con stock, precios y estado",
+      },
+      {
+        src: "/project-previews/nexus-admin-crm-r20261126.webp",
+        alt: "Nexus Web Store — Admin CRM with customer list, spend, and order history",
+        altEs:
+          "Nexus Web Store — CRM admin con clientes, gasto y historial de pedidos",
+      },
+      {
+        src: "/project-previews/nexus-admin-cupones-r20261126.webp",
+        alt: "Nexus Web Store — Admin coupons and 2x1 promo with usage and validity",
+        altEs:
+          "Nexus Web Store — Cupones y promo 2x1 admin con usos y vigencia",
       },
     ],
     previewAlt:
