@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 
 function ContactItem({ icon, href, label, linkLabel, external = false }) {
@@ -33,6 +34,50 @@ function ContactItem({ icon, href, label, linkLabel, external = false }) {
   );
 }
 
+function EmailContactItem({ email, copyLabel, copiedLabel, mailSubject }) {
+  const [copied, setCopied] = useState(false);
+  const mailto = mailSubject
+    ? `mailto:${email}?subject=${encodeURIComponent(mailSubject)}`
+    : `mailto:${email}`;
+
+  const handleCopyEmail = async (event) => {
+    // Prefer clipboard for recruiters; keep mailto as progressive enhancement.
+    event.preventDefault();
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.location.href = mailto;
+    }
+  };
+
+  return (
+    <Tooltip title={copied ? copiedLabel : copyLabel}>
+      <Button
+        size="small"
+        variant="outlined"
+        component="a"
+        href={mailto}
+        onClick={handleCopyEmail}
+        aria-label={copyLabel}
+        startIcon={<EmailRoundedIcon sx={{ fontSize: 16 }} />}
+        sx={{
+          justifyContent: "flex-start",
+          textTransform: "none",
+          fontWeight: 600,
+          py: 0.7,
+          px: 1.2,
+          whiteSpace: "nowrap",
+          flexShrink: 0,
+        }}
+      >
+        {email}
+      </Button>
+    </Tooltip>
+  );
+}
+
 function WhatsAppIcon() {
   return (
     <Box
@@ -49,14 +94,12 @@ export default function PortfolioContact({
   title,
   showTitle = true,
   email,
+  copyEmailLabel,
+  emailCopiedLabel,
   whatsappHref,
   openWhatsAppLabel,
   mailSubject,
 }) {
-  const mailto = mailSubject
-    ? `mailto:${email}?subject=${encodeURIComponent(mailSubject)}`
-    : `mailto:${email}`;
-
   return (
     <Box>
       {showTitle && title ? (
@@ -71,11 +114,11 @@ export default function PortfolioContact({
         flexWrap="wrap"
         sx={{ mt: 1 }}
       >
-        <ContactItem
-          icon={<EmailRoundedIcon sx={{ fontSize: 16 }} />}
-          href={mailto}
-          label={email}
-          linkLabel="Email"
+        <EmailContactItem
+          email={email}
+          copyLabel={copyEmailLabel ?? "Copy email"}
+          copiedLabel={emailCopiedLabel ?? "Email copied"}
+          mailSubject={mailSubject}
         />
         <ContactItem
           icon={<WhatsAppIcon />}

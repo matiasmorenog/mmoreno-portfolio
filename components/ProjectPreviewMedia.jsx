@@ -17,13 +17,20 @@ const slideFadeIn = keyframes`
   }
 `;
 
-function resolveSlides(project) {
+function resolveSlides(project, locale = "en") {
+  const useEs = locale === "es";
+  const fallbackAlt = useEs
+    ? project.previewAltEs ?? project.previewAlt ?? project.title
+    : project.previewAlt ?? project.title;
+
   if (Array.isArray(project.previewImages) && project.previewImages.length > 0) {
     return project.previewImages
       .filter((item) => item?.src)
       .map((item) => ({
         src: item.src,
-        alt: item.alt ?? project.previewAlt ?? project.title,
+        alt: useEs
+          ? item.altEs ?? item.alt ?? fallbackAlt
+          : item.alt ?? fallbackAlt,
       }));
   }
 
@@ -31,7 +38,7 @@ function resolveSlides(project) {
     return [
       {
         src: project.previewImage,
-        alt: project.previewAlt ?? project.title,
+        alt: fallbackAlt,
       },
     ];
   }
@@ -42,10 +49,11 @@ function resolveSlides(project) {
 export default function ProjectPreviewMedia({
   project,
   PreviewComponent,
+  locale = "en",
   previousLabel = "Previous image",
   nextLabel = "Next image",
 }) {
-  const slides = useMemo(() => resolveSlides(project), [project]);
+  const slides = useMemo(() => resolveSlides(project, locale), [project, locale]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [preferReducedMotion, setPreferReducedMotion] = useState(false);
   const [hovering, setHovering] = useState(false);
