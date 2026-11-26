@@ -313,6 +313,7 @@ export default function PortfolioPage({ initialLocale = defaultLocale }) {
                       component="a"
                       href="#projects"
                       onClick={handleScrollToProjects}
+                      sx={{ display: { xs: "inline-flex", md: "none" } }}
                     >
                       {ui.viewProjects}
                     </Button>
@@ -458,11 +459,16 @@ export default function PortfolioPage({ initialLocale = defaultLocale }) {
             <SkillsIconGrid title={ui.coreSkillsTitle} subtitle={ui.skillsSubtitle} />
 
             <Box
+              id="projects"
               ref={projectsRevealRef}
               className="reveal"
               data-reveal
               component="section"
               aria-labelledby="projects-heading"
+              sx={{
+                // Keep section title in view after in-page jump (no sticky top nav today).
+                scrollMarginTop: { xs: 16, md: 24 },
+              }}
             >
               <Typography
                 id="projects-heading"
@@ -477,7 +483,6 @@ export default function PortfolioPage({ initialLocale = defaultLocale }) {
               </Typography>
 
               <Box
-                id="projects"
                 sx={{
                   display: "grid",
                   gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
