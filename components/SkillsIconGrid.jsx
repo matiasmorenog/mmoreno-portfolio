@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import TechIcon from "@/components/TechIcon";
+import ScrollReveal from "@/components/ScrollReveal";
 import { portfolioSkillKeys } from "@/data/technologies";
 
 export default function SkillsIconGrid({ title, subtitle }) {
@@ -40,30 +41,36 @@ export default function SkillsIconGrid({ title, subtitle }) {
           rowGap: { xs: 1.2, md: 1.25 },
         }}
       >
-        {portfolioSkillKeys.map((techKey) => (
-          <Box
+        {portfolioSkillKeys.map((techKey, index) => (
+          <ScrollReveal
             key={techKey}
-            sx={{
-              // Single icon instance; compact sizing below lg via CSS, not duplicated DOM.
-              "& .tech-icon-slot": {
-                width: { xs: 54, lg: 76 },
-              },
-              "& .tech-icon-box": {
-                width: { xs: 34, lg: 44 },
-                height: { xs: 34, lg: 44 },
-              },
-              "& .tech-icon-img": {
-                width: { xs: 20, lg: 22 },
-                height: { xs: 20, lg: 22 },
-              },
-              "& .tech-icon-label": {
-                fontSize: { xs: "0.62rem", lg: "0.72rem" },
-                minHeight: { xs: "2.3em", lg: "2.4em" },
-              },
-            }}
+            delayMs={Math.min(index, 9) * 70}
+            durationMs={1000}
+            distancePx={10}
           >
-            <TechIcon techKey={techKey} responsive />
-          </Box>
+            <Box
+              sx={{
+                // Single icon instance; compact sizing below lg via CSS, not duplicated DOM.
+                "& .tech-icon-slot": {
+                  width: { xs: 54, lg: 76 },
+                },
+                "& .tech-icon-box": {
+                  width: { xs: 34, lg: 44 },
+                  height: { xs: 34, lg: 44 },
+                },
+                "& .tech-icon-img": {
+                  width: { xs: 20, lg: 22 },
+                  height: { xs: 20, lg: 22 },
+                },
+                "& .tech-icon-label": {
+                  fontSize: { xs: "0.62rem", lg: "0.72rem" },
+                  minHeight: { xs: "2.3em", lg: "2.4em" },
+                },
+              }}
+            >
+              <TechIcon techKey={techKey} responsive />
+            </Box>
+          </ScrollReveal>
         ))}
       </Box>
     </Paper>
