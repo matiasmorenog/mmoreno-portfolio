@@ -11,6 +11,14 @@ const nextConfig = {
         headers: [{ key: "Cache-Control", value: cdnCachedPage }],
       },
       {
+        source: "/es",
+        headers: [{ key: "Cache-Control", value: cdnCachedPage }],
+      },
+      {
+        source: "/en",
+        headers: [{ key: "Cache-Control", value: cdnCachedPage }],
+      },
+      {
         source: "/og",
         headers: [{ key: "Cache-Control", value: immutableAsset }],
       },

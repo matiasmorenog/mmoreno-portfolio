@@ -206,7 +206,8 @@ export default function ProjectPreviewMedia({
           src={activeSlide.src}
           alt={activeSlide.alt}
           fill
-          sizes="(max-width: 768px) 100vw, 960px"
+          sizes="(max-width: 900px) 100vw, 50vw"
+          loading="lazy"
           style={{ objectFit: "cover", objectPosition: "top center" }}
         />
       </Box>
@@ -259,9 +260,9 @@ export default function ProjectPreviewMedia({
           src={activeSlide.src}
           alt={activeSlide.alt}
           fill
-          sizes="(max-width: 768px) 100vw, 960px"
+          sizes="(max-width: 900px) 100vw, 50vw"
+          loading="lazy"
           style={{ objectFit: "cover", objectPosition: "top center" }}
-          priority={activeIndex === 0}
         />
       </Box>
 

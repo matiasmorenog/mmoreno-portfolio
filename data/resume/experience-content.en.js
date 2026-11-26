@@ -1,20 +1,20 @@
 export const experienceContentById = {
-  rocha: {
+  freelance: {
     role: "Independent Software Engineer",
-    company: "Freelance · Rocha B2B Ordering & Quotation Platform",
-    periodDisplay: "Jul 2026 – Present",
+    company: "Freelance & personal projects",
+    periodDisplay: "Aug 2025 – Present",
     portfolioSummary:
-      "Production B2B ordering and quotation platform for a multi-location bakery, replacing WhatsApp/Excel wholesale workflows with customer self-service and centralized admin.",
+      "Freelance and personal product work: Rocha (B2B ordering platform), Nexus (multi-tenant SaaS e-commerce), Coach app (on-device pose training with Expo), this portfolio, and Moreno Hub (job-application automation and tracking).",
     highlights: [
-      "Built and deployed a production B2B ordering and quotation platform for a multi-location bakery business, replacing a WhatsApp- and Excel-based wholesale workflow with customer self-service and centralized administration.",
-      "Developed the application end-to-end using Next.js, TypeScript, PostgreSQL, Prisma, and NextAuth, including authentication, customer-specific pricing, product and stock management, quotations, orders, and Excel synchronization.",
-      "Took the product from requirements discovery to production within weeks, working directly with the business owner and expanding functionality based on real operational needs.",
-      "Continue to maintain and evolve the platform as a paid software service, supporting recurring wholesale ordering across multiple business locations.",
+      "Freelance and personal projects since August 2025, including commercial and product work across web and mobile.",
+      "Rocha — freelance production B2B ordering and quotation platform (Next.js, TypeScript, PostgreSQL, Prisma, NextAuth) with Excel sync, PDF generation (pdfkit), and web push (web-push).",
+      "Nexus Web Store — personal multi-tenant SaaS e-commerce in production with isolated stores and integrations (Mercado Pago, Stripe, Resend, Vercel Blob).",
+      "Also building Coach app (on-device pose training with Expo), this portfolio site, and Moreno Hub to automate and track job applications.",
     ],
     webHighlights: [
-      "Shipped a production B2B ordering and quotation platform that replaced WhatsApp/Excel wholesale workflows with customer self-service and centralized administration.",
-      "Built end-to-end with Next.js, TypeScript, PostgreSQL, Prisma, and NextAuth — pricing, stock, quotations, orders, and Excel sync.",
-      "Took the product from discovery to production within weeks; continue maintaining it as a paid software service across multiple locations.",
+      "Freelance and personal product work since Aug 2025 — no employment gap after INE.",
+      "Rocha (freelance B2B platform) and Nexus (personal multi-tenant SaaS e-commerce) — see Projects for detail.",
+      "Also: Coach app (Expo, on-device pose training), this portfolio, and Moreno Hub (job-application automation/tracking).",
     ],
   },
   ine: {
@@ -82,7 +82,7 @@ export const experienceContentById = {
   santander: {
     role: "Software Developer",
     company: "Santander",
-    periodDisplay: "Dec 2021 – Mar 2022",
+    periodDisplay: "Dec 2021 – Feb 2022",
     portfolioSummary:
       "Supported SQL stored-procedure maintenance while completing technical onboarding and training in Santander's development environment.",
     highlights: [

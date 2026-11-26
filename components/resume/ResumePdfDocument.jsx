@@ -14,8 +14,8 @@ const colors = {
   accent: "#7de2db",
 };
 
-/** Page 1: Rocha → Santander. Page 2: Genetrics + Envone + Nexus (balanced fill). */
-const PAGE1_JOB_IDS = ["rocha", "ine", "santander"];
+/** Page 1: Freelance → Santander. Page 2: Genetrics + Envone + Nexus (balanced fill). */
+const PAGE1_JOB_IDS = ["freelance", "ine", "santander"];
 const PAGE2_JOB_IDS = ["genetrics", "envone"];
 
 const styles = StyleSheet.create({

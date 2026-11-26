@@ -7,19 +7,35 @@ import {
   jsonLdKnowsAbout,
   jsonLdKnowsLanguage,
   jsonLdPersonDescription,
+  professionalProfileEs,
   siteDescription,
 } from "@/data/resume/canonical";
+import { parseLocale, supportedLocales } from "@/data/resume/index";
+import { notFound } from "next/navigation";
 
 export const dynamic = "force-static";
 
-export default function Page() {
+export function generateStaticParams() {
+  return supportedLocales.map((locale) => ({ locale }));
+}
+
+export default async function Page({ params }) {
+  const { locale: rawLocale } = await params;
+  if (!supportedLocales.includes(rawLocale)) {
+    notFound();
+  }
+  const locale = parseLocale(rawLocale);
+  const description =
+    locale === "es" ? professionalProfileEs[0] : jsonLdPersonDescription;
+
   const personJsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
     name: canonicalProfile.name,
     alternateName: canonicalProfile.legalName,
-    jobTitle: jsonLdJobTitle,
-    description: jsonLdPersonDescription,
+    jobTitle:
+      locale === "es" ? "Ingeniero de Software" : jsonLdJobTitle,
+    description,
     url: CANONICAL_SITE_URL,
     email: canonicalProfile.email,
     telephone: canonicalProfile.phone,
@@ -29,7 +45,7 @@ export default function Page() {
     sameAs: [canonicalProfile.githubUrl, canonicalProfile.linkedinUrl],
     hasOccupation: {
       "@type": "Occupation",
-      name: jsonLdJobTitle,
+      name: locale === "es" ? "Ingeniero de Software" : jsonLdJobTitle,
     },
     alumniOf: {
       "@type": "CollegeOrUniversity",
@@ -41,9 +57,9 @@ export default function Page() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Matías Moreno Portfolio",
-    description: siteDescription,
+    description: locale === "es" ? professionalProfileEs[0] : siteDescription,
     url: CANONICAL_SITE_URL,
-    inLanguage: "en",
+    inLanguage: locale,
     author: {
       "@type": "Person",
       name: canonicalProfile.legalName,
@@ -60,7 +76,7 @@ export default function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
       />
-      <PortfolioPage />
+      <PortfolioPage initialLocale={locale} />
     </>
   );
 }

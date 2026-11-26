@@ -22,6 +22,18 @@ describe("CV download filenames and locale data", () => {
     expect(en.experience.map((job) => job.id)).toEqual(
       es.experience.map((job) => job.id)
     );
+    expect(en.experience[0].id).toBe("freelance");
+    expect(en.experience[0].periodDisplay).toBe("Aug 2025 – Present");
+    expect(es.experience[0].periodDisplay).toBe("Ago 2025 – Actualidad");
+    expect(en.experience.find((j) => j.id === "santander").periodDisplay).toBe(
+      "Dec 2021 – Feb 2022"
+    );
+    expect(es.experience.find((j) => j.id === "santander").periodDisplay).toBe(
+      "Dic 2021 – Feb 2022"
+    );
+    expect(en.experience.find((j) => j.id === "ine").periodDisplay).toMatch(
+      /^Mar 2022/
+    );
     expect(en.experience[0].role).not.toEqual(es.experience[0].role);
     expect(en.professionalProfile[0]).not.toEqual(es.professionalProfile[0]);
   });
