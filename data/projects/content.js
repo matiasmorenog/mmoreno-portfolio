@@ -14,7 +14,7 @@ export const projectContentById = {
         problem:
           "Wholesale orders were managed through WhatsApp and Excel, without customer self-service or centralized administration.",
         action:
-          "Designed and shipped the full wholesale ordering flow so customers can place orders themselves — with per-customer pricing, stock visibility, quotes delivered as PDFs, Excel sync for existing ops, and push alerts for admins — replacing the WhatsApp/Excel back-and-forth.",
+          "Met face-to-face with the client to understand the wholesale ordering problem, then designed and shipped the full ordering flow so customers can place orders themselves — with per-customer pricing, stock visibility, quotes delivered as PDFs, Excel sync for existing ops, and push alerts for admins — replacing the WhatsApp/Excel back-and-forth.",
         result:
           "In daily use by 4 ordering locations; 61 wholesale orders (delivery notes) processed in Nov 2026.",
       },
@@ -33,7 +33,7 @@ export const projectContentById = {
         problem:
           "Los pedidos mayoristas se gestionaban por WhatsApp y Excel, sin autogestión para clientes ni administración centralizada.",
         action:
-          "Diseñé y entregué el flujo completo de pedidos mayoristas para que los clientes carguen pedidos solos — con precios por cliente, visibilidad de stock, cotizaciones en PDF, sync con Excel para la operación existente y avisos push para administración — reemplazando el ida y vuelta por WhatsApp/Excel.",
+          "Trabajé presencialmente con el cliente para entender el problema de pedidos mayoristas y, a partir de eso, diseñé y entregué el flujo completo para que los clientes carguen pedidos solos — con precios por cliente, visibilidad de stock, cotizaciones en PDF, sync con Excel para la operación existente y avisos push para administración — reemplazando el ida y vuelta por WhatsApp/Excel.",
         result:
           "En uso diario por 4 sucursales; 61 pedidos mayoristas (remitos) procesados en noviembre 2026.",
       },
