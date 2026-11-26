@@ -49,9 +49,8 @@ export const projectContentById = {
         "Public demo includes a navigable demo storefront with sample data — not a real paid customer store.",
       caseStudy: {
         problem:
-          "Needed a production-shaped multi-tenant e-commerce foundation with storefront, checkout, merchant administration, payments, and reusable SaaS-oriented capabilities.",
-        action:
-          "Built a multi-tenant storefront and merchant admin with store-level isolation, checkout, payments, transactional email, and media storage shaped for a reusable SaaS path — plus a navigable demo storefront to show the full experience.",
+          "Needed a production-shaped multi-tenant e-commerce foundation with storefront, checkout, merchant administration, payments, and reusable SaaS-oriented capabilities. Built a multi-tenant storefront and merchant admin with store-level isolation, checkout, payments, transactional email, and media storage shaped for a reusable SaaS path — plus a navigable demo storefront to show the full experience.",
+        action: null,
         result:
           "Live personal SaaS-oriented platform in production with several isolated stores and a navigable demo storefront.",
       },
@@ -67,9 +66,8 @@ export const projectContentById = {
         "La demo pública incluye una tienda demo navegable con datos de ejemplo; no es una tienda de un cliente pago.",
       caseStudy: {
         problem:
-          "Necesitaba una base e-commerce multi-tenant con forma de producción: storefront, checkout, administración comercial, pagos y capacidades reutilizables orientadas a SaaS.",
-        action:
-          "Armé storefront multi-tenant y admin comercial con aislamiento por tienda, checkout, pagos, email transaccional y media orientados a un camino SaaS reutilizable — más una tienda demo navegable para mostrar la experiencia completa.",
+          "Necesitaba una base e-commerce multi-tenant con forma de producción: storefront, checkout, administración comercial, pagos y capacidades reutilizables orientadas a SaaS. Armé storefront multi-tenant y admin comercial con aislamiento por tienda, checkout, pagos, email transaccional y media orientados a un camino SaaS reutilizable — más una tienda demo navegable para mostrar la experiencia completa.",
+        action: null,
         result:
           "Plataforma personal orientada a SaaS en producción con varias tiendas aisladas y una tienda demo navegable.",
       },

@@ -43,6 +43,25 @@ describe("App", () => {
     ).toBeInTheDocument();
   });
 
+  it("merges Nexus Describe into one paragraph without Action heading", () => {
+    render(<PortfolioPage initialLocale="en" />);
+
+    fireEvent.click(screen.getAllByRole("button", { name: "View case study" })[1]);
+
+    expect(screen.getByText("Describe")).toBeInTheDocument();
+    expect(screen.queryByText("Action")).not.toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /Needed a production-shaped multi-tenant e-commerce foundation[\s\S]*Built a multi-tenant storefront and merchant admin/i
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /Live personal SaaS-oriented platform in production with several isolated stores/
+      )
+    ).toBeInTheDocument();
+  });
+
   it("points Rocha Live Demo to the public demo and links production-since to prod", () => {
     render(<PortfolioPage initialLocale="en" />);
 
