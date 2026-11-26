@@ -22,8 +22,13 @@ const nextConfig = {
         source: "/og",
         headers: [{ key: "Cache-Control", value: immutableAsset }],
       },
-      // Preview carousel assets keep stable filenames; never mark immutable or
-      // browsers keep the previous capture for up to a year after refresh.
+      {
+        source: "/:path*.:ext(svg|png|jpg|jpeg|gif|webp|ico|pdf)",
+        headers: [{ key: "Cache-Control", value: immutableAsset }],
+      },
+      // After catch-all: matching headers merge and last Cache-Control wins.
+      // Preview filenames are stable across edits only when we bump the
+      // `-rYYYYMMDD` suffix; still avoid year-immutable so soft refreshes work.
       {
         source: "/project-previews/:path*",
         headers: [
@@ -32,10 +37,6 @@ const nextConfig = {
             value: "public, max-age=0, must-revalidate",
           },
         ],
-      },
-      {
-        source: "/:path*.:ext(svg|png|jpg|jpeg|gif|webp|ico|pdf)",
-        headers: [{ key: "Cache-Control", value: immutableAsset }],
       },
     ];
   },
