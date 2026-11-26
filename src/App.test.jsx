@@ -218,6 +218,18 @@ describe("App", () => {
     expect(screen.queryByText("Working style")).not.toBeInTheDocument();
   });
 
+  it("shows email and WhatsApp contact links without a tel button", () => {
+    render(<PortfolioPage initialLocale="en" />);
+
+    expect(
+      screen.getByRole("link", { name: /Email: matiasmorenog@gmail.com/i })
+    ).toHaveAttribute("href", expect.stringContaining("mailto:"));
+    expect(
+      screen.getByRole("link", { name: /Open WhatsApp chat/i })
+    ).toBeInTheDocument();
+    expect(document.querySelector('a[href^="tel:"]')).toBeNull();
+  });
+
   it("highlights INE Web Worker technical work", () => {
     render(<PortfolioPage initialLocale="en" />);
 
