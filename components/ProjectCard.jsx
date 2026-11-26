@@ -198,6 +198,15 @@ export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
             statusLabel={project.statusLabel}
             liveStatus={liveStatus}
           />
+          {project.productionSince ? (
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ fontWeight: 500, letterSpacing: 0.2 }}
+            >
+              {project.productionSince}
+            </Typography>
+          ) : null}
           {project.category ? (
             <Chip
               size="small"
@@ -294,35 +303,42 @@ export default function ProjectCard({ project, caseStudyLabels, uiLabels }) {
 
         <Divider sx={{ mt: "auto", mb: 2 }} />
 
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
-          {project.demoUrl ? (
-            <Button
-              size="small"
-              variant="contained"
-              component="a"
-              href={project.demoUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {liveDemoLabel}
-            </Button>
-          ) : (
-            <Button size="small" variant="outlined" disabled>
-              {demoSoonLabel}
-            </Button>
-          )}
+        <Stack spacing={0.75}>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
+            {project.demoUrl ? (
+              <Button
+                size="small"
+                variant="contained"
+                component="a"
+                href={project.demoUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {liveDemoLabel}
+              </Button>
+            ) : (
+              <Button size="small" variant="outlined" disabled>
+                {demoSoonLabel}
+              </Button>
+            )}
 
-          {project.repoUrl ? (
-            <Button
-              size="small"
-              variant="outlined"
-              component="a"
-              href={project.repoUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {sourceCodeLabel}
-            </Button>
+            {project.repoUrl ? (
+              <Button
+                size="small"
+                variant="outlined"
+                component="a"
+                href={project.repoUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {sourceCodeLabel}
+              </Button>
+            ) : null}
+          </Stack>
+          {project.demoUrl && project.demoHint ? (
+            <Typography variant="caption" color="text.secondary">
+              {project.demoHint}
+            </Typography>
           ) : null}
         </Stack>
       </Box>

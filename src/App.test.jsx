@@ -23,6 +23,46 @@ describe("App", () => {
     expect(screen.queryByText("Problem")).not.toBeInTheDocument();
   });
 
+  it("points Rocha Live Demo to the public demo and shows production metrics", () => {
+    render(<PortfolioPage initialLocale="en" />);
+
+    const rochaDemo = screen
+      .getAllByRole("link", { name: "Live Demo" })
+      .find((link) => link.getAttribute("href")?.includes("rocha-cotizador"));
+
+    expect(rochaDemo).toHaveAttribute(
+      "href",
+      "https://rocha-cotizador-dev.vercel.app/"
+    );
+    expect(rochaDemo?.getAttribute("href")).not.toBe(
+      "https://rocha-cotizador.vercel.app/"
+    );
+    expect(screen.getByText("Demo access available")).toBeInTheDocument();
+    expect(screen.getByText("In production since Jul 2026")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /In daily use by 4 ordering locations; 61 wholesale orders \(delivery notes\) processed in Nov 2026\./
+      )
+    ).toBeInTheDocument();
+
+    const nexusDemo = screen
+      .getAllByRole("link", { name: "Live Demo" })
+      .find((link) => link.getAttribute("href")?.includes("nexus-web-store"));
+    expect(nexusDemo).toHaveAttribute("href", "https://nexus-web-store.vercel.app/");
+  });
+
+  it("shows Rocha demo hint and metrics in Spanish", () => {
+    render(<PortfolioPage initialLocale="es" />);
+
+    expect(screen.getByText("Acceso demo disponible")).toBeInTheDocument();
+    expect(screen.getByText("En producción desde jul 2026")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /En uso diario por 4 sucursales; 61 pedidos mayoristas \(remitos\) procesados en noviembre 2026\./
+      )
+    ).toBeInTheDocument();
+  });
+
   it("renders Rocha preview carousel with five slides", () => {
     render(<PortfolioPage initialLocale="en" />);
 

@@ -3,6 +3,8 @@ export const projectContentById = {
     en: {
       category: "Commercial / Production",
       statusLabel: "Live",
+      productionSince: "In production since Jul 2026",
+      demoHint: "Demo access available",
       role: "Independent Software Engineer — commercial production work",
       summary:
         "Production B2B ordering and quotation platform for a multi-location bakery, replacing WhatsApp/Excel wholesale workflows with customer self-service, PDF quotes, web push, and centralized administration.",
@@ -15,12 +17,14 @@ export const projectContentById = {
         action:
           "Built the platform end-to-end with Next.js, TypeScript, PostgreSQL, Prisma, and NextAuth, covering authentication, customer-specific pricing, stock, quotations, orders, Excel synchronization, PDF generation (pdfkit), and web push notifications (web-push).",
         result:
-          "Production platform supporting recurring wholesale ordering across multiple locations and maintained as a paid software service.",
+          "In daily use by 4 ordering locations; 61 wholesale orders (delivery notes) processed in Nov 2026.",
       },
     },
     es: {
       category: "Comercial / Producción",
       statusLabel: "En producción",
+      productionSince: "En producción desde jul 2026",
+      demoHint: "Acceso demo disponible",
       role: "Ingeniero de Software Independiente — trabajo comercial en producción",
       summary:
         "Plataforma B2B de pedidos y cotizaciones en producción para una panadería con múltiples sucursales, con autogestión, PDFs, push y administración centralizada.",
@@ -33,7 +37,7 @@ export const projectContentById = {
         action:
           "Desarrollé la plataforma end-to-end con Next.js, TypeScript, PostgreSQL, Prisma y NextAuth, cubriendo autenticación, precios personalizados por cliente, stock, cotizaciones, pedidos, sincronización con Excel, generación de PDFs (pdfkit) y notificaciones push (web-push).",
         result:
-          "Plataforma en producción que soporta pedidos mayoristas recurrentes en múltiples sucursales y se mantiene como servicio de software pago.",
+          "En uso diario por 4 sucursales; 61 pedidos mayoristas (remitos) procesados en noviembre 2026.",
       },
     },
   },
